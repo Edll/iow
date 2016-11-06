@@ -22,7 +22,7 @@ namespace IowLibrary {
             }
             return handler;
         }
-    
+
         /// <summary>
         /// Get the number of connected Devices.
         /// </summary>
@@ -47,7 +47,7 @@ namespace IowLibrary {
         /// Get the handler for the Device with the number. Bevor use this you must call 
         /// OpenDevices() to open the device stream.
         /// </summary>
-        /// <param name="deviceNumber">devicenumber of the selected Device</param>
+        /// <param name="deviceNumber">Devicenumber of the selected Device</param>
         /// <returns>null if device was not Found else handler</returns>
         /// <exception cref="IowLibaryException">If deviceNumber is null</exception> 
         public static int? GetHandlerForDevice(int? deviceNumber) {
@@ -64,9 +64,9 @@ namespace IowLibrary {
         }
 
         /// <summary>
-        /// get the ProductId off a device.
+        /// get the ProductId from a device.
         /// </summary>
-        /// <param name="handler">Handler off the Device.</param>
+        /// <param name="handler">Handler for the Device</param>
         /// <returns>null if device could not be found else int with product id</returns>
         /// <exception cref="IowLibaryException">If handler is null</exception> 
         public static int? GetProductId(int? handler) {
@@ -83,9 +83,9 @@ namespace IowLibrary {
         }
 
         /// <summary>
-        /// Get the Prduct Serialnumber from a Device.
+        /// get the Prductserial from a Device.
         /// </summary>
-        /// <param name="handler">handler of the device wich will be called</param>
+        /// <param name="handler">Handler for the Device</param>
         /// <returns>Productserial as String</returns>
         /// <exception cref="IowLibaryException">If handler is null</exception> 
         public static String GetProductSerial(int? handler) {
@@ -94,25 +94,26 @@ namespace IowLibrary {
             }
             StringBuilder sb = new StringBuilder();
 
-           bool conditon = IOW.DllWapper.Method.IowKitGetSerialNumber(ConvertIntToIntPtr(handler), sb);
+            bool conditon = Method.IowKitGetSerialNumber(ConvertIntToIntPtr(handler), sb);
             if (!conditon) {
                 return null;
             }
 
-          return sb.ToString();
+            return sb.ToString();
         }
 
         /// <summary>
         /// Get the Product Software version of the devices with the given handler
         /// </summary>
-        /// <param name="handler">handler of the device wich will be called</param>
+        /// <param name="handler">Handler for the Device</param>
         /// <returns>Software Version as formated String</returns>
+        /// <exception cref="IowLibaryException">If handler is null</exception> 
         public static String GetProductSoftwareVersion(int? handler) {
             if (handler == null) {
                 throw new IowLibaryException("handler to get software version is null");
             }
-            UInt32 software = IOW.DllWapper.Method.IowKitGetRevision(ConvertIntToIntPtr(handler));
-            if(software == 0x1010) {
+            UInt32 software = Method.IowKitGetRevision(ConvertIntToIntPtr(handler));
+            if (software == 0x1010) {
                 return "no Software Version";
             }
             /// Es sind 4 Hex-Stellen gültig. Wäre die gegenwärtige Softwareversion 1.0.2.1 so wird

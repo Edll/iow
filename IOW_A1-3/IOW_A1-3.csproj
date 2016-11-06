@@ -72,9 +72,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IowLibrary\IowLibrary.csproj">
+    <ProjectReference Include="..\IowLibrary\IowLibary.csproj">
       <Project>{c2606d6f-db64-4ba3-9139-be9e63139ad8}</Project>
-      <Name>IowLibrary</Name>
+      <Name>IowLibary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

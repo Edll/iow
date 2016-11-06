@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOW_A1-3", "IOW_A1-3\IOW_A1-3.csproj", "{FAD93E5A-2F92-45A7-8A05-274AD582AAD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IowLibrary", "IowLibrary\IowLibrary.csproj", "{C2606D6F-DB64-4BA3-9139-BE9E63139AD8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IowLibary", "IowLibrary\IowLibary.csproj", "{C2606D6F-DB64-4BA3-9139-BE9E63139AD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
