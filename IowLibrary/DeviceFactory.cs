@@ -32,7 +32,7 @@ namespace IowLibrary {
                 if (devices == null) {
                     initFactory();
                     if (devices == null) {
-                        DeviceError("Es wurden keine Angeschlossenen Devices gefunden");
+                        deviceError("Es wurden keine Angeschlossenen Devices gefunden");
                     }
                 }
                 return devices;
@@ -66,10 +66,15 @@ namespace IowLibrary {
             }
         }
 
+        public void Refresh() {
+            Devices.Clear();
+            initFactory();
+        }
+
         private bool openDevices() {
             int? firstDeviceHandler = IowKit.OpenDevices();
             if (firstDeviceHandler == null) {
-                DeviceError("Es wurde kein Device gefunden");
+                deviceError("Es wurde kein Device gefunden");
                 return false;
             }
             return true;
@@ -78,7 +83,7 @@ namespace IowLibrary {
         private bool countDevices() {
             deviceCounter = IowKit.GetConnectDeviceCounter();
             if (deviceCounter == null && DeviceError != null) {
-                DeviceError("Fehler beim öffnen der Devices. Wurden welche angeschlossen?");
+                deviceError("Fehler beim öffnen der Devices. Wurden welche angeschlossen?");
                 return false;
             }
             return true;
@@ -104,7 +109,7 @@ namespace IowLibrary {
                 device.Close();
                 removeDevice(handler);
             } else {
-                DeviceError("Device mit dem Handler: " + handler + " konnte nicht enfernt werden.");
+                deviceError("Device mit dem Handler: " + handler + " konnte nicht enfernt werden.");
             }
         }
 
@@ -114,7 +119,7 @@ namespace IowLibrary {
                     Device device = deviceEntry.Value;
                     device.Close();
                 }
-            } catch (InvalidOperationException e) {
+            } catch (InvalidOperationException) {
                 // ignore
             }
             devices.Clear();
@@ -132,7 +137,7 @@ namespace IowLibrary {
             devices.TryGetValue(handler, out device);
 
             if (device == null) {
-                DeviceError("Device mit dem Handler: " + handler + " konnte nicht enfernt werden.");
+                deviceError("Device mit dem Handler: " + handler + " konnte nicht enfernt werden.");
             }
             return device;
         }
@@ -149,7 +154,7 @@ namespace IowLibrary {
                     }
                 }
             }
-            DeviceError("Es wurde kein Device mit der Nummer: " + deviceNumber + " gefunden");
+            deviceError("Es wurde kein Device mit der Nummer: " + deviceNumber + " gefunden");
             return null;
         }
 
@@ -169,6 +174,13 @@ namespace IowLibrary {
             if (deviceFromFactroy != null) {
                 removeDevice(device.Handler);
             }
+        }
+
+        private void deviceError(String msg) {
+            if (DeviceError == null) {
+                throw new SystemException("Error at Devices handling: " + msg);
+            }
+            DeviceError(msg);
         }
     }
 }
