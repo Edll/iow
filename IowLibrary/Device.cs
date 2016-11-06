@@ -13,7 +13,7 @@ namespace IowLibrary {
         private int? handler;
         private int deviceNumber;
         private int? productId;
-        private String deviceSerial;
+        private String serial;
         private String softwareVersion;
         private List<Port> ports;
 
@@ -38,9 +38,9 @@ namespace IowLibrary {
             set { productId = value; }
         }
 
-        public String DeviceSerial {
-            get { return deviceSerial; }
-            set { deviceSerial = value; }
+        public String Serial {
+            get { return serial; }
+            set { serial = value; }
         }
         
         public String SoftwareVersion {
@@ -53,10 +53,10 @@ namespace IowLibrary {
             set { ports = value; }
         }
 
-
-
         private void initDevice() {
             getDeviceProductId();
+            getDeviceSerial();
+            getSoftwareVersion();
         }
 
         private int? getDeviceProductId() {
@@ -67,6 +67,20 @@ namespace IowLibrary {
                 }
             }
             return productId;
+        }
+
+        private String getDeviceSerial() {
+            if(serial == null) {
+                serial = IowKit.GetProductSerial(Handler);
+            }
+            return serial;
+        }
+
+        private String getSoftwareVersion() {
+            if (softwareVersion == null) {
+                softwareVersion = IowKit.GetProductSoftwareVersion(Handler);
+            }
+            return softwareVersion;
         }
 
 
@@ -80,6 +94,7 @@ namespace IowLibrary {
             if (DeviceClose != null) {
                 DeviceClose(this);
             }
+            System.Console.WriteLine("Device: " + Handler + " close");
         }
 
         private void deviceErrorEvent(Device device) {

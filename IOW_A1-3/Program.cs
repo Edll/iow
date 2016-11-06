@@ -24,9 +24,11 @@ namespace IOW_A1_3 {
                 device.DeviceError += Device_DeviceError;
                 System.Console.WriteLine("bla: " + device.Handler);
                 System.Console.WriteLine("ProduktID: " + device.ProductId);
-
-                device.Close();
+                System.Console.WriteLine("Serial: " + device.SoftwareVersion);
+                System.Console.WriteLine("Software: " + device.Serial);
+               
             }
+        
             System.Console.Read();
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);

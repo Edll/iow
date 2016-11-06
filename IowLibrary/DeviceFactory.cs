@@ -23,15 +23,20 @@ namespace IowLibrary {
             }
         }
 
+        ~DeviceFactory() {
+            RemoveAllDevices();
+        }
+
         public Dictionary<int, Device> Devices {
             get {
-                if(devices == null) {
+                if (devices == null) {
                     initFactory();
-                    if(devices == null) {
+                    if (devices == null) {
                         DeviceError("Es wurden keine Angeschlossenen Devices gefunden");
                     }
                 }
-                return devices; }
+                return devices;
+            }
             set { devices = value; }
         }
 
@@ -93,7 +98,7 @@ namespace IowLibrary {
         public void RemoveDevice(int? handler) {
             Device device = null;
 
-            devices.TryGetValue((int) handler, out device);
+            devices.TryGetValue((int)handler, out device);
 
             if (device != null) {
                 device.Close();
@@ -104,13 +109,18 @@ namespace IowLibrary {
         }
 
         public void RemoveAllDevices() {
-            foreach (KeyValuePair<int, Device> deviceEntry in Devices) {
-                Device device = deviceEntry.Value;
-                device.Close();
+            try {
+                foreach (KeyValuePair<int, Device> deviceEntry in Devices) {
+                    Device device = deviceEntry.Value;
+                    device.Close();
+                }
+            } catch (InvalidOperationException e) {
+                // ignore
             }
             devices.Clear();
         }
 
+        // for internal use only, to prevent a seconde Close event.
         private void removeDevice(int? handler) {
             System.Console.WriteLine("Device will be removed: " + handler);
             devices.Remove((int)handler);

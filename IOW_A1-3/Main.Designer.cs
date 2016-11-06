@@ -1,6 +1,6 @@
 ﻿namespace IOW_A1_3
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
