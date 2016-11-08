@@ -45,6 +45,7 @@
     <Compile Include="IowLibaryException.cs" />
     <Compile Include="Port.cs" />
     <Compile Include="PortBit.cs" />
+    <Compile Include="PortHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

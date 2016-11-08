@@ -19,15 +19,20 @@ namespace IOW_A1_3 {
             // open of the DeviceFactory
             df = new DeviceFactory(DeviceFactory_OpenError);
 
+
+            // ist es möglich ein custom table model zu generieren
+            dataPort0.DataSource = IowPortDataTable.GetResultsTable();
+
         }
 
         private void bttReadInfos_Click(object sender, EventArgs e) {
             df.Refresh();
             Dictionary<int, Device> devices = df.Devices;
 
-            NumberOfConDevices.Text = devices.Count.ToString();
+            NumberOfConDevices.Text = devices == null ? "0" : devices.Count.ToString();
 
             dataGridView1.DataSource = IowDataTable.GetResultsTable(devices);
+          
         }
 
 

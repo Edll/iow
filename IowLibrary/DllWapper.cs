@@ -21,8 +21,8 @@ namespace IOW
             public const uint IOWKIT_VID = IOWKIT_VENDOR_ID;
 
             // IO-Warrior 24
-            public const uint IOWKIT_PRODUCT_ID_IOW24 = 0x1501;
-            public const uint IOWKIT_PID_IOW24 = IOWKIT_PRODUCT_ID_IOW24;
+            public const int IOWKIT_PRODUCT_ID_IOW24 = 0x1501;
+            public const int IOWKIT_PID_IOW24 = IOWKIT_PRODUCT_ID_IOW24;
 
             // Max number of pipes per IOW device
             public const uint IOWKIT_MAX_PIPEX = 2;
@@ -43,9 +43,9 @@ namespace IOW
             public const uint IOW_NON_LEGACY_REVISION = 0x1010;
 
             //Report size
-            public const uint IOWKIT_REPORT_SIZE = 4;
-            public const uint IOWKIT24_IO_REPORT_SIZE = 3;
-            public const uint IOWKIT_SPECIAL_REPORT_SIZE = 8;
+            public const int IOWKIT_REPORT_SIZE = 4;
+            public const int IOWKIT24_IO_REPORT_SIZE = 3;
+            public const int IOWKIT_SPECIAL_REPORT_SIZE = 8;
         }
 
 

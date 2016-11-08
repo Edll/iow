@@ -67,7 +67,9 @@ namespace IowLibrary {
         }
 
         public void Refresh() {
-            Devices.Clear();
+            if (Devices != null) {
+                Devices.Clear();
+            }
             initFactory();
         }
 
@@ -114,15 +116,19 @@ namespace IowLibrary {
         }
 
         public void RemoveAllDevices() {
-            try {
-                foreach (KeyValuePair<int, Device> deviceEntry in Devices) {
-                    Device device = deviceEntry.Value;
-                    device.Close();
+            if (Devices != null) {
+                try {
+
+                    foreach (KeyValuePair<int, Device> deviceEntry in Devices) {
+                        Device device = deviceEntry.Value;
+                        device.Close();
+                    }
+
+                } catch (InvalidOperationException) {
+                    // ignore
                 }
-            } catch (InvalidOperationException) {
-                // ignore
+                devices.Clear();
             }
-            devices.Clear();
         }
 
         // for internal use only, to prevent a seconde Close event.

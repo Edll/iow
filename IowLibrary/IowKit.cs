@@ -113,13 +113,35 @@ namespace IowLibrary {
                 throw new IowLibaryException("handler to get software version is null");
             }
             UInt32 software = Method.IowKitGetRevision(ConvertIntToIntPtr(handler));
-            if (software == 0x1010) {
+            if (software == Defines.IOW_NON_LEGACY_REVISION) {
                 return "no Software Version";
             }
             /// Es sind 4 Hex-Stellen gültig. Wäre die gegenwärtige Softwareversion 1.0.2.1 so wird
             /// 0x1021 zurückgegeben.
             return String.Format("{0:X}", software);
         }
+
+        /// <summary>
+        /// Read in Data from Device, while reading thread is blocked.
+        /// </summary>
+        /// <param name="handler">Handler for the Device</param>
+        /// <param name="numPipe">DataPipe of the usb interface</param>
+        /// <param name="data">Data Buffer for Result</param>
+        /// <param name="byteLength">length for the Data bytes.</param>
+        /// <returns>Real number of bits wich was readin</returns>
+        public static int? Read(int? handler, int numPipe, byte[] data, int byteLength) {
+            if (handler == null) {
+                throw new IowLibaryException("handler to to read is null");
+            }
+            IntPtr handlerConvert = ConvertIntToIntPtr(handler);
+
+            int? result = (int)Method.IowKitRead(handlerConvert, (UInt32)numPipe, data, (UInt32) byteLength);
+            if (result == 0) {
+                return null;
+            }
+            return result;
+        }
+
 
         private static IntPtr ConvertIntToIntPtr(int? Input) {
             if (Input == null) {

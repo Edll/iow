@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace IowLibrary {
     public delegate void DeviceStatusEventHandler(Device device);
@@ -16,6 +17,9 @@ namespace IowLibrary {
         private String serial;
         private String softwareVersion;
         private List<Port> ports;
+        private int reportSize;
+        private Thread portThread;
+        private PortHandler portHandler;
 
         public Device(int? handler) {
             this.Handler = handler;
@@ -42,7 +46,7 @@ namespace IowLibrary {
             get { return serial; }
             set { serial = value; }
         }
-        
+
         public String SoftwareVersion {
             get { return softwareVersion; }
             set { softwareVersion = value; }
@@ -53,10 +57,16 @@ namespace IowLibrary {
             set { ports = value; }
         }
 
+        public int ReportSize {
+            get { return reportSize; }
+            set { reportSize = value; }
+        }
+
         private void initDevice() {
             getDeviceProductId();
             getDeviceSerial();
             getSoftwareVersion();
+            initPorts();
         }
 
         private int? getDeviceProductId() {
@@ -66,11 +76,17 @@ namespace IowLibrary {
                     deviceErrorEvent(this);
                 }
             }
+            switch (productId) {
+                case IOW.DllWapper.Defines.IOWKIT_PID_IOW24:
+                reportSize = IOW.DllWapper.Defines.IOWKIT24_IO_REPORT_SIZE;
+                break;
+            }
+
             return productId;
         }
 
         private String getDeviceSerial() {
-            if(serial == null) {
+            if (serial == null) {
                 serial = IowKit.GetProductSerial(Handler);
             }
             return serial;
@@ -83,7 +99,26 @@ namespace IowLibrary {
             return softwareVersion;
         }
 
+        private void initPorts() {
+            if(ports == null) {
+                ports = new List<Port>();
+            }
+            for (int i = 0; i < 2; i++) {
+                Port port = new Port(i, this);
+                port.Error += Port_Error;
+                ports.Add(port);
+            }
+        }
 
+        private void Port_Error(Port port) {
+            System.Console.WriteLine("Error in Port: " + port.PortNumber);
+        }
+
+        public void IO() {
+            foreach (Port port in ports) {
+                port.ReadIn(0);
+            }
+        }
 
         public void Close() {
             IowKit.closeDevice(this.Handler);
