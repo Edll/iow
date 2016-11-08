@@ -135,13 +135,12 @@ namespace IowLibrary {
             }
             IntPtr handlerConvert = ConvertIntToIntPtr(handler);
 
-            int? result = (int)Method.IowKitRead(handlerConvert, (UInt32)numPipe, data, (UInt32) byteLength);
+            int? result = (int)Method.IowKitRead(handlerConvert, (UInt32)numPipe, data, (UInt32)byteLength);
             if (result == 0) {
                 return null;
             }
             return result;
         }
-
 
         private static IntPtr ConvertIntToIntPtr(int? Input) {
             if (Input == null) {

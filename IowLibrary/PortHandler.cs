@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 
 namespace IowLibrary {
-    class PortHandler {
+    public class DeviceHandler {
         private volatile bool stopHandler = false;
-        private Port port;
+        private Device device;
         private int numPipe = 0;
 
-        public PortHandler(Port port) {
-            this.port = port;
+        public DeviceHandler(Device device) {
+            this.device = device;
         }
-        public Port Port {
-            get { return port; }
-            set { port = value; }
+        public Device Device {
+            get { return device; }
+            set { device = value; }
         }
 
         public void IO() {
             while (!stopHandler) {
-                port.ReadIn(numPipe);
+                device.IO(0);
             }
         }
 

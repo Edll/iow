@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading;
 using IowLibrary;
 
 namespace IOW_A1_3 {
@@ -12,15 +13,22 @@ namespace IOW_A1_3 {
         [STAThread]
         static void Main() {
             System.Console.WriteLine("io Read in!");
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
-            //DeviceFactory df = new DeviceFactory(deviceError);
-            //Device device = df.GetDeviceNumber(1);
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new Main());
+            DeviceFactory df = new DeviceFactory(deviceError);
+            Device device = df.GetDeviceNumber(1);
 
-            //if (device != null) {
-            //    device.IO();
-            //}
+            
+            DeviceHandler portHandler = new DeviceHandler(device);
+
+            Thread portThread = new Thread(portHandler.IO);
+            portThread.Start();
+
+
+
+          
+
         }
 
         private static void deviceError(string deviceError) {

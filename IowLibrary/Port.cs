@@ -45,21 +45,6 @@ namespace IowLibrary {
             data = new byte[4];           
         }
 
-        public void ReadIn(int pipeNum) {
-            System.Console.WriteLine("ReadIn");
-            int? readByts = IowKit.Read(device.Handler, pipeNum, data, device.ReportSize);
-            if(readByts == null) {
-                errorEvent();
-            }
-            if(readByts != device.ReportSize) {
-                // TODO nicht alle bit eingelesen und nun?
-                System.Console.WriteLine("not all read in!");
-            }
-            foreach(Byte dat in data) {
-                System.Console.WriteLine("data: " + dat);
-            }
-        }
-
         private void Bit_Change(PortBit portbit) {
             System.Console.WriteLine("port: " + portNumber +
                 " bit change: " + portbit.BitNumber +
