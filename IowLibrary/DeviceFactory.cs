@@ -66,6 +66,11 @@ namespace IowLibrary {
             }
         }
 
+        public void SetBit(int deviceNumber, int port, int bit, bool value) {
+            Device device = GetDeviceNumber(deviceNumber);
+            device.SetBit(port, bit, value);
+        }
+
         public void Refresh() {
             if (Devices != null) {
                 Devices.Clear();

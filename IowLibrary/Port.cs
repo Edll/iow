@@ -36,6 +36,16 @@ namespace IowLibrary {
             }
         }
 
+        public void SetBit(int bit, bool value) {
+            if (portBits.Count - 1 >= bit) {
+                PortBit pb = portBits[bit];
+                pb.BitOut = value;
+            } else {
+                Console.WriteLine("try to write bit out of size!");
+            }
+
+        }
+
         private void initPort() {
             if (portBits == null) {
                 portBits = new List<PortBit>();
@@ -58,13 +68,14 @@ namespace IowLibrary {
         }
 
         private void bitOutChange(PortBit portbit) {
+          // TODO nach oben weiter geben!!!
             System.Console.WriteLine("port: " + portNumber +
                 " bit OUT change: " + portbit.BitNumber +
                 " to: " + portbit.BitOut);
         }
 
         private void portBitInChangeEvent(PortBit portbit) {
-            if(PortBitInChange != null) {
+            if (PortBitInChange != null) {
                 PortBitInChange(this, portbit);
             }
         }
@@ -78,7 +89,7 @@ namespace IowLibrary {
         public void SetInputData(byte dataIn) {
             foreach (PortBit bit in portBits) {
                 byte mask = (byte)(1 << bit.BitNumber);
-                 bit.BitIn = ((dataIn & mask) == mask);
+                bit.BitIn = ((dataIn & mask) == mask);
             }
         }
     }

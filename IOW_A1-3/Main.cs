@@ -30,12 +30,38 @@ namespace IOW_A1_3 {
 
             // create outputs
             createPortEntrys(port0Output, true);
+            port0Output.ItemCheck += Port0Output_ItemCheck;
             createPortEntrys(port1Output, true);
+            port1Output.ItemCheck += Port1Output_ItemCheck;
 
             Device device = df.GetDeviceNumber(1);
             if (device != null) {
                 device.PortBitChange += Device_PortBitChange;
                 portHandler = new DeviceHandler(device);
+            }
+        }
+
+        private void Port1Output_ItemCheck(object sender, ItemCheckEventArgs e) {
+            int port = 0;
+            int device = 1;
+            CheckOutputBit(sender, e, port, device);
+        }
+
+        private void Port0Output_ItemCheck(object sender, ItemCheckEventArgs e) {
+            int port = 0;
+            int device = 1;
+            CheckOutputBit(sender, e, port, device);
+        }
+
+        private void CheckOutputBit(object sender, ItemCheckEventArgs e, int port, int device) {
+            if (sender is CheckedListBox) {
+                CheckedListBox clb = (CheckedListBox)sender;
+                int bit = Convert.ToInt32(clb.SelectedItem);
+                bool value = false;
+                if (e.NewValue == CheckState.Checked) {
+                    value = true;
+                }
+                df.SetBit(device, port, bit, value);
             }
         }
 

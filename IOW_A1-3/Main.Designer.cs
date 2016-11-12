@@ -30,27 +30,27 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabControl = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.port1Output = new System.Windows.Forms.CheckedListBox();
+            this.port1Input = new System.Windows.Forms.CheckedListBox();
+            this.bttStop = new System.Windows.Forms.Button();
+            this.bttRun = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.port0Output = new System.Windows.Forms.CheckedListBox();
+            this.port0Input = new System.Windows.Forms.CheckedListBox();
             this.tabWarriorInfo = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.bttReadInfos = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.NumberOfConDevices = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.port0Input = new System.Windows.Forms.CheckedListBox();
-            this.port0Output = new System.Windows.Forms.CheckedListBox();
-            this.bttRun = new System.Windows.Forms.Button();
-            this.bttStop = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.port1Output = new System.Windows.Forms.CheckedListBox();
-            this.port1Input = new System.Windows.Forms.CheckedListBox();
             this.tabControl1.SuspendLayout();
             this.tabControl.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabWarriorInfo.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -78,6 +78,55 @@
             this.tabControl.Text = "Controll";
             this.tabControl.UseVisualStyleBackColor = true;
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.port1Output);
+            this.groupBox3.Controls.Add(this.port1Input);
+            this.groupBox3.Location = new System.Drawing.Point(159, 52);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(149, 162);
+            this.groupBox3.TabIndex = 2;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Port1";
+            // 
+            // port1Output
+            // 
+            this.port1Output.CheckOnClick = true;
+            this.port1Output.FormattingEnabled = true;
+            this.port1Output.Location = new System.Drawing.Point(83, 19);
+            this.port1Output.Name = "port1Output";
+            this.port1Output.Size = new System.Drawing.Size(55, 124);
+            this.port1Output.TabIndex = 1;
+            // 
+            // port1Input
+            // 
+            this.port1Input.FormattingEnabled = true;
+            this.port1Input.Location = new System.Drawing.Point(6, 19);
+            this.port1Input.Name = "port1Input";
+            this.port1Input.Size = new System.Drawing.Size(55, 124);
+            this.port1Input.TabIndex = 0;
+            // 
+            // bttStop
+            // 
+            this.bttStop.Enabled = false;
+            this.bttStop.Location = new System.Drawing.Point(87, 6);
+            this.bttStop.Name = "bttStop";
+            this.bttStop.Size = new System.Drawing.Size(75, 23);
+            this.bttStop.TabIndex = 2;
+            this.bttStop.Text = "stop";
+            this.bttStop.UseVisualStyleBackColor = true;
+            this.bttStop.Click += new System.EventHandler(this.bttStop_Click);
+            // 
+            // bttRun
+            // 
+            this.bttRun.Location = new System.Drawing.Point(6, 6);
+            this.bttRun.Name = "bttRun";
+            this.bttRun.Size = new System.Drawing.Size(75, 23);
+            this.bttRun.TabIndex = 1;
+            this.bttRun.Text = "run";
+            this.bttRun.UseVisualStyleBackColor = true;
+            this.bttRun.Click += new System.EventHandler(this.bttRun_Click);
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.port0Output);
@@ -88,6 +137,23 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Port0";
+            // 
+            // port0Output
+            // 
+            this.port0Output.CheckOnClick = true;
+            this.port0Output.FormattingEnabled = true;
+            this.port0Output.Location = new System.Drawing.Point(83, 19);
+            this.port0Output.Name = "port0Output";
+            this.port0Output.Size = new System.Drawing.Size(55, 124);
+            this.port0Output.TabIndex = 1;
+            // 
+            // port0Input
+            // 
+            this.port0Input.FormattingEnabled = true;
+            this.port0Input.Location = new System.Drawing.Point(6, 19);
+            this.port0Input.Name = "port0Input";
+            this.port0Input.Size = new System.Drawing.Size(55, 124);
+            this.port0Input.TabIndex = 0;
             // 
             // tabWarriorInfo
             // 
@@ -151,70 +217,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(941, 464);
             this.dataGridView1.TabIndex = 3;
             // 
-            // port0Input
-            // 
-            this.port0Input.FormattingEnabled = true;
-            this.port0Input.Location = new System.Drawing.Point(6, 19);
-            this.port0Input.Name = "port0Input";
-            this.port0Input.Size = new System.Drawing.Size(55, 124);
-            this.port0Input.TabIndex = 0;
-            // 
-            // port0Output
-            // 
-            this.port0Output.FormattingEnabled = true;
-            this.port0Output.Location = new System.Drawing.Point(83, 19);
-            this.port0Output.Name = "port0Output";
-            this.port0Output.Size = new System.Drawing.Size(55, 124);
-            this.port0Output.TabIndex = 1;
-            // 
-            // bttRun
-            // 
-            this.bttRun.Location = new System.Drawing.Point(6, 6);
-            this.bttRun.Name = "bttRun";
-            this.bttRun.Size = new System.Drawing.Size(75, 23);
-            this.bttRun.TabIndex = 1;
-            this.bttRun.Text = "run";
-            this.bttRun.UseVisualStyleBackColor = true;
-            this.bttRun.Click += new System.EventHandler(this.bttRun_Click);
-            // 
-            // bttStop
-            // 
-            this.bttStop.Enabled = false;
-            this.bttStop.Location = new System.Drawing.Point(87, 6);
-            this.bttStop.Name = "bttStop";
-            this.bttStop.Size = new System.Drawing.Size(75, 23);
-            this.bttStop.TabIndex = 2;
-            this.bttStop.Text = "stop";
-            this.bttStop.UseVisualStyleBackColor = true;
-            this.bttStop.Click += new System.EventHandler(this.bttStop_Click);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.port1Output);
-            this.groupBox3.Controls.Add(this.port1Input);
-            this.groupBox3.Location = new System.Drawing.Point(159, 52);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(149, 162);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Port1";
-            // 
-            // port1Output
-            // 
-            this.port1Output.FormattingEnabled = true;
-            this.port1Output.Location = new System.Drawing.Point(83, 19);
-            this.port1Output.Name = "port1Output";
-            this.port1Output.Size = new System.Drawing.Size(55, 124);
-            this.port1Output.TabIndex = 1;
-            // 
-            // port1Input
-            // 
-            this.port1Input.FormattingEnabled = true;
-            this.port1Input.Location = new System.Drawing.Point(6, 19);
-            this.port1Input.Name = "port1Input";
-            this.port1Input.Size = new System.Drawing.Size(55, 124);
-            this.port1Input.TabIndex = 0;
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -225,12 +227,12 @@
             this.Text = "IO Warrior";
             this.tabControl1.ResumeLayout(false);
             this.tabControl.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.tabWarriorInfo.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

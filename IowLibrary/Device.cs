@@ -75,6 +75,58 @@ namespace IowLibrary {
             get { return lastError; }
             set { lastError = value; }
         }
+             
+        public void SetReadTimeout(int timeout) {
+            bool result = IowKit.Timeout(handler, timeout);
+            if (!result) {
+                Console.WriteLine("time was not set");
+            }
+        }
+
+        public void InitPorts(int pipeNum) {
+            byte[] write = new byte[IoReportsSize];
+
+            write[0] = 0xff;
+            write[1] = 0xff;
+            write[2] = 0xff;
+            int? writebyts = IowKit.Write(handler, pipeNum, write, IoReportsSize);
+            if (writebyts != IoReportsSize) {
+                writebyts = IowKit.Write(handler, pipeNum, write, IoReportsSize);
+                if (writebyts != IoReportsSize) {
+                    lastError = "could not write all Datas to InitDevice!";
+                    deviceErrorEvent();
+                }
+            }
+        }
+
+        public void SetBit(int port, int bit, bool value) {
+            if(ports.Count-1 >= port) {
+                Port p = ports[port];
+                p.SetBit(bit, value);
+            }else {
+                Console.WriteLine("try to set Port out of Size");
+            }
+        }
+
+        public void IO(int pipeNum) {
+            byte[] data = readDataIm(pipeNum); 
+            writeDataToPort(data);
+           
+        }
+
+        public void Close() {
+            IowKit.closeDevice(this.Handler);
+            deviceCloseEvent();
+        }
+
+        private byte[] readDataIm(int pipeNum) {
+            byte[] data = new byte[IoReportsSize];
+            bool ok = IowKit.ReadImm(handler, data);
+            if (!ok) {
+                data = readDataIm(pipeNum);
+            }
+            return data;
+        }
 
         private void initDevice() {
             getDeviceProductId();
@@ -131,74 +183,13 @@ namespace IowLibrary {
         }
 
         private void portBitInChange(Port port, PortBit portBit) {
-           if(PortBitChange != null) {
+            if (PortBitChange != null) {
                 PortBitChange(port, portBit);
             }
         }
 
         private void Port_Error(Port port) {
             System.Console.WriteLine("Error in Port: " + port.PortNumber);
-        }
-     
-        public void SetReadTimeout(int timeout) {
-            bool result = IowKit.Timeout(handler, timeout);
-            if (!result) {
-                Console.WriteLine("time was not set");
-            }
-        }
-
-        public void InitPorts(int pipeNum) {
-            byte[] write = new byte[IoReportsSize];
-
-            write[0] = 0xff;
-            write[1] = 0xff;
-            write[2] = 0xff;
-            int? writebyts = IowKit.Write(handler, pipeNum, write, IoReportsSize);
-            if (writebyts != IoReportsSize) {
-                writebyts = IowKit.Write(handler, pipeNum, write, IoReportsSize);
-                if (writebyts != IoReportsSize) {
-                    lastError = "could not write all Datas to InitDevice!";
-                    deviceErrorEvent();
-                }
-            }
-        }
-
-        public void IO(int pipeNum) {
-
-
-            //IowKit.Timeout(handler, 1);
-            //int? ok = IowKit.Read(handler, 0, data, ioReportSize);
-            //if (ok == null || ok != ioReportSize) {
-            //    ok = IowKit.Read(handler, 0, data, ioReportSize);
-            //    if (ok == null || ok != ioReportSize) {
-            //        lastError = "could not read all data";
-            //        deviceErrorEvent();
-            //    }
-            //}
-
-            byte[] data = readDataIm(pipeNum); 
-
-     
-            //foreach(byte da in data){
-            //    Console.WriteLine("data1 : " + da);
-            //}
-            writeDataToPort(data);
-           
-        }
-
-        private byte[] readDataIm(int pipeNum) {
-            byte[] data = new byte[IoReportsSize];
-            bool ok = IowKit.ReadImm(handler, data);
-            if (!ok) {
-                data = readDataIm(pipeNum);
-            }
-            return data;
-        }
-
-
-        public void Close() {
-            IowKit.closeDevice(this.Handler);
-            deviceCloseEvent();
         }
 
         private void deviceCloseEvent() {

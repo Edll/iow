@@ -22,8 +22,10 @@ namespace IowLibrary {
         public bool BitOut {
             get { return bitOut; }
             set {
-                bitOut = value;
-                changeOutEvent();
+                if (bitOut != value) {
+                    bitOut = value;
+                    changeOutEvent();
+                }
             }
         }
 
