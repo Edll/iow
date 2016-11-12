@@ -7,11 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using IowLibrary;
+using System.Threading;
 
 namespace IOW_A1_3 {
-    public partial class Main : Form {
-        private DeviceFactory df;
 
+    public partial class Main : Form {
+        delegate void SetBoolCallback(CheckedListBox clb, int index, bool value);
+
+        private DeviceFactory df;
+        private DeviceHandler portHandler;
+        private Thread portThread;
         public Main() {
 
             InitializeComponent();
@@ -19,10 +24,38 @@ namespace IOW_A1_3 {
             // open of the DeviceFactory
             df = new DeviceFactory(DeviceFactory_OpenError);
 
+            // create inputs
+            createPortEntrys(port0Input, false);
+            createPortEntrys(port1Input, false);
 
-            // ist es möglich ein custom table model zu generieren
-            dataPort0.DataSource = IowPortDataTable.GetResultsTable();
+            // create outputs
+            createPortEntrys(port0Output, true);
+            createPortEntrys(port1Output, true);
 
+            Device device = df.GetDeviceNumber(1);
+            if (device != null) {
+                device.PortBitChange += Device_PortBitChange;
+                portHandler = new DeviceHandler(device);
+            }
+        }
+
+        private void Device_PortBitChange(Port port, PortBit portbit) {
+            if (port.PortNumber == 0) {
+                changeCheckOnList(port0Input, portbit.BitNumber, portbit.BitIn);
+            }
+            if (port.PortNumber == 1) {
+                changeCheckOnList(port1Input, portbit.BitNumber, portbit.BitIn);
+            }
+        }
+
+        private void changeCheckOnList(CheckedListBox clb, int index, bool value) {
+            // um das hier ThreadSafe zu machen wird ein Callback erzeugt wenn der aufrufer nicht gleich dem erzeuger ist.
+            if (clb.InvokeRequired) {
+                SetBoolCallback sbc = new SetBoolCallback(changeCheckOnList);
+                this.Invoke(sbc, new Object[] { clb, index, value });
+            } else {
+                clb.SetItemChecked(index, value);
+            }
         }
 
         private void bttReadInfos_Click(object sender, EventArgs e) {
@@ -32,7 +65,7 @@ namespace IOW_A1_3 {
             NumberOfConDevices.Text = devices == null ? "0" : devices.Count.ToString();
 
             dataGridView1.DataSource = IowDataTable.GetResultsTable(devices);
-          
+
         }
 
 
@@ -44,6 +77,25 @@ namespace IOW_A1_3 {
             MessageBox.Show("Problem mit einem Device " + deviceError);
         }
 
-  
+        private void createPortEntrys(CheckedListBox clb, bool enabel) {
+            for (int i = 0; i < PortBit.maxBitNumber + 1; i++) {
+                clb.Items.Add(i);
+                clb.Enabled = enabel;
+            }
+        }
+
+        private void bttRun_Click(object sender, EventArgs e) {
+            portThread = new Thread(portHandler.IO);
+            portThread.Start();
+            bttStop.Enabled = true;
+            bttRun.Enabled = false;
+        }
+
+        private void bttStop_Click(object sender, EventArgs e) {
+            bttRun.Enabled = true;
+            bttStop.Enabled = false;
+            portHandler.RequestStop();
+            portThread.Join();
+        }
     }
 }

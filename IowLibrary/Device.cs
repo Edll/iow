@@ -7,11 +7,13 @@ using IOW.DllWapper;
 
 namespace IowLibrary {
     public delegate void DeviceStatusEventHandler(Device device);
+    public delegate void DevicePortEventHandler(Port port, PortBit portbit);
 
     public class Device {
         public event DeviceStatusEventHandler DeviceClose;
         public event DeviceStatusEventHandler DeviceError;
         public event DeviceStatusEventHandler IoReadError;
+        public event DevicePortEventHandler PortBitChange;
 
         private int? handler;
         private int deviceNumber;
@@ -123,7 +125,14 @@ namespace IowLibrary {
             for (int i = 0; i < 2; i++) {
                 Port port = new Port(i, this);
                 port.Error += Port_Error;
+                port.PortBitInChange += portBitInChange;
                 ports.Add(port);
+            }
+        }
+
+        private void portBitInChange(Port port, PortBit portBit) {
+           if(PortBitChange != null) {
+                PortBitChange(port, portBit);
             }
         }
 

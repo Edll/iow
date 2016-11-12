@@ -19,13 +19,13 @@ namespace IowLibrary {
         }
 
         public void IO() {
+            stopHandler = false;
             device.InitPorts(numPipe);
 
                device.SetReadTimeout(100);
      
             while (!stopHandler) {
                 device.IO(numPipe);
-       
             }
         }
 

@@ -12,19 +12,19 @@ namespace IOW_A1_3 {
         /// </summary>
         [STAThread]
         static void Main() {
- 
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Main());
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Main());
 
 
-            DeviceFactory df = new DeviceFactory(deviceError);
-            Device device = df.GetDeviceNumber(1);
+            //DeviceFactory df = new DeviceFactory(deviceError);
+            //Device device = df.GetDeviceNumber(1);
 
-            DeviceHandler portHandler = new DeviceHandler(device);
+            //DeviceHandler portHandler = new DeviceHandler(device);
 
-            Thread portThread = new Thread(portHandler.IO);
-            portThread.Start();
+            //Thread portThread = new Thread(portHandler.IO);
+            //portThread.Start();
 
 
 

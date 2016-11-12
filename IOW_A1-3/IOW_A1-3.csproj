@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IowPortDataTable.cs" />
     <Compile Include="IowDataTable.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>

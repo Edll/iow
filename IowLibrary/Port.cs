@@ -6,9 +6,11 @@ using System.Threading;
 
 namespace IowLibrary {
     public delegate void PortEventHandler(Port port);
+    public delegate void PortChangeEventHandler(Port port, PortBit portBit);
 
     public class Port {
         public event PortEventHandler Error;
+        public event PortChangeEventHandler PortBitInChange;
 
         private int portNumber;
         private List<PortBit> portBits;
@@ -41,23 +43,30 @@ namespace IowLibrary {
 
             for (int i = 0; i < PortBit.maxBitNumber + 1; i++) {
                 PortBit bit = new PortBit(i);
-                bit.ChangeIn += BitInChange;
-                bit.ChangeOut += BitOutChange;
+                bit.ChangeIn += bitInChange;
+                bit.ChangeOut += bitOutChange;
                 portBits.Add(bit);
             }
             data = new byte[4];
         }
 
-        private void BitInChange(PortBit portbit) {
+        private void bitInChange(PortBit portbit) {
+            portBitInChangeEvent(portbit);
             System.Console.WriteLine("port: " + portNumber +
                 " bit IN change: " + portbit.BitNumber +
                 " to: " + portbit.BitIn);
         }
 
-        private void BitOutChange(PortBit portbit) {
+        private void bitOutChange(PortBit portbit) {
             System.Console.WriteLine("port: " + portNumber +
                 " bit OUT change: " + portbit.BitNumber +
                 " to: " + portbit.BitOut);
+        }
+
+        private void portBitInChangeEvent(PortBit portbit) {
+            if(PortBitInChange != null) {
+                PortBitInChange(this, portbit);
+            }
         }
 
         private void errorEvent() {
