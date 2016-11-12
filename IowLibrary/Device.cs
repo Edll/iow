@@ -21,6 +21,7 @@ namespace IowLibrary {
         private List<Port> ports;
         private int reportSize;
         private int ioReportSize;
+        private String lastError;
 
         public Device(int? handler) {
             this.Handler = handler;
@@ -68,6 +69,10 @@ namespace IowLibrary {
             set { ioReportSize = value; }
         }
 
+        public string LastError {
+            get { return lastError; }
+            set { lastError = value; }
+        }
 
         private void initDevice() {
             getDeviceProductId();
@@ -112,7 +117,7 @@ namespace IowLibrary {
         }
 
         private void initPorts() {
-            if(ports == null) {
+            if (ports == null) {
                 ports = new List<Port>();
             }
             for (int i = 0; i < 2; i++) {
@@ -125,27 +130,60 @@ namespace IowLibrary {
         private void Port_Error(Port port) {
             System.Console.WriteLine("Error in Port: " + port.PortNumber);
         }
+     
+        public void SetReadTimeout(int timeout) {
+            bool result = IowKit.Timeout(handler, timeout);
+            if (!result) {
+                Console.WriteLine("time was not set");
+            }
+        }
+
+        public void InitPorts(int pipeNum) {
+            byte[] write = new byte[IoReportsSize];
+
+            write[0] = 0xff;
+            write[1] = 0xff;
+            write[2] = 0xff;
+            int? writebyts = IowKit.Write(handler, pipeNum, write, IoReportsSize);
+            if (writebyts != IoReportsSize) {
+                writebyts = IowKit.Write(handler, pipeNum, write, IoReportsSize);
+                if (writebyts != IoReportsSize) {
+                    lastError = "could not write all Datas to InitDevice!";
+                    deviceErrorEvent();
+                }
+            }
+        }
 
         public void IO(int pipeNum) {
 
+
+            //IowKit.Timeout(handler, 1);
+            //int? ok = IowKit.Read(handler, 0, data, ioReportSize);
+            //if (ok == null || ok != ioReportSize) {
+            //    ok = IowKit.Read(handler, 0, data, ioReportSize);
+            //    if (ok == null || ok != ioReportSize) {
+            //        lastError = "could not read all data";
+            //        deviceErrorEvent();
+            //    }
+            //}
+
+            byte[] data = readDataIm(pipeNum); 
+
+     
+            //foreach(byte da in data){
+            //    Console.WriteLine("data1 : " + da);
+            //}
+            writeDataToPort(data);
+           
+        }
+
+        private byte[] readDataIm(int pipeNum) {
             byte[] data = new byte[IoReportsSize];
-            // Read in data
-            Console.WriteLine("ReadIn");
-            int? readByts = IowKit.Read(Handler, 1, data, IoReportsSize);
-            if (readByts == null) {
-                ioErrorEvent();
+            bool ok = IowKit.ReadImm(handler, data);
+            if (!ok) {
+                data = readDataIm(pipeNum);
             }
-            if (readByts != IoReportsSize) {
-                // TODO nicht alle bit eingelesen und nun?
-                Console.WriteLine("not all read in!");
-            }
-            int count = 0;
-            foreach (Byte dat in data) {
-                Console.WriteLine("data " + count +": " + dat);
-                count++;
-            }
-         
-            // Write out ports
+            return data;
         }
 
 
@@ -154,14 +192,30 @@ namespace IowLibrary {
             deviceCloseEvent();
         }
 
-        private void deviceCloseEvent( ) {
+        private void deviceCloseEvent() {
             if (DeviceClose != null) {
                 DeviceClose(this);
             }
-            System.Console.WriteLine("Device: " + Handler + " close");
+            Console.WriteLine("Device: " + Handler + " close");
         }
 
-        private void deviceErrorEvent( ) {
+        private void writeDataToPort(byte[] data) {
+            // da wir mit readImm arbeiten ist das result byte 0 das erste
+            int i = 0;
+            foreach(byte dataIn in data) {
+               if((i+1) <= ports.Count) {
+                    Port port = ports[i];
+                    port.SetInputData(dataIn);
+                }else {
+                    break;
+                }
+
+                i++;
+            }
+
+        }
+
+        private void deviceErrorEvent() {
             if (DeviceError != null) {
                 Close();
                 DeviceError(this);
@@ -169,7 +223,7 @@ namespace IowLibrary {
         }
 
         private void ioErrorEvent() {
-            if(IoReadError != null) {
+            if (IoReadError != null) {
                 IoReadError(this);
             }
         }

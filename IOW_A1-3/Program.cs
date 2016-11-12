@@ -12,14 +12,15 @@ namespace IOW_A1_3 {
         /// </summary>
         [STAThread]
         static void Main() {
-            System.Console.WriteLine("io Read in!");
+ 
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Main());
+
+
             DeviceFactory df = new DeviceFactory(deviceError);
             Device device = df.GetDeviceNumber(1);
 
-            
             DeviceHandler portHandler = new DeviceHandler(device);
 
             Thread portThread = new Thread(portHandler.IO);
@@ -27,7 +28,7 @@ namespace IOW_A1_3 {
 
 
 
-          
+
 
         }
 

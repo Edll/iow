@@ -142,6 +142,45 @@ namespace IowLibrary {
             return result;
         }
 
+        public static bool ReadImm(int? handler, byte[] data) {
+            if (handler == null) {
+                throw new IowLibaryException("handler to to read is null");
+            }
+            IntPtr handlerConvert = ConvertIntToIntPtr(handler);
+
+            return Method.IowKitReadImmediate(handlerConvert, data);
+        }
+
+        /// <summary>
+        /// Write Data to a Device.
+        /// </summary>
+        /// <param name="handler">Handler for the Device</param>
+        /// <param name="numPipe">DataPipe of the usb interface</param>
+        /// <param name="data">data wich are write to the device</param>
+        /// <param name="byteLength">lenght of the Data bytes</param>
+        /// <returns>Real number of bits wich was write to the device</returns>
+        public static int? Write(int? handler, int numPipe, byte[] data, int byteLength) {
+            if (handler == null) {
+                throw new IowLibaryException("handler to to write is null");
+            }
+            IntPtr handlerConvert = ConvertIntToIntPtr(handler);
+
+            int? result = (int)Method.IowKitWrite(handlerConvert, (UInt32)numPipe, data, (UInt32)byteLength);
+            if (result == 0) {
+                result = null;
+            }
+
+            return result;
+        }
+
+        public static bool Timeout(int? handler, int timeout) {
+            if (handler == null) {
+                throw new IowLibaryException("handler to to write is null");
+            }
+            IntPtr handlerConvert = ConvertIntToIntPtr(handler);
+           return Method.IowKitSetTimeout(handlerConvert, (uint)timeout);
+        }
+
         private static IntPtr ConvertIntToIntPtr(int? Input) {
             if (Input == null) {
                 throw new IowLibaryException("input to convert In to IntPtr is null");

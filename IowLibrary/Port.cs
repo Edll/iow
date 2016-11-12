@@ -11,13 +11,12 @@ namespace IowLibrary {
         public event PortEventHandler Error;
 
         private int portNumber;
-        private int bitNumber;
         private List<PortBit> portBits;
         private byte[] data;
         private Device device;
-  
-        public Port(int bitNumber, Device device) {
-            this.bitNumber = bitNumber;
+
+        public Port(int portNumber, Device device) {
+            this.portNumber = portNumber;
             this.device = device;
             initPort();
         }
@@ -29,7 +28,10 @@ namespace IowLibrary {
 
         public int PortNumber {
             get { return portNumber; }
-            set { portNumber = value; }
+            set {
+                Console.WriteLine("set port:" + value);
+                portNumber = value;
+            }
         }
 
         private void initPort() {
@@ -37,23 +39,37 @@ namespace IowLibrary {
                 portBits = new List<PortBit>();
             }
 
-            for (int i = 0; i < portNumber; i++) {
+            for (int i = 0; i < PortBit.maxBitNumber + 1; i++) {
                 PortBit bit = new PortBit(i);
-                bit.Change += Bit_Change;
+                bit.ChangeIn += BitInChange;
+                bit.ChangeOut += BitOutChange;
                 portBits.Add(bit);
             }
-            data = new byte[4];           
+            data = new byte[4];
         }
 
-        private void Bit_Change(PortBit portbit) {
+        private void BitInChange(PortBit portbit) {
             System.Console.WriteLine("port: " + portNumber +
-                " bit change: " + portbit.BitNumber +
-                " to: " + portbit.BitValue);
+                " bit IN change: " + portbit.BitNumber +
+                " to: " + portbit.BitIn);
+        }
+
+        private void BitOutChange(PortBit portbit) {
+            System.Console.WriteLine("port: " + portNumber +
+                " bit OUT change: " + portbit.BitNumber +
+                " to: " + portbit.BitOut);
         }
 
         private void errorEvent() {
             if (Error != null) {
                 Error(this);
+            }
+        }
+
+        public void SetInputData(byte dataIn) {
+            foreach (PortBit bit in portBits) {
+                byte mask = (byte)(1 << bit.BitNumber);
+                 bit.BitIn = ((dataIn & mask) == mask);
             }
         }
     }

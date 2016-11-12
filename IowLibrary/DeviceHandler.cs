@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace IowLibrary {
     public class DeviceHandler {
@@ -18,8 +19,13 @@ namespace IowLibrary {
         }
 
         public void IO() {
+            device.InitPorts(numPipe);
+
+               device.SetReadTimeout(100);
+     
             while (!stopHandler) {
-                device.IO(0);
+                device.IO(numPipe);
+       
             }
         }
 

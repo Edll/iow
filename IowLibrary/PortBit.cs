@@ -7,20 +7,34 @@ namespace IowLibrary {
     public delegate void PortBitChangeEventHandler(PortBit portbit);
 
     public class PortBit {
-        public event PortBitChangeEventHandler Change;
+        public event PortBitChangeEventHandler ChangeOut;
+        public event PortBitChangeEventHandler ChangeIn;
 
         public const int maxBitNumber = 7;
         private int bitNumber = 0;
-        private bool bitValue = false;
+        private bool bitOut = false;
+        private bool bitIn = false;
 
         public PortBit(int bitNumber) {
             this.bitNumber = bitNumber;
         }
 
-        public bool BitValue {
-            get { return bitValue; }
-            set { bitValue = value;
-                changeEvent();
+        public bool BitOut {
+            get { return bitOut; }
+            set {
+                bitOut = value;
+                changeOutEvent();
+            }
+        }
+
+        public bool BitIn {
+            get { return bitIn; }
+            set { 
+                if (bitIn != value) {
+                    bitIn = value;
+                    changeInEvent();
+                }
+
             }
         }
 
@@ -34,9 +48,14 @@ namespace IowLibrary {
             }
         }
 
-        private void changeEvent() {
-            if(Change != null) {
-                Change(this);
+        private void changeOutEvent() {
+            if (ChangeOut != null) {
+                ChangeOut(this);
+            }
+        }
+        private void changeInEvent() {
+            if (ChangeIn != null) {
+                ChangeIn(this);
             }
         }
 
