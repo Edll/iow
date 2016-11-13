@@ -11,6 +11,9 @@ namespace IowLibrary {
     public class Port {
         public event PortEventHandler Error;
         public event PortChangeEventHandler PortBitInChange;
+        public event PortChangeEventHandler PortBitOutChange;
+
+        public const int portOffset = 1;
 
         private int portNumber;
         private List<PortBit> portBits;
@@ -46,6 +49,18 @@ namespace IowLibrary {
 
         }
 
+        public byte GetBitStateAsByte() {
+            byte portState = new byte();
+            portState = 0xff;
+            foreach(PortBit bit in portBits) {
+                int value = PortBit.ConvertToInt(bit.BitOut);
+                int bitNum = bit.BitNumber;
+
+                portState &= (byte) ~(value << bitNum);
+            }
+            return portState;
+        }
+
         private void initPort() {
             if (portBits == null) {
                 portBits = new List<PortBit>();
@@ -68,7 +83,7 @@ namespace IowLibrary {
         }
 
         private void bitOutChange(PortBit portbit) {
-          // TODO nach oben weiter geben!!!
+            portBitOutChangeEvent(portbit);
             System.Console.WriteLine("port: " + portNumber +
                 " bit OUT change: " + portbit.BitNumber +
                 " to: " + portbit.BitOut);
@@ -77,6 +92,12 @@ namespace IowLibrary {
         private void portBitInChangeEvent(PortBit portbit) {
             if (PortBitInChange != null) {
                 PortBitInChange(this, portbit);
+            }
+        }
+
+        private void portBitOutChangeEvent(PortBit portbit) {
+            if (PortBitOutChange != null) {
+                PortBitOutChange(this, portbit);
             }
         }
 

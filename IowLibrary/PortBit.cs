@@ -55,9 +55,18 @@ namespace IowLibrary {
                 ChangeOut(this);
             }
         }
+
         private void changeInEvent() {
             if (ChangeIn != null) {
                 ChangeIn(this);
+            }
+        }
+
+        public static int ConvertToInt(bool value) {
+            if (value) {
+                return 1;
+            }else {
+                return 0;
             }
         }
 

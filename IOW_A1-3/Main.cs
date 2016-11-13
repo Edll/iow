@@ -36,19 +36,19 @@ namespace IOW_A1_3 {
 
             Device device = df.GetDeviceNumber(1);
             if (device != null) {
-                device.PortBitChange += Device_PortBitChange;
+                device.PortBitInChange += Device_PortBitChange;
                 portHandler = new DeviceHandler(device);
             }
         }
 
-        private void Port1Output_ItemCheck(object sender, ItemCheckEventArgs e) {
+        private void Port0Output_ItemCheck(object sender, ItemCheckEventArgs e) {
             int port = 0;
             int device = 1;
             CheckOutputBit(sender, e, port, device);
         }
 
-        private void Port0Output_ItemCheck(object sender, ItemCheckEventArgs e) {
-            int port = 0;
+        private void Port1Output_ItemCheck(object sender, ItemCheckEventArgs e) {
+            int port = 1;
             int device = 1;
             CheckOutputBit(sender, e, port, device);
         }

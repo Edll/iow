@@ -13,14 +13,15 @@ namespace IowLibrary {
         public event DeviceStatusEventHandler DeviceClose;
         public event DeviceStatusEventHandler DeviceError;
         public event DeviceStatusEventHandler IoReadError;
-        public event DevicePortEventHandler PortBitChange;
+        public event DevicePortEventHandler PortBitInChange;
+        public event DevicePortEventHandler PortBitOutChange;
 
         private int? handler;
         private int deviceNumber;
         private int? productId;
         private String serial;
         private String softwareVersion;
-        private List<Port> ports;
+        private Dictionary<int, Port> ports;
         private int reportSize;
         private int ioReportSize;
         private String lastError;
@@ -56,7 +57,7 @@ namespace IowLibrary {
             set { softwareVersion = value; }
         }
 
-        public List<Port> Ports {
+        public Dictionary<int, Port> Ports {
             get { return ports; }
             set { ports = value; }
         }
@@ -86,7 +87,7 @@ namespace IowLibrary {
         public void InitPorts(int pipeNum) {
             byte[] write = new byte[IoReportsSize];
 
-            write[0] = 0xff;
+            write[0] = 0x00;
             write[1] = 0xff;
             write[2] = 0xff;
             int? writebyts = IowKit.Write(handler, pipeNum, write, IoReportsSize);
@@ -108,15 +109,31 @@ namespace IowLibrary {
             }
         }
 
-        public void IO(int pipeNum) {
+        public void ReadPortState(int pipeNum) {
             byte[] data = readDataIm(pipeNum); 
-            writeDataToPort(data);
+            setDataStateToPort(data);
            
         }
 
         public void Close() {
             IowKit.closeDevice(this.Handler);
             deviceCloseEvent();
+        }
+
+        public bool WritePortStateToDevice() {
+            byte[] data = new byte[ioReportSize];
+            data[0] = 0x00;
+            foreach (KeyValuePair<int, Port> kvp in ports) {
+                Port p = kvp.Value;
+                data[kvp.Key + Port.portOffset] = p.GetBitStateAsByte();
+            }
+
+            int? size = IowKit.Write(handler, 0, data, ioReportSize);
+            if (size == null || size != ioReportSize) {
+                Console.WriteLine("not all write to iow device");
+                return false;
+            }
+            return true;
         }
 
         private byte[] readDataIm(int pipeNum) {
@@ -172,19 +189,40 @@ namespace IowLibrary {
 
         private void initPorts() {
             if (ports == null) {
-                ports = new List<Port>();
+                ports = new Dictionary<int, Port>();
             }
             for (int i = 0; i < 2; i++) {
                 Port port = new Port(i, this);
                 port.Error += Port_Error;
                 port.PortBitInChange += portBitInChange;
-                ports.Add(port);
+                port.PortBitOutChange += portBitOutChange;
+                ports.Add(i, port);
+            }
+        }
+
+        private void setDataStateToPort(byte[] data) {
+            // da wir mit readImm arbeiten ist das result byte 0 das erste
+            int i = 0;
+            foreach (byte dataIn in data) {
+                if ((i + 1) <= ports.Count) {
+                    Port port = ports[i];
+                    port.SetInputData(dataIn);
+                } else {
+                    break;
+                }
+                i++;
+            }
+        }
+
+        private void portBitOutChange(Port port, PortBit portBit) {
+            if (PortBitOutChange != null) {
+                PortBitOutChange(port, portBit);
             }
         }
 
         private void portBitInChange(Port port, PortBit portBit) {
-            if (PortBitChange != null) {
-                PortBitChange(port, portBit);
+            if (PortBitInChange != null) {
+                PortBitInChange(port, portBit);
             }
         }
 
@@ -197,22 +235,6 @@ namespace IowLibrary {
                 DeviceClose(this);
             }
             Console.WriteLine("Device: " + Handler + " close");
-        }
-
-        private void writeDataToPort(byte[] data) {
-            // da wir mit readImm arbeiten ist das result byte 0 das erste
-            int i = 0;
-            foreach(byte dataIn in data) {
-               if((i+1) <= ports.Count) {
-                    Port port = ports[i];
-                    port.SetInputData(dataIn);
-                }else {
-                    break;
-                }
-
-                i++;
-            }
-
         }
 
         private void deviceErrorEvent() {

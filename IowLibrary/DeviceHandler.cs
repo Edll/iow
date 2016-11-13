@@ -9,10 +9,17 @@ namespace IowLibrary {
         private volatile bool stopHandler = false;
         private Device device;
         private int numPipe = 0;
+        private bool isDataWrite;
 
         public DeviceHandler(Device device) {
             this.device = device;
+            device.PortBitOutChange += Device_PortBitOutChange;
         }
+
+        private void Device_PortBitOutChange(Port port, PortBit portbit) {
+            isDataWrite = true;
+        }
+
         public Device Device {
             get { return device; }
             set { device = value; }
@@ -25,7 +32,14 @@ namespace IowLibrary {
                device.SetReadTimeout(100);
      
             while (!stopHandler) {
-                device.IO(numPipe);
+                if (isDataWrite) {
+                   bool ok = device.WritePortStateToDevice();
+                    if (ok) {
+                        isDataWrite = false;
+                    }
+                } 
+                    device.ReadPortState(numPipe);
+                
             }
         }
 
