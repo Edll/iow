@@ -80,18 +80,15 @@ namespace IOW_A1_3 {
                 SetBoolCallback sbc = new SetBoolCallback(changeCheckOnList);
                 this.Invoke(sbc, new Object[] { clb, index, value });
             } else {
-                clb.SetItemChecked(index, value);
+                clb.SetItemChecked(index, !value);
             }
         }
 
         private void bttReadInfos_Click(object sender, EventArgs e) {
             df.Refresh();
             Dictionary<int, Device> devices = df.Devices;
-
             NumberOfConDevices.Text = devices == null ? "0" : devices.Count.ToString();
-
             dataGridView1.DataSource = IowDataTable.GetResultsTable(devices);
-
         }
 
 
@@ -115,6 +112,7 @@ namespace IOW_A1_3 {
             portThread.Start();
             bttStop.Enabled = true;
             bttRun.Enabled = false;
+            runStatus.BackColor = Color.Green;
         }
 
         private void bttStop_Click(object sender, EventArgs e) {
@@ -122,6 +120,42 @@ namespace IOW_A1_3 {
             bttStop.Enabled = false;
             portHandler.RequestStop();
             portThread.Join();
+            runStatus.BackColor = Color.Red;
+        }
+
+        private void checked_port1invert(object sender, EventArgs e) {
+
+        }
+
+        private void checked_port0invert(object sender, EventArgs e) {
+
+        }
+
+        private void checked_port0selectAll(object sender, EventArgs e) {
+            SetCheckboxListCheckStatus(sender, port0Output);
+        }
+
+        private void checked_port1selectAll(object sender, EventArgs e) {
+            SetCheckboxListCheckStatus(sender, port1Output);
+        }
+
+        private void SetCheckboxListCheckStatus(object sender, CheckedListBox clb) {
+            if (sender is CheckBox) {
+                CheckBox cb = (CheckBox)sender;
+                if (cb.Checked) {
+                    for (int i = 0; i < clb.Items.Count; i++) {
+                        clb.SetSelected(i, true);
+                        clb.SetItemChecked(i, true);
+                        clb.SetSelected(i, false);
+                    }
+                } else {
+                    for (int i = 0; i < clb.Items.Count; i++) {
+                        clb.SetSelected(i, true);
+                        clb.SetItemChecked(i, false);
+                        clb.SetSelected(i, false);
+                    }
+                }
+            }
         }
     }
 }
