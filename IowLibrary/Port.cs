@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace IowLibrary {
     public delegate void PortEventHandler(Port port);
@@ -12,35 +9,32 @@ namespace IowLibrary {
         public event PortChangeEventHandler PortBitInChange;
         public event PortChangeEventHandler PortBitOutChange;
 
-        public const int portOffset = 1;
+        public const int PortOffset = 1;
 
-        private int portNumber;
-        private List<PortBit> portBits;
-        private byte[] data;
-        private Device device;
+        private int _portNumber;
+        private List<PortBit> _portBits;
 
-        public Port(int portNumber, Device device) {
-            this.portNumber = portNumber;
-            this.device = device;
-            initPort();
+        public Port(int portNumber) {
+            _portNumber = portNumber;
+            InitPort();
         }
 
         public List<PortBit> PortBits {
-            get { return portBits; }
-            set { portBits = value; }
+            get { return _portBits; }
+            set { _portBits = value; }
         }
 
         public int PortNumber {
-            get { return portNumber; }
+            get { return _portNumber; }
             set {
                 Console.WriteLine("set port:" + value);
-                portNumber = value;
+                _portNumber = value;
             }
         }
 
         public void SetBit(int bit, bool value) {
-            if (portBits.Count - 1 >= bit) {
-                PortBit pb = portBits[bit];
+            if (_portBits.Count - 1 >= bit) {
+                var pb = _portBits[bit];
                 pb.BitOut = value;
             } else {
                 Console.WriteLine("try to write bit out of size!");
@@ -49,60 +43,60 @@ namespace IowLibrary {
         }
 
         public byte GetBitStateAsByte() {
-            byte portState = new byte();
-            portState = 0xff;
-            foreach(PortBit bit in portBits) {
-                int value = PortBit.ConvertToInt(bit.BitOut);
-                int bitNum = bit.BitNumber;
+            byte portState = 0xff;
+            foreach(var bit in _portBits) {
+                var value = PortBit.ConvertToInt(bit.BitOut);
+                var bitNum = bit.BitNumber;
 
                 portState &= (byte) ~(value << bitNum);
             }
             return portState;
         }
 
-        private void initPort() {
-            if (portBits == null) {
-                portBits = new List<PortBit>();
+        private void InitPort() {
+            if (_portBits == null) {
+                _portBits = new List<PortBit>();
             }
 
-            for (int i = 0; i < PortBit.maxBitNumber + 1; i++) {
-                PortBit bit = new PortBit(i);
-                bit.ChangeIn += bitInChange;
-                bit.ChangeOut += bitOutChange;
-                portBits.Add(bit);
+            for (var i = 0; i < PortBit.MaxBitNumber + 1; i++) {
+                var bit = new PortBit(i);
+                bit.ChangeIn += BitInChange;
+                bit.ChangeOut += BitOutChange;
+                _portBits.Add(bit);
             }
-            data = new byte[4];
         }
 
-        private void bitInChange(PortBit portbit) {
-            portBitInChangeEvent(portbit);
-            System.Console.WriteLine("port: " + portNumber +
+        private void BitInChange(PortBit portbit) {
+            PortBitInChangeEvent(portbit);
+            //TODO: testausgabe
+            Console.WriteLine("port: " + _portNumber +
                 " bit IN change: " + portbit.BitNumber +
                 " to: " + portbit.BitIn);
         }
 
-        private void bitOutChange(PortBit portbit) {
-            portBitOutChangeEvent(portbit);
-            System.Console.WriteLine("port: " + portNumber +
+        private void BitOutChange(PortBit portbit) {
+            PortBitOutChangeEvent(portbit);
+            //TODO: testausgabe
+            Console.WriteLine("port: " + _portNumber +
                 " bit OUT change: " + portbit.BitNumber +
                 " to: " + portbit.BitOut);
         }
 
-        private void portBitInChangeEvent(PortBit portbit) {
+        private void PortBitInChangeEvent(PortBit portbit) {
             if (PortBitInChange != null) {
                 PortBitInChange(this, portbit);
             }
         }
 
-        private void portBitOutChangeEvent(PortBit portbit) {
+        private void PortBitOutChangeEvent(PortBit portbit) {
             if (PortBitOutChange != null) {
                 PortBitOutChange(this, portbit);
             }
         }
 
         public void SetInputData(byte dataIn) {
-            foreach (PortBit bit in portBits) {
-                byte mask = (byte)(1 << bit.BitNumber);
+            foreach (var bit in _portBits) {
+                var mask = (byte)(1 << bit.BitNumber);
                 bit.BitIn = ((dataIn & mask) == mask);
             }
         }

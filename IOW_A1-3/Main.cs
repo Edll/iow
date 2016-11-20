@@ -1,134 +1,112 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using IowLibrary;
-using System.Threading;
 
 namespace IOW_A1_3 {
 
     public partial class Main : Form {
         private delegate void SetBoolCallback(CheckedListBox clb, int index, bool value);
-       private delegate void SetStringCallback(String text);
+       private delegate void SetStringCallback(string text);
 
-        private DeviceFactory df;
+        private readonly DeviceFactory _deviceFactory;
         public Main() {
 
             InitializeComponent();
 
             // open of the DeviceFactory
-            df = new DeviceFactory(DeviceFactory_OpenError);
+            _deviceFactory = new DeviceFactory(DeviceFactory_OpenError);
 
             // create inputs
-            createPortEntrys(port0Input, false);
-            createPortEntrys(port1Input, false);
+            GuiUtils.CreatePortEntrys(port0Input, false);
+            GuiUtils.CreatePortEntrys(port1Input, false);
 
             // create outputs
-            createPortEntrys(port0Output, true);
+            GuiUtils.CreatePortEntrys(port0Output, true);
             port0Output.ItemCheck += Port0Output_ItemCheck;
-            createPortEntrys(port1Output, true);
+            GuiUtils.CreatePortEntrys(port1Output, true);
             port1Output.ItemCheck += Port1Output_ItemCheck;
 
-            Device device = df.GetDeviceNumber(1);
+            var device = _deviceFactory.GetDeviceNumber(1);
             if (device != null) {
                 device.PortBitInChange += Device_PortBitChange;
             }
         }
 
         private void Port0Output_ItemCheck(object sender, ItemCheckEventArgs e) {
-            int port = 0;
-            int device = 1;
+            var port = 0;
+            var device = 1;
             CheckOutputBit(sender, e, port, device);
         }
 
         private void Port1Output_ItemCheck(object sender, ItemCheckEventArgs e) {
-            int port = 1;
-            int device = 1;
+            var port = 1;
+            var device = 1;
             CheckOutputBit(sender, e, port, device);
         }
 
         private void CheckOutputBit(object sender, ItemCheckEventArgs e, int port, int device) {
-            if (sender is CheckedListBox) {
-                CheckedListBox clb = (CheckedListBox)sender;
-                int bit = Convert.ToInt32(clb.SelectedItem);
-                bool value = false;
-                if (e.NewValue == CheckState.Checked) {
-                    value = true;
-                }
-                df.SetBit(device, port, bit, value);
-            }
+            if (!(sender is CheckedListBox)) return;
+            var clb = (CheckedListBox)sender;
+            var bit = Convert.ToInt32(clb.SelectedItem);
+            var value = e.NewValue == CheckState.Checked;
+            _deviceFactory.SetBit(device, port, bit, value);
         }
 
         private void Device_PortBitChange(Port port, PortBit portbit) {
             if (port.PortNumber == 0) {
-                changeCheckOnList(port0Input, portbit.BitNumber, portbit.BitIn);
+                ChangeCheckOnList(port0Input, portbit.BitNumber, portbit.BitIn);
             }
             if (port.PortNumber == 1) {
-                changeCheckOnList(port1Input, portbit.BitNumber, portbit.BitIn);
+                ChangeCheckOnList(port1Input, portbit.BitNumber, portbit.BitIn);
             }
         }
 
-        private void changeCheckOnList(CheckedListBox clb, int index, bool value) {
+        private void ChangeCheckOnList(CheckedListBox clb, int index, bool value) {
             // um das hier ThreadSafe zu machen wird ein Callback erzeugt wenn der aufrufer nicht gleich dem erzeuger ist.
             if (clb.InvokeRequired) {
-                SetBoolCallback sbc = new SetBoolCallback(changeCheckOnList);
-                this.Invoke(sbc, new Object[] { clb, index, value });
+                var sbc = new SetBoolCallback(ChangeCheckOnList);
+                Invoke(sbc, clb, index, value);
             } else {
                 clb.SetItemChecked(index, !value);
             }
         }
 
         private void bttReadInfos_Click(object sender, EventArgs e) {
-            df.Refresh();
-            Dictionary<int, Device> devices = df.Devices;
-            NumberOfConDevices.Text = devices == null ? "0" : devices.Count.ToString();
+            _deviceFactory.Refresh();
+            var devices = _deviceFactory.Devices;
+            NumberOfConDevices.Text = devices?.Count.ToString() ?? "0";
             dataGridView1.DataSource = IowDataTable.GetResultsTable(devices);
-        }
-
-
-        private static void Device_DeviceError(Device device) {
-            MessageBox.Show("Upss....Device error!: " + device.Handler);
         }
 
         private static void DeviceFactory_OpenError(DeviceFactory deviceError) {
             MessageBox.Show("Problem mit einem Device " + deviceError.GetAndResetErrorList());
         }
 
-        private void createPortEntrys(CheckedListBox clb, bool enabel) {
-            for (int i = 0; i < PortBit.maxBitNumber + 1; i++) {
-                clb.Items.Add(i);
-                clb.Enabled = enabel;
-            }
-        }
-
         private void bttRun_Click(object sender, EventArgs e) {
-            df.RunDevice(1);
-            df.RunTimeUpate += Df_RunTimeUpate;
+            _deviceFactory.RunDevice(1);
+            _deviceFactory.RunTimeUpate += DeviceFactoryRunTimeUpate;
             bttStop.Enabled = true;
             bttRun.Enabled = false;
             runStatus.BackColor = Color.Green;
         }
 
-        private void Df_RunTimeUpate(long runtime) {
+        private void DeviceFactoryRunTimeUpate(long runtime) {
             if (runtimeLabel.InvokeRequired) {
-                SetStringCallback slc = new SetStringCallback(SetRuntimeLabelText);
-                this.Invoke(slc, new Object[] { Convert.ToString(runtime) });
+                var slc = new SetStringCallback(SetRuntimeLabelText);
+                Invoke(slc, Convert.ToString(runtime));
             } else {
                 SetRuntimeLabelText(Convert.ToString(runtime));
             }
         }
 
-        private void SetRuntimeLabelText(String text)
+        private void SetRuntimeLabelText(string text)
         {
             runtimeLabel.Text = text + " ms";
         }
 
         private void bttStop_Click(object sender, EventArgs e) {
-            df.StopDevice(1);
+            _deviceFactory.StopDevice(1);
             bttRun.Enabled = true;
             bttStop.Enabled = false;
             runStatus.BackColor = Color.Red;
@@ -152,7 +130,7 @@ namespace IOW_A1_3 {
         }
 
         private void CloseProgramm(object sender, FormClosedEventArgs e) {
-            df.RemoveAllDevices();
+            _deviceFactory.RemoveAllDevices();
         }
     }
 }

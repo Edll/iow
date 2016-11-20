@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using IowLibrary.DllWapper;
 
@@ -10,9 +8,11 @@ namespace IowLibrary {
     public delegate void DeviceHandlerEvent(long runtime);
 
     public class DeviceHandler {
+        private const int CountRuntimeRounds = 50;
+
         public event DeviceHandlerEvent RunTimeUpdate;
 
-        private volatile bool _stopHandler = false;
+        private volatile bool _stopHandler;
         private bool _isDataWrite;
 
         private long _runtime;
@@ -20,7 +20,7 @@ namespace IowLibrary {
         private readonly List<long> _stopWatchResult = new List<long>();
 
         public DeviceHandler(Device device) {
-            this.Device = device;
+            Device = device;
             device.PortBitOutChange += Device_PortBitOutChange;
         }
 
@@ -65,7 +65,7 @@ namespace IowLibrary {
         private void AddStopWatchResult(long stopwatchElapsedMilliseconds) {
             _stopWatchResult.Add(stopwatchElapsedMilliseconds);
 
-            if (_stopWatchResult.Count() < 50) return;
+            if (_stopWatchResult.Count() < CountRuntimeRounds) return;
 
             UpdateRuntime();
         }

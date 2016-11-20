@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace IowLibrary {
     public delegate void PortBitChangeEventHandler(PortBit portbit);
@@ -10,64 +7,58 @@ namespace IowLibrary {
         public event PortBitChangeEventHandler ChangeOut;
         public event PortBitChangeEventHandler ChangeIn;
 
-        public const int maxBitNumber = 7;
-        private int bitNumber = 0;
-        private bool bitOut = false;
-        private bool bitIn = false;
+        public const int MaxBitNumber = 7;
+        private int _bitNumber;
+        private bool _bitOut;
+        private bool _bitIn;
 
         public PortBit(int bitNumber) {
-            this.bitNumber = bitNumber;
+            _bitNumber = bitNumber;
         }
 
         public bool BitOut {
-            get { return bitOut; }
+            get { return _bitOut; }
             set {
-                if (bitOut != value) {
-                    bitOut = value;
-                    changeOutEvent();
-                }
+                if (_bitOut == value) { return;}
+                _bitOut = value;
+                ChangeOutEvent();
             }
         }
 
         public bool BitIn {
-            get { return bitIn; }
+            get { return _bitIn; }
             set { 
-                if (bitIn != value) {
-                    bitIn = value;
-                    changeInEvent();
+                if (_bitIn != value) {
+                    _bitIn = value;
+                    ChangeInEvent();
                 }
 
             }
         }
 
         public int BitNumber {
-            get { return bitNumber; }
+            get { return _bitNumber; }
             set {
-                if (value < maxBitNumber) {
-                    throw new IndexOutOfRangeException("Max Bitnumber is: " + maxBitNumber + " given was: " + value);
+                if (value < MaxBitNumber) {
+                    throw new IndexOutOfRangeException("Max Bitnumber is: " + MaxBitNumber + " given was: " + value);
                 }
-                bitNumber = value;
+                _bitNumber = value;
             }
         }
 
-        private void changeOutEvent() {
-            if (ChangeOut != null) {
-                ChangeOut(this);
-            }
+        private void ChangeOutEvent()
+        {
+            ChangeOut?.Invoke(this);
         }
 
-        private void changeInEvent() {
-            if (ChangeIn != null) {
-                ChangeIn(this);
-            }
+        private void ChangeInEvent()
+        {
+            ChangeIn?.Invoke(this);
         }
 
-        public static int ConvertToInt(bool value) {
-            if (value) {
-                return 1;
-            }else {
-                return 0;
-            }
+        public static int ConvertToInt(bool value)
+        {
+            return value ? 1 : 0;
         }
 
     }

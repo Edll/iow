@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IowLibrary.DllWapper;
@@ -16,7 +15,7 @@ namespace IowLibrary {
         /// </summary>
         /// <returns>null if no devices was found else handler of the first device.</returns>
         public static int? OpenDevices() {
-            int handler = ConvertIntPtrToInt(Method.IowKitOpenDevice());
+            var handler = ConvertIntPtrToInt(Method.IowKitOpenDevice());
             if (handler == 0) {
                 return null;
             }
@@ -28,7 +27,7 @@ namespace IowLibrary {
         /// </summary>
         /// <returns>null if no device was found else number of Devices.</returns>
         public static int? GetConnectDeviceCounter() {
-            int number = (int)Method.IowKitGetNumDevs();
+            var number = (int)Method.IowKitGetNumDevs();
             if (number == 0) {
                 return null;
             }
@@ -39,7 +38,7 @@ namespace IowLibrary {
         /// Try to Close a device with the given Handler.
         /// </summary>
         /// <param name="handler">device handler</param>
-        public static void closeDevice(int? handler) {
+        public static void CloseDevice(int? handler) {
             Method.IowKitCloseDevice(ConvertIntToIntPtr(handler));
         }
 
@@ -55,7 +54,7 @@ namespace IowLibrary {
                 throw new IowLibaryException("devicenumber is null");
             }
 
-            int handler = ConvertIntPtrToInt(Method.IowKitGetDeviceHandle((uint)deviceNumber));
+            var handler = ConvertIntPtrToInt(Method.IowKitGetDeviceHandle((uint)deviceNumber));
             if (handler == 0) {
                 return null;
             } else {
@@ -74,7 +73,7 @@ namespace IowLibrary {
                 throw new IowLibaryException("handler to get productid is null");
             }
 
-            uint id = Method.IowKitGetProductId(ConvertIntToIntPtr(handler));
+            var id = Method.IowKitGetProductId(ConvertIntToIntPtr(handler));
             if (id == 0) {
                 return null;
             } else {
@@ -88,13 +87,13 @@ namespace IowLibrary {
         /// <param name="handler">Handler for the Device</param>
         /// <returns>Productserial as String</returns>
         /// <exception cref="IowLibaryException">If handler is null</exception> 
-        public static String GetProductSerial(int? handler) {
+        public static string GetProductSerial(int? handler) {
             if (handler == null) {
                 throw new IowLibaryException("handler to get product serial is null");
             }
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            bool conditon = Method.IowKitGetSerialNumber(ConvertIntToIntPtr(handler), sb);
+            var conditon = Method.IowKitGetSerialNumber(ConvertIntToIntPtr(handler), sb);
             if (!conditon) {
                 return null;
             }
@@ -108,17 +107,14 @@ namespace IowLibrary {
         /// <param name="handler">Handler for the Device</param>
         /// <returns>Software Version as formated String</returns>
         /// <exception cref="IowLibaryException">If handler is null</exception> 
-        public static String GetProductSoftwareVersion(int? handler) {
+        public static string GetProductSoftwareVersion(int? handler) {
             if (handler == null) {
                 throw new IowLibaryException("handler to get software version is null");
             }
-            UInt32 software = Method.IowKitGetRevision(ConvertIntToIntPtr(handler));
-            if (software == Defines.IOW_NON_LEGACY_REVISION) {
-                return "no Software Version";
-            }
-            /// Es sind 4 Hex-Stellen gültig. Wäre die gegenwärtige Softwareversion 1.0.2.1 so wird
-            /// 0x1021 zurückgegeben.
-            return String.Format("{0:X}", software);
+            var software = Method.IowKitGetRevision(ConvertIntToIntPtr(handler));
+            // Es sind 4 Hex-Stellen gültig. Wäre die gegenwärtige Softwareversion 1.0.2.1 so wird
+            // 0x1021 zurückgegeben.
+            return software == Defines.IOW_NON_LEGACY_REVISION ? "no Software Version" : $"{software:X}";
         }
 
         /// <summary>
@@ -133,9 +129,9 @@ namespace IowLibrary {
             if (handler == null) {
                 throw new IowLibaryException("handler to to read is null");
             }
-            IntPtr handlerConvert = ConvertIntToIntPtr(handler);
+            var handlerConvert = ConvertIntToIntPtr(handler);
 
-            int? result = (int)Method.IowKitRead(handlerConvert, (UInt32)numPipe, data, (UInt32)byteLength);
+            int? result = (int)Method.IowKitRead(handlerConvert, (uint)numPipe, data, (uint)byteLength);
             if (result == 0) {
                 return null;
             }
@@ -146,7 +142,7 @@ namespace IowLibrary {
             if (handler == null) {
                 throw new IowLibaryException("handler to to read is null");
             }
-            IntPtr handlerConvert = ConvertIntToIntPtr(handler);
+            var handlerConvert = ConvertIntToIntPtr(handler);
 
             return Method.IowKitReadImmediate(handlerConvert, data);
         }
@@ -163,9 +159,9 @@ namespace IowLibrary {
             if (handler == null) {
                 throw new IowLibaryException("handler to to write is null");
             }
-            IntPtr handlerConvert = ConvertIntToIntPtr(handler);
+            var handlerConvert = ConvertIntToIntPtr(handler);
 
-            int? result = (int)Method.IowKitWrite(handlerConvert, (UInt32)numPipe, data, (UInt32)byteLength);
+            int? result = (int)Method.IowKitWrite(handlerConvert, (uint)numPipe, data, (uint)byteLength);
             if (result == 0) {
                 result = null;
             }
@@ -177,19 +173,19 @@ namespace IowLibrary {
             if (handler == null) {
                 throw new IowLibaryException("handler to to write is null");
             }
-            IntPtr handlerConvert = ConvertIntToIntPtr(handler);
+            var handlerConvert = ConvertIntToIntPtr(handler);
            return Method.IowKitSetTimeout(handlerConvert, (uint)timeout);
         }
 
-        private static IntPtr ConvertIntToIntPtr(int? Input) {
-            if (Input == null) {
+        private static IntPtr ConvertIntToIntPtr(int? input) {
+            if (input == null) {
                 throw new IowLibaryException("input to convert In to IntPtr is null");
             }
-            return (IntPtr)Input;
+            return (IntPtr)input;
         }
 
-        private static int ConvertIntPtrToInt(IntPtr Input) {
-            return (int)Input;
+        private static int ConvertIntPtrToInt(IntPtr input) {
+            return (int)input;
         }
 
     }

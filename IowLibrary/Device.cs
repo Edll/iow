@@ -90,7 +90,7 @@ namespace IowLibrary {
         /// Close this Device. Triggers the Devices close Event
         /// </summary>
         public void Close() {
-            IowKit.closeDevice(Handler);
+            IowKit.CloseDevice(Handler);
             DeviceCloseEvent();
         }
 
@@ -103,7 +103,7 @@ namespace IowLibrary {
             data[0] = 0x00;
             foreach (var kvp in Ports) {
                 var p = kvp.Value;
-                data[kvp.Key + Port.portOffset] = p.GetBitStateAsByte();
+                data[kvp.Key + Port.PortOffset] = p.GetBitStateAsByte();
             }
 
             var size = IowKit.Write(Handler, 0, data, IoReportsSize);
@@ -166,7 +166,7 @@ namespace IowLibrary {
                 Ports = new Dictionary<int, Port>();
             }
             for (var i = 0; i < 2; i++) {
-                var port = new Port(i, this);
+                var port = new Port(i);
                 port.PortBitInChange += PortBitInChangeEvent;
                 port.PortBitOutChange += PortBitOutChangeEvent;
                 Ports.Add(i, port);
