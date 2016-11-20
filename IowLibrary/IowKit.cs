@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IOW.DllWapper;
+using IowLibrary.DllWapper;
 
 namespace IowLibrary {
     /// <summary>

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
+using System.Text;
 
-namespace IOW
+namespace IowLibrary
 {
     namespace DllWapper
     {
@@ -28,8 +26,8 @@ namespace IOW
             public const uint IOWKIT_MAX_PIPEX = 2;
 
             // pipe names
-            public const uint IOW_PIPE_IO_PINS = 0;
-            public const uint IOW_PIPE_SPECIAL_MODE = 1;
+            public const int IOW_PIPE_IO_PINS = 0;
+            public const int IOW_PIPE_SPECIAL_MODE = 1;
 
             // Max number of IOW devices in system
             public const uint IOWKIT_MAX_DEVICES = 16;

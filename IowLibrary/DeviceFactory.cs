@@ -1,25 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using IOW.DllWapper;
+using IowLibrary.DllWapper;
 
 namespace IowLibrary {
-    public delegate void DeviceFactorEventHandler(String deviceError);
+    public delegate void DeviceFactoryEventHandler(DeviceFactory device);
+    public delegate void DeviceUpdateEventHandler(long runtime);
 
     public class DeviceFactory {
-        public event DeviceFactorEventHandler DeviceError;
+        public const int DeviceTimeout = 200;
 
-        private Dictionary<int, Device> devices;
-        private int? deviceCounter = null;
-        private readonly DeviceFactory instance;
+        public event DeviceFactoryEventHandler DeviceError;
+        public event DeviceUpdateEventHandler RunTimeUpate;
 
-        public DeviceFactory(DeviceFactorEventHandler DeviceError) {
-            this.DeviceError += DeviceError;
-            initFactory();
+        private Dictionary<int, Device> _devices;
+        private int? _deviceCounter;
+        private readonly DeviceFactory _instance;
+        private DeviceHandlerFactory _deviceHandlerFactory = new DeviceHandlerFactory();
+        private readonly List<string> _errorsList = new List<string>();
 
-            if (instance == null) {
-                instance = this;
+        public DeviceFactory(DeviceFactoryEventHandler deviceError) {
+            DeviceError += deviceError;
+            InitFactory();
+
+            if (_instance == null) {
+                _instance = this;
             }
         }
 
@@ -29,169 +34,246 @@ namespace IowLibrary {
 
         public Dictionary<int, Device> Devices {
             get {
-                if (devices == null) {
-                    initFactory();
-                    if (devices == null) {
-                        deviceError("Es wurden keine Angeschlossenen Devices gefunden");
-                    }
-                }
-                return devices;
+                if (_devices != null) return _devices;
+                InitFactory();
+                return _devices;
             }
-            set { devices = value; }
+            set { _devices = value; }
         }
 
-        private void initFactory() {
-            bool isOpen = openDevices();
-            if (!isOpen) {
-                return;
-            }
-
-            bool isCountDevices = countDevices();
-            if (!isCountDevices) {
-                return;
-            }
-            openAllAvailableDevices();
+        /// <summary>
+        /// Runs the I/O Read/Write for the Device with the given devices Number
+        /// </summary>
+        /// <param name="deviceNumber">Number of the Device to Run</param>
+        public void RunDevice(int deviceNumber) {
+            var device = GetDeviceNumber(deviceNumber);
+            var deviceHandler = _deviceHandlerFactory.AddNewDeviceThread(device);
+            deviceHandler.RunTimeUpdate += DeviceHandler_RunTimeUpdate;
         }
 
-        private void openAllAvailableDevices() {
-            for (int? i = Defines.IOWKIT_START_NUMBERING; i <= deviceCounter; i++) {
-                int? handler = IowKit.GetHandlerForDevice(i);
-                if (handler == null && DeviceError != null) {
-                    // TODO: close devices if there is no!
-                    DeviceError("Das Device mit der Nummer: " + i + " konnte nicht geöffnet " +
-                        "werden. Wurde es zwischendurch entfernt.");
-                    continue;
-                }
-                AddDevice((int)handler, (int)i);
-            }
+        /// <summary>
+        /// Stops the I/O Read for the Device with the given number
+        /// </summary>
+        /// <param name="deviceNumber">Number of the device to Stop</param>
+        public void StopDevice(int deviceNumber) {
+            var device = GetDeviceNumber(deviceNumber);
+            _deviceHandlerFactory.StopDeviceThread(device);
         }
 
+        /// <summary>
+        /// Set a Bit of a Device
+        /// </summary>
+        /// <param name="deviceNumber">Number of the Target Device</param>
+        /// <param name="port">Target port Number Starts with 0</param>
+        /// <param name="bit">Target Bit of the port Starts with 0</param>
+        /// <param name="value">Target portstate</param>
         public void SetBit(int deviceNumber, int port, int bit, bool value) {
-            Device device = GetDeviceNumber(deviceNumber);
+            var device = GetDeviceNumber(deviceNumber);
             device.SetBit(port, bit, value);
         }
 
+        /// <summary>
+        /// Refresh the Factory
+        /// </summary>
         public void Refresh() {
-            if (Devices != null) {
-                Devices.Clear();
-            }
-            initFactory();
+            RemoveAllDevices();
+            InitFactory();
         }
 
-        private bool openDevices() {
-            int? firstDeviceHandler = IowKit.OpenDevices();
-            if (firstDeviceHandler == null) {
-                deviceError("Es wurde kein Device gefunden");
-                return false;
-            }
-            return true;
-        }
-
-        private bool countDevices() {
-            deviceCounter = IowKit.GetConnectDeviceCounter();
-            if (deviceCounter == null && DeviceError != null) {
-                deviceError("Fehler beim öffnen der Devices. Wurden welche angeschlossen?");
-                return false;
-            }
-            return true;
-        }
-
-        public void AddDevice(int handler, int deviceNumber) {
-            if (devices == null) {
-                devices = new Dictionary<int, Device>();
-            }
-
-            Device device = new Device(handler);
-            device.DeviceNumber = deviceNumber;
-            device.DeviceClose += Device_DeviceClose;
-            devices.Add(handler, device);
-        }
-
-        public void RemoveDevice(int? handler) {
-            Device device = null;
-
-            devices.TryGetValue((int)handler, out device);
-
-            if (device != null) {
-                device.Close();
-                removeDevice(handler);
-            } else {
-                deviceError("Device mit dem Handler: " + handler + " konnte nicht enfernt werden.");
-            }
-        }
-
+        /// <summary>
+        /// Remove All Devices From the Factory, if needed it Close the Devices.
+        /// </summary>
         public void RemoveAllDevices() {
-            if (Devices != null) {
-                try {
-
-                    foreach (KeyValuePair<int, Device> deviceEntry in Devices) {
-                        Device device = deviceEntry.Value;
-                        device.Close();
-                    }
-
-                } catch (InvalidOperationException) {
-                    // ignore
+            if (_deviceHandlerFactory != null) {
+                _deviceHandlerFactory.StopAllDeviceThreads();
+                _deviceHandlerFactory = null;
+            }
+            if (Devices == null) return;
+            try {
+                foreach (var deviceEntry in Devices) {
+                    RemoveDeviceFromFactory(deviceEntry.Key);
                 }
-                devices.Clear();
+            } catch (InvalidOperationException) {
+                // kann ignoriert werden da alle Devices schon weg sind!
             }
+
+            _devices.Clear();
         }
 
-        // for internal use only, to prevent a seconde Close event.
-        private void removeDevice(int? handler) {
-            System.Console.WriteLine("Device will be removed: " + handler);
-            devices.Remove((int)handler);
-        }
-
-        public Device GetDevice(int handler) {
-            Device device = null;
-
-            devices.TryGetValue(handler, out device);
-
-            if (device == null) {
-                deviceError("Device mit dem Handler: " + handler + " konnte nicht enfernt werden.");
-            }
-            return device;
-        }
-
+        /// <summary>
+        /// Picks the Devices with the DeviceNumber.
+        /// </summary>
+        /// <param name="deviceNumber">Number of the Device we want to Pick</param>
+        /// <returns>Null if device is not found</returns>
+        /// <exception cref="ArgumentException">if number is not Valid</exception>
         public Device GetDeviceNumber(int deviceNumber) {
-            if (deviceNumber < Defines.IOWKIT_START_NUMBERING) {
-                throw new ArgumentException("Die angegebene Device Nummer ist zu klein");
-            }
-            if (devices != null) {
-                foreach (KeyValuePair<int, Device> deviceEntry in devices) {
-                    Device device = deviceEntry.Value;
+            LibaryUtils.CheckDeviceNumber(deviceNumber);
+
+            if (_devices != null) {
+                foreach (var deviceEntry in _devices) {
+                    var device = deviceEntry.Value;
                     if (device.DeviceNumber == deviceNumber) {
                         return device;
                     }
                 }
             }
-            deviceError("Es wurde kein Device mit der Nummer: " + deviceNumber + " gefunden");
+            AddDeviceFactoryError("Es wurde kein Device mit der Nummer: " + deviceNumber + " gefunden");
             return null;
         }
+        /// <summary>
+        /// Get a Device by the Handler
+        /// </summary>
+        /// <param name="handler">handler of the Device we want</param>
+        public Device GetDeviceFromHandler(int handler) {
+            Device device;
 
+            _devices.TryGetValue(handler, out device);
+
+            if (device == null) {
+                AddDeviceFactoryError("Device mit dem Handler: " + handler + " konnte nicht enfernt werden.");
+            }
+            return device;
+        }
+
+        /// <summary>
+        /// Number of the Devices handel in Factory
+        /// </summary>
+        /// <returns>0 to Number of Devices</returns>
         public int GetNumberOfDevices() {
-            return devices == null ? 0 : devices.Count; ;
+            return _devices?.Count ?? 0;
+        }
+
+        /// <summary>
+        ///  Gets all Error stored in the Factory
+        /// </summary>
+        public string GetDeviceFactoryErrors() {
+            return _errorsList.Aggregate("", (current, error) => current + (error + "\n"));
+        }
+
+        /// <summary>
+        /// Reset the Errors stored in the Factory
+        /// </summary>
+        public void ResetErrorList() {
+            _errorsList?.Clear();
+        }
+
+        /// <summary>
+        /// Get all Errors form the Factory and Reset them.
+        /// </summary>
+        public string GetAndResetErrorList() {
+            var errors = GetDeviceFactoryErrors();
+            ResetErrorList();
+            return errors;
+        }
+
+        private void InitFactory() {
+            var isOpen = OpenConnectedDevices();
+            if (!isOpen) {
+                return;
+            }
+
+            var isCountDevices = CountConnectedDevices();
+            if (!isCountDevices) {
+                return;
+            }
+            AddAllConnectedDeviceToFactory();
+        }
+
+        private bool OpenConnectedDevices() {
+            var firstDeviceHandler = IowKit.OpenDevices();
+
+            if (firstDeviceHandler != null) {
+                return true;
+            }
+
+            AddDeviceFactoryError("Fehler beim öffnen der Devices. Sind welche Verbunden?");
+            return false;
+
+        }
+
+        private bool CountConnectedDevices() {
+            _deviceCounter = IowKit.GetConnectDeviceCounter();
+
+            if (_deviceCounter != null) {
+                return true;
+            }
+
+            AddDeviceFactoryError("Fehler beim öffnen der Devices. Sind welche Verbunden?");
+            return false;
+        }
+
+        private void AddAllConnectedDeviceToFactory() {
+            for (int? i = Defines.IOWKIT_START_NUMBERING; i <= _deviceCounter; i++) {
+                var handler = IowKit.GetHandlerForDevice(i);
+
+                if (handler == null) {
+                    AddDeviceFactoryError("Das Device mit der Nummer: " + i + " konnte nicht geöffnet " +
+                        "werden.");
+                    continue;
+                }
+
+                AddDeviceToFactory((int)handler, (int)i);
+            }
+        }
+
+        private void AddDeviceToFactory(int handler, int deviceNumber) {
+            if (_devices == null) {
+                _devices = new Dictionary<int, Device>();
+            }
+
+            var device = new Device(handler) { DeviceNumber = deviceNumber };
+            device.DeviceClose += Device_DeviceClose;
+            _devices.Add(handler, device);
+        }
+
+        private void RemoveDeviceFromFactory(int? handler) {
+            Device device;
+
+            if (handler == null) { return; }
+
+            _devices.TryGetValue((int)handler, out device);
+
+            if (device != null) {
+                device.Close();
+                RemoveDevice(handler);
+            } else {
+                AddDeviceFactoryError("Device mit dem Handler: " + handler + " konnte nicht enfernt werden.");
+            }
+        }
+
+        private void RemoveDevice(int? handler) {
+            Console.WriteLine("Device will be removed: " + handler);
+            if (handler != null) _devices.Remove((int)handler);
         }
 
         private void Device_DeviceClose(Device device) {
-            if (device != null && device.Handler != null) {
-                this.removeDeviceAsCloseEvent(device);
+            if (device?.Handler != null) {
+                RemoveDeviceAsCloseEvent(device);
             }
         }
 
-        private void removeDeviceAsCloseEvent(Device device) {
-            Device deviceFromFactroy = null;
-            devices.TryGetValue((int)device.Handler, out deviceFromFactroy);
+        private void RemoveDeviceAsCloseEvent(Device device) {
+            if (device.Handler == null) return;
+
+            Device deviceFromFactroy;
+
+            _devices.TryGetValue((int)device.Handler, out deviceFromFactroy);
+
             if (deviceFromFactroy != null) {
-                removeDevice(device.Handler);
+                RemoveDevice(device.Handler);
             }
         }
 
-        private void deviceError(String msg) {
+        private void AddDeviceFactoryError(string msg) {
+            _errorsList.Add(msg);
             if (DeviceError == null) {
                 throw new SystemException("Error at Devices handling: " + msg);
             }
-            DeviceError(msg);
+            DeviceError(this);
+        }
+
+        private void DeviceHandler_RunTimeUpdate(long runtime) {
+            RunTimeUpate?.Invoke(runtime);
         }
     }
 }

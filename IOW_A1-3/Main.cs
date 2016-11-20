@@ -12,11 +12,10 @@ using System.Threading;
 namespace IOW_A1_3 {
 
     public partial class Main : Form {
-        delegate void SetBoolCallback(CheckedListBox clb, int index, bool value);
+        private delegate void SetBoolCallback(CheckedListBox clb, int index, bool value);
+       private delegate void SetStringCallback(String text);
 
         private DeviceFactory df;
-        private DeviceHandler portHandler;
-        private Thread portThread;
         public Main() {
 
             InitializeComponent();
@@ -37,7 +36,6 @@ namespace IOW_A1_3 {
             Device device = df.GetDeviceNumber(1);
             if (device != null) {
                 device.PortBitInChange += Device_PortBitChange;
-                portHandler = new DeviceHandler(device);
             }
         }
 
@@ -96,8 +94,8 @@ namespace IOW_A1_3 {
             MessageBox.Show("Upss....Device error!: " + device.Handler);
         }
 
-        private static void DeviceFactory_OpenError(String deviceError) {
-            MessageBox.Show("Problem mit einem Device " + deviceError);
+        private static void DeviceFactory_OpenError(DeviceFactory deviceError) {
+            MessageBox.Show("Problem mit einem Device " + deviceError.GetAndResetErrorList());
         }
 
         private void createPortEntrys(CheckedListBox clb, bool enabel) {
@@ -108,19 +106,33 @@ namespace IOW_A1_3 {
         }
 
         private void bttRun_Click(object sender, EventArgs e) {
-            portThread = new Thread(portHandler.IO);
-            portThread.Start();
+            df.RunDevice(1);
+            df.RunTimeUpate += Df_RunTimeUpate;
             bttStop.Enabled = true;
             bttRun.Enabled = false;
             runStatus.BackColor = Color.Green;
         }
 
+        private void Df_RunTimeUpate(long runtime) {
+            if (runtimeLabel.InvokeRequired) {
+                SetStringCallback slc = new SetStringCallback(SetRuntimeLabelText);
+                this.Invoke(slc, new Object[] { Convert.ToString(runtime) });
+            } else {
+                SetRuntimeLabelText(Convert.ToString(runtime));
+            }
+        }
+
+        private void SetRuntimeLabelText(String text)
+        {
+            runtimeLabel.Text = text + " ms";
+        }
+
         private void bttStop_Click(object sender, EventArgs e) {
+            df.StopDevice(1);
             bttRun.Enabled = true;
             bttStop.Enabled = false;
-            portHandler.RequestStop();
-            portThread.Join();
             runStatus.BackColor = Color.Red;
+            SetRuntimeLabelText("0");
         }
 
         private void checked_port1invert(object sender, EventArgs e) {
@@ -132,30 +144,15 @@ namespace IOW_A1_3 {
         }
 
         private void checked_port0selectAll(object sender, EventArgs e) {
-            SetCheckboxListCheckStatus(sender, port0Output);
+            GuiUtils.CheckboxListSetAllItems(sender, port0Output);
         }
 
         private void checked_port1selectAll(object sender, EventArgs e) {
-            SetCheckboxListCheckStatus(sender, port1Output);
+            GuiUtils.CheckboxListSetAllItems(sender, port1Output);
         }
 
-        private void SetCheckboxListCheckStatus(object sender, CheckedListBox clb) {
-            if (sender is CheckBox) {
-                CheckBox cb = (CheckBox)sender;
-                if (cb.Checked) {
-                    for (int i = 0; i < clb.Items.Count; i++) {
-                        clb.SetSelected(i, true);
-                        clb.SetItemChecked(i, true);
-                        clb.SetSelected(i, false);
-                    }
-                } else {
-                    for (int i = 0; i < clb.Items.Count; i++) {
-                        clb.SetSelected(i, true);
-                        clb.SetItemChecked(i, false);
-                        clb.SetSelected(i, false);
-                    }
-                }
-            }
+        private void CloseProgramm(object sender, FormClosedEventArgs e) {
+            df.RemoveAllDevices();
         }
     }
 }

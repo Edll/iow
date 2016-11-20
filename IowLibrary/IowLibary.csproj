@@ -40,9 +40,11 @@
   <ItemGroup>
     <Compile Include="Device.cs" />
     <Compile Include="DeviceFactory.cs" />
+    <Compile Include="DeviceHandlerFactory.cs" />
     <Compile Include="DllWapper.cs" />
     <Compile Include="IowKit.cs" />
     <Compile Include="IowLibaryException.cs" />
+    <Compile Include="LibaryUtils.cs" />
     <Compile Include="Port.cs" />
     <Compile Include="PortBit.cs" />
     <Compile Include="DeviceHandler.cs" />

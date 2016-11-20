@@ -30,12 +30,21 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabControl = new System.Windows.Forms.TabPage();
+            this.runStatus = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.port1selectAll = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.port1invert = new System.Windows.Forms.CheckBox();
             this.port1Output = new System.Windows.Forms.CheckedListBox();
             this.port1Input = new System.Windows.Forms.CheckedListBox();
             this.bttStop = new System.Windows.Forms.Button();
             this.bttRun = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.port0selectAll = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.port0invert = new System.Windows.Forms.CheckBox();
             this.port0Output = new System.Windows.Forms.CheckedListBox();
             this.port0Input = new System.Windows.Forms.CheckedListBox();
             this.tabWarriorInfo = new System.Windows.Forms.TabPage();
@@ -44,15 +53,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.NumberOfConDevices = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.port0invert = new System.Windows.Forms.CheckBox();
-            this.port1invert = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.port0selectAll = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.port1selectAll = new System.Windows.Forms.CheckBox();
-            this.runStatus = new System.Windows.Forms.Label();
+            this.runtimeLabel = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -75,6 +76,7 @@
             // 
             // tabControl
             // 
+            this.tabControl.Controls.Add(this.runtimeLabel);
             this.tabControl.Controls.Add(this.runStatus);
             this.tabControl.Controls.Add(this.groupBox3);
             this.tabControl.Controls.Add(this.bttStop);
@@ -87,6 +89,15 @@
             this.tabControl.TabIndex = 0;
             this.tabControl.Text = "Controll";
             this.tabControl.UseVisualStyleBackColor = true;
+            // 
+            // runStatus
+            // 
+            this.runStatus.BackColor = System.Drawing.Color.Red;
+            this.runStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.runStatus.Location = new System.Drawing.Point(168, 6);
+            this.runStatus.Name = "runStatus";
+            this.runStatus.Size = new System.Drawing.Size(22, 23);
+            this.runStatus.TabIndex = 3;
             // 
             // groupBox3
             // 
@@ -102,6 +113,46 @@
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Port1";
+            // 
+            // port1selectAll
+            // 
+            this.port1selectAll.AutoSize = true;
+            this.port1selectAll.Location = new System.Drawing.Point(68, 200);
+            this.port1selectAll.Name = "port1selectAll";
+            this.port1selectAll.Size = new System.Drawing.Size(38, 17);
+            this.port1selectAll.TabIndex = 6;
+            this.port1selectAll.Text = "All";
+            this.port1selectAll.UseVisualStyleBackColor = true;
+            this.port1selectAll.CheckedChanged += new System.EventHandler(this.checked_port1selectAll);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(65, 53);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(39, 13);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Output";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 54);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(31, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Input";
+            // 
+            // port1invert
+            // 
+            this.port1invert.AutoSize = true;
+            this.port1invert.Location = new System.Drawing.Point(7, 18);
+            this.port1invert.Name = "port1invert";
+            this.port1invert.Size = new System.Drawing.Size(54, 17);
+            this.port1invert.TabIndex = 2;
+            this.port1invert.Text = "Invert";
+            this.port1invert.UseVisualStyleBackColor = true;
+            this.port1invert.CheckedChanged += new System.EventHandler(this.checked_port1invert);
             // 
             // port1Output
             // 
@@ -155,6 +206,46 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Port0";
+            // 
+            // port0selectAll
+            // 
+            this.port0selectAll.AutoSize = true;
+            this.port0selectAll.Location = new System.Drawing.Point(68, 201);
+            this.port0selectAll.Name = "port0selectAll";
+            this.port0selectAll.Size = new System.Drawing.Size(38, 17);
+            this.port0selectAll.TabIndex = 5;
+            this.port0selectAll.Text = "All";
+            this.port0selectAll.UseVisualStyleBackColor = true;
+            this.port0selectAll.CheckedChanged += new System.EventHandler(this.checked_port0selectAll);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(65, 53);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(39, 13);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Output";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 54);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(31, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Input";
+            // 
+            // port0invert
+            // 
+            this.port0invert.AutoSize = true;
+            this.port0invert.Location = new System.Drawing.Point(7, 19);
+            this.port0invert.Name = "port0invert";
+            this.port0invert.Size = new System.Drawing.Size(54, 17);
+            this.port0invert.TabIndex = 2;
+            this.port0invert.Text = "Invert";
+            this.port0invert.UseVisualStyleBackColor = true;
+            this.port0invert.CheckedChanged += new System.EventHandler(this.checked_port0invert);
             // 
             // port0Output
             // 
@@ -235,94 +326,14 @@
             this.dataGridView1.Size = new System.Drawing.Size(941, 464);
             this.dataGridView1.TabIndex = 3;
             // 
-            // port0invert
+            // runtimeLabel
             // 
-            this.port0invert.AutoSize = true;
-            this.port0invert.Location = new System.Drawing.Point(7, 19);
-            this.port0invert.Name = "port0invert";
-            this.port0invert.Size = new System.Drawing.Size(54, 17);
-            this.port0invert.TabIndex = 2;
-            this.port0invert.Text = "Invert";
-            this.port0invert.UseVisualStyleBackColor = true;
-            this.port0invert.CheckedChanged += new System.EventHandler(this.checked_port0invert);
-            // 
-            // port1invert
-            // 
-            this.port1invert.AutoSize = true;
-            this.port1invert.Location = new System.Drawing.Point(7, 18);
-            this.port1invert.Name = "port1invert";
-            this.port1invert.Size = new System.Drawing.Size(54, 17);
-            this.port1invert.TabIndex = 2;
-            this.port1invert.Text = "Invert";
-            this.port1invert.UseVisualStyleBackColor = true;
-            this.port1invert.CheckedChanged += new System.EventHandler(this.checked_port1invert);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 54);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(31, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Input";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(65, 53);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(39, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Output";
-            // 
-            // port0selectAll
-            // 
-            this.port0selectAll.AutoSize = true;
-            this.port0selectAll.Location = new System.Drawing.Point(68, 201);
-            this.port0selectAll.Name = "port0selectAll";
-            this.port0selectAll.Size = new System.Drawing.Size(38, 17);
-            this.port0selectAll.TabIndex = 5;
-            this.port0selectAll.Text = "All";
-            this.port0selectAll.UseVisualStyleBackColor = true;
-            this.port0selectAll.CheckedChanged += new System.EventHandler(this.checked_port0selectAll);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 54);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(31, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Input";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(65, 53);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(39, 13);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "Output";
-            // 
-            // port1selectAll
-            // 
-            this.port1selectAll.AutoSize = true;
-            this.port1selectAll.Location = new System.Drawing.Point(68, 200);
-            this.port1selectAll.Name = "port1selectAll";
-            this.port1selectAll.Size = new System.Drawing.Size(38, 17);
-            this.port1selectAll.TabIndex = 6;
-            this.port1selectAll.Text = "All";
-            this.port1selectAll.UseVisualStyleBackColor = true;
-            this.port1selectAll.CheckedChanged += new System.EventHandler(this.checked_port1selectAll);
-            // 
-            // runStatus
-            // 
-            this.runStatus.BackColor = System.Drawing.Color.Red;
-            this.runStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.runStatus.Location = new System.Drawing.Point(168, 6);
-            this.runStatus.Name = "runStatus";
-            this.runStatus.Size = new System.Drawing.Size(22, 23);
-            this.runStatus.TabIndex = 3;
+            this.runtimeLabel.AutoSize = true;
+            this.runtimeLabel.Location = new System.Drawing.Point(196, 11);
+            this.runtimeLabel.Name = "runtimeLabel";
+            this.runtimeLabel.Size = new System.Drawing.Size(29, 13);
+            this.runtimeLabel.TabIndex = 4;
+            this.runtimeLabel.Text = "0 ms";
             // 
             // Main
             // 
@@ -332,8 +343,10 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "Main";
             this.Text = "IO Warrior";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CloseProgramm);
             this.tabControl1.ResumeLayout(false);
             this.tabControl.ResumeLayout(false);
+            this.tabControl.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -373,6 +386,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox port0invert;
+        private System.Windows.Forms.Label runtimeLabel;
     }
 }
 

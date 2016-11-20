@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using IOW.DllWapper;
+using IowLibrary.DllWapper;
 
 namespace IowLibrary {
     public delegate void DeviceStatusEventHandler(Device device);
