@@ -39,7 +39,7 @@ namespace IowLibrary {
         public void RunDevice() {
             _stopHandler = false;
 
-            Device.InitPorts(Defines.IOW_PIPE_IO_PINS);
+            Device.PortsInitialisation(Defines.IOW_PIPE_IO_PINS);
 
             Device.SetReadTimeout(DeviceFactory.DeviceTimeout);
 
@@ -52,7 +52,7 @@ namespace IowLibrary {
                         _isDataWrite = false;
                     }
                 }
-                Device.ReadPortState(Defines.IOW_PIPE_IO_PINS);
+                Device.ReadInPortState(Defines.IOW_PIPE_IO_PINS);
                 _stopwatch.Stop();
                 AddStopWatchResult(_stopwatch.ElapsedMilliseconds);
             }

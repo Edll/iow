@@ -9,7 +9,6 @@ namespace IowLibrary {
     public delegate void PortChangeEventHandler(Port port, PortBit portBit);
 
     public class Port {
-        public event PortEventHandler Error;
         public event PortChangeEventHandler PortBitInChange;
         public event PortChangeEventHandler PortBitOutChange;
 
@@ -98,12 +97,6 @@ namespace IowLibrary {
         private void portBitOutChangeEvent(PortBit portbit) {
             if (PortBitOutChange != null) {
                 PortBitOutChange(this, portbit);
-            }
-        }
-
-        private void errorEvent() {
-            if (Error != null) {
-                Error(this);
             }
         }
 

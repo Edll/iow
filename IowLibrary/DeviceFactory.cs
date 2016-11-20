@@ -47,6 +47,10 @@ namespace IowLibrary {
         /// <param name="deviceNumber">Number of the Device to Run</param>
         public void RunDevice(int deviceNumber) {
             var device = GetDeviceNumber(deviceNumber);
+            if (_deviceHandlerFactory == null)
+            {
+                _deviceHandlerFactory = new DeviceHandlerFactory();
+            }
             var deviceHandler = _deviceHandlerFactory.AddNewDeviceThread(device);
             deviceHandler.RunTimeUpdate += DeviceHandler_RunTimeUpdate;
         }
@@ -57,7 +61,7 @@ namespace IowLibrary {
         /// <param name="deviceNumber">Number of the device to Stop</param>
         public void StopDevice(int deviceNumber) {
             var device = GetDeviceNumber(deviceNumber);
-            _deviceHandlerFactory.StopDeviceThread(device);
+            _deviceHandlerFactory?.StopDeviceThread(device);
         }
 
         /// <summary>

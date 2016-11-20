@@ -142,7 +142,7 @@ namespace IowLibrary {
             return result;
         }
 
-        public static bool ReadImm(int? handler, byte[] data) {
+        public static bool ReadImmediate(int? handler, byte[] data) {
             if (handler == null) {
                 throw new IowLibaryException("handler to to read is null");
             }

@@ -1,211 +1,184 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using IowLibrary.DllWapper;
 
 namespace IowLibrary {
     public delegate void DeviceStatusEventHandler(Device device);
-    public delegate void DevicePortEventHandler(Port port, PortBit portbit);
 
+    /// <summary>
+    /// Representation Class for an IOWarrior Device
+    /// </summary>
     public class Device {
         public event DeviceStatusEventHandler DeviceClose;
         public event DeviceStatusEventHandler DeviceError;
-        public event DeviceStatusEventHandler IoReadError;
-        public event DevicePortEventHandler PortBitInChange;
-        public event DevicePortEventHandler PortBitOutChange;
 
-        private int? handler;
-        private int deviceNumber;
-        private int? productId;
-        private String serial;
-        private String softwareVersion;
-        private Dictionary<int, Port> ports;
-        private int reportSize;
-        private int ioReportSize;
-        private String lastError;
+        public event PortChangeEventHandler PortBitInChange;
+        public event PortChangeEventHandler PortBitOutChange;
 
         public Device(int? handler) {
-            this.Handler = handler;
-
-            initDevice();
+            Handler = handler;
+            DeviceInitialisation();
         }
 
-        public int? Handler {
-            get { return handler; }
-            set { handler = value; }
-        }
+        public int? Handler { get; set; }
 
-        public int DeviceNumber {
-            get { return deviceNumber; }
-            set { deviceNumber = value; }
-        }
+        public int DeviceNumber { get; set; }
 
-        public int? ProductId {
-            get { return getDeviceProductId(); }
-            set { productId = value; }
-        }
+        public int? ProductId { get; set; }
 
-        public String Serial {
-            get { return serial; }
-            set { serial = value; }
-        }
+        public string Serial { get; set; }
 
-        public String SoftwareVersion {
-            get { return softwareVersion; }
-            set { softwareVersion = value; }
-        }
+        public string SoftwareVersion { get; set; }
 
-        public Dictionary<int, Port> Ports {
-            get { return ports; }
-            set { ports = value; }
-        }
+        public Dictionary<int, Port> Ports { get; set; }
 
-        public int ReportSize {
-            get { return reportSize; }
-            set { reportSize = value; }
-        }
+        public int ReportSize { get; set; }
 
-        public int IoReportsSize {
-            get { return ioReportSize; }
-            set { ioReportSize = value; }
-        }
+        public int IoReportsSize { get; set; }
 
-        public string LastError {
-            get { return lastError; }
-            set { lastError = value; }
-        }
-             
+        public string LastError { get; set; }
+
+        /// <summary>
+        /// Set the Timeout for this Device
+        /// </summary>
+        /// <param name="timeout"></param>
         public void SetReadTimeout(int timeout) {
-            bool result = IowKit.Timeout(handler, timeout);
-            if (!result) {
-                Console.WriteLine("time was not set");
-            }
+            var result = IowKit.Timeout(Handler, timeout);
+            if (result) { return; }
+            DeviceAddError("Timeout konnte nicht gesetzt werden");
         }
 
-        public void InitPorts(int pipeNum) {
-            byte[] write = new byte[IoReportsSize];
+        /// <summary>
+        /// initialisat ports for I/O Reading of this Device
+        /// </summary>
+        /// <param name="pipeNum">pipe to use Write</param>
+        public void PortsInitialisation(int pipeNum) {
+            var write = new byte[IoReportsSize];
 
             write[0] = 0x00;
             write[1] = 0xff;
             write[2] = 0xff;
-            int? writebyts = IowKit.Write(handler, pipeNum, write, IoReportsSize);
-            if (writebyts != IoReportsSize) {
-                writebyts = IowKit.Write(handler, pipeNum, write, IoReportsSize);
-                if (writebyts != IoReportsSize) {
-                    lastError = "could not write all Datas to InitDevice!";
-                    deviceErrorEvent();
-                }
-            }
+            var writebyts = IowKit.Write(Handler, pipeNum, write, IoReportsSize);
+            if (writebyts == IoReportsSize) { return; }
+            writebyts = IowKit.Write(Handler, pipeNum, write, IoReportsSize);
+            if (writebyts == IoReportsSize) { return; }
+            DeviceAddError("Beim Device: " + DeviceNumber + " konnten die I/O Ports nicht Initalisiert werden.");
         }
 
+        /// <summary>
+        /// Set of a Bit on a Port of this Devices
+        /// </summary>
+        /// <param name="port">Ports to set Starts with 0</param>
+        /// <param name="bit">Bit to set starts with 0</param>
+        /// <param name="value">target state</param>
         public void SetBit(int port, int bit, bool value) {
-            if(ports.Count-1 >= port) {
-                Port p = ports[port];
-                p.SetBit(bit, value);
-            }else {
-                Console.WriteLine("try to set Port out of Size");
-            }
+            if (Ports.Count - 1 < port) { return; }
+            var p = Ports[port];
+            p.SetBit(bit, value);
         }
 
-        public void ReadPortState(int pipeNum) {
-            byte[] data = readDataIm(pipeNum); 
-            setDataStateToPort(data);
-           
+        /// <summary>
+        /// Read in the current State of all Ports of this Device
+        /// </summary>
+        /// <param name="pipeNum">Pipe for Read In</param>
+        public void ReadInPortState(int pipeNum) {
+            var data = ReadDeviceImmediate();
+            SetDataStateToPort(data);
         }
 
+        /// <summary>
+        /// Close this Device. Triggers the Devices close Event
+        /// </summary>
         public void Close() {
-            IowKit.closeDevice(this.Handler);
-            deviceCloseEvent();
+            IowKit.closeDevice(Handler);
+            DeviceCloseEvent();
         }
 
+        /// <summary>
+        /// Write the Current out state of the Ports to the Device
+        /// </summary>
+        /// <returns>true if all Bits write to the device</returns>
         public bool WritePortStateToDevice() {
-            byte[] data = new byte[ioReportSize];
+            var data = new byte[IoReportsSize];
             data[0] = 0x00;
-            foreach (KeyValuePair<int, Port> kvp in ports) {
-                Port p = kvp.Value;
+            foreach (var kvp in Ports) {
+                var p = kvp.Value;
                 data[kvp.Key + Port.portOffset] = p.GetBitStateAsByte();
             }
 
-            int? size = IowKit.Write(handler, 0, data, ioReportSize);
-            if (size == null || size != ioReportSize) {
-                Console.WriteLine("not all write to iow device");
-                return false;
-            }
-            return true;
+            var size = IowKit.Write(Handler, 0, data, IoReportsSize);
+
+            return size != null && size == IoReportsSize;
         }
 
-        private byte[] readDataIm(int pipeNum) {
-            byte[] data = new byte[IoReportsSize];
-            bool ok = IowKit.ReadImm(handler, data);
+        private byte[] ReadDeviceImmediate() {
+            var data = new byte[IoReportsSize];
+            var ok = IowKit.ReadImmediate(Handler, data);
             if (!ok) {
-                data = readDataIm(pipeNum);
+                // TODO: loop prevention!!!!!
+                data = ReadDeviceImmediate();
             }
             return data;
         }
 
-        private void initDevice() {
-            getDeviceProductId();
-            getDeviceSerial();
-            getSoftwareVersion();
-            initPorts();
+        private void DeviceInitialisation() {
+            ReadDeviceProductId();
+            ReadDeviceSerial();
+            ReadSoftwareVersion();
+            PortsInitialisation();
         }
 
-        private int? getDeviceProductId() {
-            if (productId == null) {
-                productId = IowKit.GetProductId(Handler);
-                if (productId == null) {
-                    deviceErrorEvent();
+        private void ReadDeviceProductId() {
+            if (ProductId == null) {
+                ProductId = IowKit.GetProductId(Handler);
+                if (ProductId == null) {
+                    DeviceErrorEvent();
                 }
             }
-            switch (productId) {
+            SetDeviceReportSize();
+        }
+
+        private void SetDeviceReportSize() {
+            switch (ProductId) {
                 case Defines.IOWKIT_PID_IOW24:
-                reportSize = Defines.IOWKIT_REPORT_SIZE;
-                ioReportSize = Defines.IOWKIT24_IO_REPORT_SIZE;
+                ReportSize = Defines.IOWKIT_REPORT_SIZE;
+                IoReportsSize = Defines.IOWKIT24_IO_REPORT_SIZE;
                 break;
                 default:
-                reportSize = Defines.IOWKIT_SPECIAL_REPORT_SIZE;
-                ioReportSize = Defines.IOWKIT_SPECIAL_REPORT_SIZE;
+                ReportSize = Defines.IOWKIT_SPECIAL_REPORT_SIZE;
+                IoReportsSize = Defines.IOWKIT_SPECIAL_REPORT_SIZE;
                 break;
             }
-
-            return productId;
         }
 
-        private String getDeviceSerial() {
-            if (serial == null) {
-                serial = IowKit.GetProductSerial(Handler);
-            }
-            return serial;
+        private void ReadDeviceSerial()
+        {
+            Serial = IowKit.GetProductSerial(Handler);
         }
 
-        private String getSoftwareVersion() {
-            if (softwareVersion == null) {
-                softwareVersion = IowKit.GetProductSoftwareVersion(Handler);
-            }
-            return softwareVersion;
+        private void ReadSoftwareVersion()
+        {
+            SoftwareVersion = IowKit.GetProductSoftwareVersion(Handler);
         }
 
-        private void initPorts() {
-            if (ports == null) {
-                ports = new Dictionary<int, Port>();
+        private void PortsInitialisation() {
+            if (Ports == null) {
+                Ports = new Dictionary<int, Port>();
             }
-            for (int i = 0; i < 2; i++) {
-                Port port = new Port(i, this);
-                port.Error += Port_Error;
-                port.PortBitInChange += portBitInChange;
-                port.PortBitOutChange += portBitOutChange;
-                ports.Add(i, port);
+            for (var i = 0; i < 2; i++) {
+                var port = new Port(i, this);
+                port.PortBitInChange += PortBitInChangeEvent;
+                port.PortBitOutChange += PortBitOutChangeEvent;
+                Ports.Add(i, port);
             }
         }
 
-        private void setDataStateToPort(byte[] data) {
-            // da wir mit readImm arbeiten ist das result byte 0 das erste
-            int i = 0;
-            foreach (byte dataIn in data) {
-                if ((i + 1) <= ports.Count) {
-                    Port port = ports[i];
+        private void SetDataStateToPort(IEnumerable<byte> data) {
+            // Da wir mit readImm arbeiten ist das result byte 0 das erste
+            var i = 0;
+            foreach (var dataIn in data) {
+                if ((i + 1) <= Ports.Count) {
+                    var port = Ports[i];
                     port.SetInputData(dataIn);
                 } else {
                     break;
@@ -214,40 +187,30 @@ namespace IowLibrary {
             }
         }
 
-        private void portBitOutChange(Port port, PortBit portBit) {
-            if (PortBitOutChange != null) {
-                PortBitOutChange(port, portBit);
-            }
+        private void PortBitOutChangeEvent(Port port, PortBit portBit)
+        {
+            PortBitOutChange?.Invoke(port, portBit);
         }
 
-        private void portBitInChange(Port port, PortBit portBit) {
-            if (PortBitInChange != null) {
-                PortBitInChange(port, portBit);
-            }
+        private void PortBitInChangeEvent(Port port, PortBit portBit)
+        {
+            PortBitInChange?.Invoke(port, portBit);
         }
 
-        private void Port_Error(Port port) {
-            System.Console.WriteLine("Error in Port: " + port.PortNumber);
-        }
-
-        private void deviceCloseEvent() {
-            if (DeviceClose != null) {
-                DeviceClose(this);
-            }
+        private void DeviceCloseEvent() {
+            DeviceClose?.Invoke(this);
             Console.WriteLine("Device: " + Handler + " close");
         }
 
-        private void deviceErrorEvent() {
-            if (DeviceError != null) {
-                Close();
-                DeviceError(this);
-            }
+        private void DeviceErrorEvent() {
+            if (DeviceError == null) { return;}
+            Close();
+            DeviceError(this);
         }
 
-        private void ioErrorEvent() {
-            if (IoReadError != null) {
-                IoReadError(this);
-            }
+        private void DeviceAddError(string error) {
+            LastError = error;
+            DeviceErrorEvent();
         }
     }
 }
