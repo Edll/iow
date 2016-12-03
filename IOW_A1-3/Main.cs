@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
@@ -23,8 +25,7 @@ namespace IOW_A1_3 {
         private void OnClick_OpenAllConnected(object sender, EventArgs e) {
             var isConnected = _deviceFactory.InitFactory();
             if (!isConnected) return;
-            SetNumberOfDevices();
-            SetDeviceToDeviceList();
+            SetDevices();
             closeAllToolStripMenuItem1.Enabled = true;
             readInToolStripMenuItem1.Enabled = false;
         }
@@ -168,14 +169,16 @@ namespace IOW_A1_3 {
             _deviceFactory.RemoveAllDevices();
         }
 
-        private void SetNumberOfDevices() {
-            NumberOfConDevices.Text = _deviceFactory.GetNumberOfDevices().ToString();
-        }
+        private void SetDevices() {
+            if (_deviceFactory.Devices == null) return;
+            dataGridView1.DataSource = IowDataTable.GetResultsTable(_deviceFactory.Devices);
 
-        private void SetDeviceToDeviceList() {
-            if (_deviceFactory.Devices != null) {
-                dataGridView1.DataSource = IowDataTable.GetResultsTable(_deviceFactory.Devices);
+            NumberOfConDevices.Text = _deviceFactory.GetNumberOfDevices().ToString();
+
+            foreach (var dev in _deviceFactory.Devices) {
+                runDeviceSelecter.Items.Add(dev.Value.DeviceNumber);
             }
+            runDeviceSelecter.SelectedIndex = 0;
         }
 
         private void DeviceFactory_Error(DeviceFactory deviceError) {
