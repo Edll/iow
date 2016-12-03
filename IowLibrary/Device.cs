@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using IowLibrary.DllWapper;
 
 namespace IowLibrary {
@@ -11,11 +12,14 @@ namespace IowLibrary {
     public class Device {
         public event DeviceStatusEventHandler DeviceClose;
         public event DeviceStatusEventHandler DeviceError;
+        public event DeviceStatusEventHandler DeviceEventLog;
 
         public event DevicPortEventHandler PortBitInChange;
         public event DevicPortEventHandler PortBitOutChange;
 
         private int _writeLoopCounter;
+        private readonly List<string> _errorLogList = new List<string>();
+        private readonly List<string> _eventLogList = new List<string>();
 
         public Device(int? handler) {
             Handler = handler;
@@ -51,7 +55,7 @@ namespace IowLibrary {
         public void SetReadTimeout(int timeout) {
             var result = IowKit.Timeout(Handler, timeout);
             if (result) { return; }
-            DeviceAddError("Timeout konnte nicht gesetzt werden");
+            AddDeviceError("Timeout konnte nicht gesetzt werden");
         }
 
         /// <summary>
@@ -68,7 +72,7 @@ namespace IowLibrary {
             if (writebyts == IoReportsSize) { return; }
             writebyts = IowKit.Write(Handler, pipeNum, write, IoReportsSize);
             if (writebyts == IoReportsSize) { return; }
-            DeviceAddError("Beim Device: " + DeviceNumber + " konnten die I/O Ports nicht Initalisiert werden.");
+            AddDeviceError("Beim Device: " + DeviceNumber + " konnten die I/O Ports nicht Initalisiert werden.");
         }
 
         /// <summary>
@@ -117,9 +121,55 @@ namespace IowLibrary {
             return size != null && size == IoReportsSize;
         }
 
+        /// <summary>
+        ///  Gets all Error stored in the Device
+        /// </summary>
+        public string GetDeviceErrors() {
+            return _errorLogList.Aggregate("", (current, error) => current + (error + "\n"));
+        }
+
+        /// <summary>
+        /// Reset the Errors stored in the Device
+        /// </summary>
+        public void ResetErrorList() {
+            _errorLogList?.Clear();
+        }
+
+        /// <summary>
+        /// Get all Errors form the Device and Reset them.
+        /// </summary>
+        public string GetAndResetErrorList() {
+            var errors = GetDeviceErrors();
+            ResetErrorList();
+            return errors;
+        }
+
+        /// <summary>
+        ///  Gets all Events stored in the Device
+        /// </summary>
+        public string GetDeviceEventLog() {
+            return _eventLogList.Aggregate("", (current, error) => current + (error + "\n"));
+        }
+
+        /// <summary>
+        /// Reset the Events stored in the Device
+        /// </summary>
+        public void ResetEventList() {
+            _eventLogList?.Clear();
+        }
+
+        /// <summary>
+        /// Get all Events form the Device and Reset them.
+        /// </summary>
+        public string GetAndResetEventList() {
+            var errors = GetDeviceEventLog();
+            ResetEventList();
+            return errors;
+        }
+
         private byte[] ReadDeviceImmediate() {
             if (_writeLoopCounter >= 3) {
-                DeviceAddError("Schreib schleife vorgang abgebrochen");
+                AddDeviceError("Schreib schleife vorgang abgebrochen");
                 return new byte[IoReportsSize];
             }
             _writeLoopCounter++;
@@ -132,7 +182,7 @@ namespace IowLibrary {
             _writeLoopCounter = 0;
             if (data != null) { return data; }
 
-            DeviceAddError("Device ist offenbar nicht mehr angeschlossen");
+            AddDeviceError("Device ist offenbar nicht mehr angeschlossen");
             return new byte[IoReportsSize];
         }
 
@@ -147,7 +197,7 @@ namespace IowLibrary {
             if (ProductId == null) {
                 ProductId = IowKit.GetProductId(Handler);
                 if (ProductId == null) {
-                    DeviceErrorEvent();
+                    AddDeviceError("Fehler beim Lesen der Product die des Devices");
                 }
             }
             SetDeviceReportSize();
@@ -202,26 +252,31 @@ namespace IowLibrary {
 
         private void PortBitOutChangeEvent(Port port, PortBit portBit) {
             PortBitOutChange?.Invoke(this ,port, portBit);
+            AddDeviceEventLog("Out Port: " + port.PortNumber + " hat sich verändert zu: " + portBit.BitOut);
         }
 
         private void PortBitInChangeEvent(Port port, PortBit portBit) {
             PortBitInChange?.Invoke(this, port, portBit);
+            AddDeviceEventLog("In Port: " + port.PortNumber + " hat sich verändert zu: " + portBit.BitIn);
         }
 
         private void DeviceCloseEvent() {
             DeviceClose?.Invoke(this);
-            Console.WriteLine("Device: " + Handler + " close");
+            AddDeviceEventLog("wurde erfolgreich geschlossen.");
         }
 
-        private void DeviceErrorEvent() {
-            if (DeviceError == null) { return; }
-            Close();
+        private void AddDeviceEventLog(String log)
+        {
+            _eventLogList.Add(log);
+            DeviceEventLog?.Invoke(this);
+        }
+
+        private void AddDeviceError(string msg) {
+            _errorLogList.Add(msg);
+            if (DeviceError == null) {
+                throw new SystemException("Error at Devices handling: " + msg);
+            }
             DeviceError(this);
-        }
-
-        private void DeviceAddError(string error) {
-            LastError = error;
-            DeviceErrorEvent();
         }
     }
 }

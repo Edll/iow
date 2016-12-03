@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using IowLibrary.DllWapper;
 
 namespace IowLibrary {
@@ -13,6 +14,8 @@ namespace IowLibrary {
         public event DeviceFactoryEventHandler DeviceError;
         public event DeviceFactoryEventHandler DeviceEvent;
         public event DeviceUpdateEventHandler RunTimeUpdate;
+
+        public Dictionary<int, Device> Devices { get; set; }
 
         private int? _deviceCounter;
         private readonly DeviceFactory _instance;
@@ -33,7 +36,43 @@ namespace IowLibrary {
             RemoveAllDevices();
         }
 
-        public Dictionary<int, Device> Devices { get; set; }
+
+        /// <summary>
+        /// Initalitation of the Factory, Open and Load all devices
+        /// </summary>
+        /// <returns>Is Returning true on no errors</returns>
+        public bool InitFactory() {
+            if (Devices != null) {
+                RemoveAllDevices();
+            }
+
+            var isOpen = OpenConnectedDevices();
+            if (!isOpen) {
+                return false;
+            }
+
+            var isCountDevices = CountConnectedDevices();
+            if (!isCountDevices) {
+                return false;
+            }
+            return AddAllConnectedDeviceToFactory();
+        }
+
+        /// <summary>
+        /// Runs the I/O Read/Write for the Device with the given devices Number
+        /// </summary>
+        /// <param name="deviceNumber">Device wich is to Run</param>
+        /// <param name="devicePortBitChange">PortBit Change Event Listener</param>
+        /// <param name="deviceFactoryRunTimeUpdate">Loop Timer Update Event</param>
+        public void RunDevice(object deviceNumber, DevicPortEventHandler devicePortBitChange,
+            DeviceUpdateEventHandler deviceFactoryRunTimeUpdate) {
+
+            var device = GetDeviceNumber(deviceNumber);
+            if (device == null) return;
+            device.PortBitInChange += devicePortBitChange;
+            RunTimeUpdate += deviceFactoryRunTimeUpdate;
+            RunDevice(device.DeviceNumber);
+        }
 
         /// <summary>
         /// Runs the I/O Read/Write for the Device with the given devices Number
@@ -51,6 +90,10 @@ namespace IowLibrary {
             deviceHandler.RunTimeUpdate += DeviceHandler_RunTimeUpdate;
         }
 
+        /// <summary>
+        /// Runs the I/O Read/Write for the Device with the given devices Number
+        /// </summary>
+        /// <param name="deviceNumber">Number of the Device to Run</param>
         public void RunDevice(object deviceNumber) {
             try {
                 var selectedDevice = Convert.ToInt32(deviceNumber);
@@ -58,22 +101,6 @@ namespace IowLibrary {
             } catch (Exception) {
                 AddDeviceFactoryEventLog("Es wurde keine gültige Device Auswahl getroffen.");
             }
-        }
-
-        /// <summary>
-        /// Runs the I/O Read/Write for the Device with the given devices Number
-        /// </summary>
-        /// <param name="deviceNumber">Device wich is to Run</param>
-        /// <param name="devicePortBitChange">PortBit Change Event Listener</param>
-        /// <param name="deviceFactoryRunTimeUpdate">Loop Timer Update Event</param>
-        public void RunDevice(object deviceNumber, DevicPortEventHandler devicePortBitChange,
-            DeviceUpdateEventHandler deviceFactoryRunTimeUpdate) {
-
-            var device = GetDeviceNumber(deviceNumber);
-            if (device == null) return;
-            device.PortBitInChange += devicePortBitChange;
-            RunTimeUpdate += deviceFactoryRunTimeUpdate;
-            RunDevice(device.DeviceNumber);
         }
 
         /// <summary>
@@ -249,27 +276,6 @@ namespace IowLibrary {
             return errors;
         }
 
-        /// <summary>
-        /// Initalitation of the Factory, Open and Load all devices
-        /// </summary>
-        /// <returns>Is Returning true on no errors</returns>
-        public bool InitFactory() {
-            if (Devices != null) {
-                RemoveAllDevices();
-            }
-
-            var isOpen = OpenConnectedDevices();
-            if (!isOpen) {
-                return false;
-            }
-
-            var isCountDevices = CountConnectedDevices();
-            if (!isCountDevices) {
-                return false;
-            }
-            return AddAllConnectedDeviceToFactory();
-        }
-
         private bool OpenConnectedDevices() {
             var firstDeviceHandler = IowKit.OpenDevices();
 
@@ -316,6 +322,8 @@ namespace IowLibrary {
 
             var device = new Device(handler) { DeviceNumber = deviceNumber };
             device.DeviceClose += Device_DeviceClose;
+            device.DeviceError += Device_DeviceError;
+            device.DeviceEventLog += Device_DeviceEventLog; ;
             Devices.Add(handler, device);
         }
 
@@ -350,6 +358,17 @@ namespace IowLibrary {
             }
         }
 
+        private void Device_DeviceEventLog(Device device) {
+            AddDeviceFactoryEventLog("Device: " + device.DeviceNumber + " meldet: " + device.GetAndResetEventList());
+        }
+
+        private void Device_DeviceError(Device device) {
+            device.Close();
+
+            AddDeviceFactoryEventLog("Device: " + device.DeviceNumber + " meldet: " + device.GetAndResetErrorList());
+            AddDeviceFactoryEventLog("Es wurde automatisch geschlossen und gestoppt!");
+        }
+
         private void RemoveDeviceAsCloseEvent(Device device) {
             if (Devices == null) return;
             if (device.Handler == null) return;
@@ -363,6 +382,7 @@ namespace IowLibrary {
             }
         }
 
+        // TODO das ganze in eine LogEventError Klasse packen so haben wir das ganze an mehr als einer Stelle Codedopplung!
         private void AddDeviceFactoryError(string msg) {
             _errorLogList.Add(msg);
             if (DeviceError == null) {
@@ -371,6 +391,7 @@ namespace IowLibrary {
             DeviceError(this);
         }
 
+        // TODO das ganze in eine LogEventError Klasse packen so haben wir das ganze an mehr als einer Stelle Codedopplung!
         private void AddDeviceFactoryEventLog(string msg) {
             _eventLogList.Add(msg);
             if (DeviceEvent == null) {

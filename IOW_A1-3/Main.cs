@@ -42,10 +42,12 @@ namespace IOW_A1_3 {
             dataGridView1.DataSource = null;
             closeAllToolStripMenuItem1.Enabled = false;
             readInToolStripMenuItem1.Enabled = true;
+            ClearAllDevice();
+
             // FIXME:
             // WORKAROUND für das DLL speicher problem
-            System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
-            Close();
+            //      System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
+            //   Close();
         }
 
         private void Click_RunSelectedDevice(object sender, EventArgs e) {
@@ -53,9 +55,7 @@ namespace IOW_A1_3 {
 
             InitDevice(runDeviceSelecter.SelectedItem);
 
-            bttStop.Enabled = true;
-            bttRun.Enabled = false;
-            runStatus.BackColor = Color.Green;
+            SetButtonStatusRun();
         }
 
         private void Click_StopSelectedDevice(object sender, EventArgs e) {
@@ -63,10 +63,7 @@ namespace IOW_A1_3 {
 
             ClearDevice(runDeviceSelecter.SelectedItem);
 
-            bttRun.Enabled = true;
-            bttStop.Enabled = false;
-            runStatus.BackColor = Color.Red;
-            SetRuntimeLabelText("0");
+            SetButtonStatusStop();
         }
 
         private void InitDevice(object selectedDevice) {
@@ -93,6 +90,13 @@ namespace IOW_A1_3 {
             port1Input.Items.Clear();
             port0Output.Items.Clear();
             port1Output.Items.Clear();
+        }
+
+        private void ClearAllDevice() {
+            // TODO wenn die ansicht der Device Dynamisch werden soll muss das hier auch um einen dynamisches löschen erweitert werden....
+            ClearDevice(runDeviceSelecter.SelectedItem);
+            runDeviceSelecter.Items.Clear();
+            SetButtonStatusStop();
         }
 
         private void Device_PortChangeStatus(Device device, Port port, PortBit portbit) {
@@ -152,6 +156,9 @@ namespace IOW_A1_3 {
             GuiUtils.CheckboxListSetAllItems(sender, port1Output);
         }
 
+        private void CloseProgramm(object sender, FormClosedEventArgs e) {
+            _deviceFactory.RemoveAllDevices();
+        }
 
         private void DeviceFactoryRunTimeUpdate(long runtime) {
             if (runtimeLabel.InvokeRequired) {
@@ -164,10 +171,6 @@ namespace IOW_A1_3 {
 
         private void SetRuntimeLabelText(string text) {
             runtimeLabel.Text = text + Resources.runtime_ms;
-        }
-
-        private void CloseProgramm(object sender, FormClosedEventArgs e) {
-            _deviceFactory.RemoveAllDevices();
         }
 
         private void SetDevices() {
@@ -184,6 +187,19 @@ namespace IOW_A1_3 {
 
         private void DeviceFactory_Error(DeviceFactory deviceError) {
             SetErrorLog(deviceError.GetAndResetErrorList());
+        }
+
+        private void SetButtonStatusRun() {
+            bttStop.Enabled = true;
+            bttRun.Enabled = false;
+            runStatus.BackColor = Color.Green;
+        }
+
+        private void SetButtonStatusStop() {
+            bttRun.Enabled = true;
+            bttStop.Enabled = false;
+            runStatus.BackColor = Color.Red;
+            SetRuntimeLabelText("0");
         }
 
         private void SetErrorLog(string errorItem) {

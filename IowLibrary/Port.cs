@@ -27,7 +27,6 @@ namespace IowLibrary {
         public int PortNumber {
             get { return _portNumber; }
             set {
-                Console.WriteLine("set port:" + value);
                 _portNumber = value;
             }
         }
@@ -36,9 +35,7 @@ namespace IowLibrary {
             if (_portBits.Count - 1 >= bit) {
                 var pb = _portBits[bit];
                 pb.BitOut = value;
-            } else {
-                Console.WriteLine("try to write bit out of size!");
-            }
+            } 
 
         }
 
@@ -68,18 +65,10 @@ namespace IowLibrary {
 
         private void BitInChange(PortBit portbit) {
             PortBitInChangeEvent(portbit);
-            //TODO: testausgabe
-            Console.WriteLine("port: " + _portNumber +
-                " bit IN change: " + portbit.BitNumber +
-                " to: " + portbit.BitIn);
         }
 
         private void BitOutChange(PortBit portbit) {
             PortBitOutChangeEvent(portbit);
-            //TODO: testausgabe
-            Console.WriteLine("port: " + _portNumber +
-                " bit OUT change: " + portbit.BitNumber +
-                " to: " + portbit.BitOut);
         }
 
         private void PortBitInChangeEvent(PortBit portbit) {
