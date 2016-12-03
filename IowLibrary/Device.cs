@@ -116,7 +116,7 @@ namespace IowLibrary {
         private byte[] ReadDeviceImmediate() {
             if (_writeLoopCounter >= 3) {
                 DeviceAddError("Schreib schleife vorgang abgebrochen");
-                return null;
+                return new byte[IoReportsSize];
             }
             _writeLoopCounter++;
             var data = new byte[IoReportsSize];
@@ -126,7 +126,10 @@ namespace IowLibrary {
                 data = ReadDeviceImmediate();
             }
             _writeLoopCounter = 0;
-            return data;
+            if (data != null) { return data; }
+
+            DeviceAddError("Device ist offenbar nicht mehr angeschlossen");
+            return new byte[IoReportsSize];
         }
 
         private void DeviceInitialisation() {
@@ -180,9 +183,6 @@ namespace IowLibrary {
         }
 
         private void SetDataStateToPort(IEnumerable<byte> data) {
-            if (data == null) {
-                return;
-            }
             // Da wir mit readImm arbeiten ist das result byte 0 das erste
             var i = 0;
             foreach (var dataIn in data) {
