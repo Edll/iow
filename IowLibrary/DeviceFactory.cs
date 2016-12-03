@@ -85,6 +85,20 @@ namespace IowLibrary {
         }
 
         /// <summary>
+        /// Stops the I/O Read for the Device with the given number
+        /// Ma
+        /// </summary>
+        /// <param name="deviceNumber">Number of the device to Stop</param>
+        public void StopDevice(object deviceNumber) {
+            try {
+                var selectedDevice = Convert.ToInt32(deviceNumber);
+                StopDevice(selectedDevice);
+            } catch (Exception) {
+                AddDeviceFactoryEventLog("Es wurde keine gültige Device Auswahl getroffen.");
+            }
+        }
+
+        /// <summary>
         /// Set a Bit of a Device
         /// </summary>
         /// <param name="deviceNumber">Number of the Target Device</param>

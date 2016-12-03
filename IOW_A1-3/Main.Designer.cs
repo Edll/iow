@@ -370,6 +370,7 @@
             this.bttStop.TabIndex = 8;
             this.bttStop.Text = "stop";
             this.bttStop.UseVisualStyleBackColor = true;
+            this.bttStop.Click += new System.EventHandler(this.Click_StopSelectedDevice);
             // 
             // bttRun
             // 
@@ -379,7 +380,7 @@
             this.bttRun.TabIndex = 6;
             this.bttRun.Text = "run";
             this.bttRun.UseVisualStyleBackColor = true;
-            this.bttRun.Click += new System.EventHandler(this.bttRun_Click);
+            this.bttRun.Click += new System.EventHandler(this.Click_RunSelectedDevice);
             // 
             // groupBox2
             // 

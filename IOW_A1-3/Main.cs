@@ -50,19 +50,20 @@ namespace IOW_A1_3 {
             this.Close();
         }
 
-        private void bttRun_Click(object sender, EventArgs e) {
-            if (runDeviceSelecter.SelectedItem != null)
-            {
-                InitDevice(runDeviceSelecter.SelectedItem);
- 
-                bttStop.Enabled = true;
-                bttRun.Enabled = false;
-                runStatus.BackColor = Color.Green;
-            }
+        private void Click_RunSelectedDevice(object sender, EventArgs e) {
+            if (runDeviceSelecter.SelectedItem == null) return;
+
+            InitDevice(runDeviceSelecter.SelectedItem);
+
+            bttStop.Enabled = true;
+            bttRun.Enabled = false;
+            runStatus.BackColor = Color.Green;
         }
 
-        private void bttStop_Click(object sender, EventArgs e) {
-            _deviceFactory.StopDevice(1);
+        private void Click_StopSelectedDevice(object sender, EventArgs e) {
+            if (runDeviceSelecter.SelectedItem == null) return;
+
+            _deviceFactory.StopDevice(runDeviceSelecter.SelectedItem);
             bttRun.Enabled = true;
             bttStop.Enabled = false;
             runStatus.BackColor = Color.Red;
@@ -91,10 +92,11 @@ namespace IOW_A1_3 {
             _deviceFactory.SetBit(device, port, bit, value);
         }
 
-        private void InitDevice(Object selectedDevice) {
+        private void InitDevice(object selectedDevice) {
 
             _deviceFactory.RunDevice(selectedDevice, Device_PortBitChange, DeviceFactoryRunTimeUpdate);
-      
+            // TODO wenn es eine anderer IOW ist mit mehr oder weniger ports sollte das hier dynamisch eingefügt werden....
+            // TODO das sollte auch gemacht werden wenn wir mehr als einen IOW laufen lassen.....
             // create inputs
             GuiUtils.CreatePortEntrys(port0Input, false);
             GuiUtils.CreatePortEntrys(port1Input, false);
