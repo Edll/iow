@@ -69,26 +69,6 @@ namespace IOW_A1_3 {
             SetRuntimeLabelText("0");
         }
 
-        private void Port0Output_ItemCheck(object sender, ItemCheckEventArgs e) {
-            const int port = 0;
-            const int device = 1;
-            CheckOutputBit(sender, e, port, device);
-        }
-
-        private void Port1Output_ItemCheck(object sender, ItemCheckEventArgs e) {
-            const int port = 1;
-            const int device = 1;
-            CheckOutputBit(sender, e, port, device);
-        }
-
-        private void CheckOutputBit(object sender, ItemCheckEventArgs e, int port, int device) {
-            if (!(sender is CheckedListBox)) return;
-            var clb = (CheckedListBox)sender;
-            var bit = Convert.ToInt32(clb.SelectedItem);
-            var value = e.NewValue == CheckState.Checked;
-            _deviceFactory.SetBit(device, port, bit, value);
-        }
-
         private void InitDevice(object selectedDevice) {
 
             _deviceFactory.RunDevice(selectedDevice, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate);
@@ -132,6 +112,26 @@ namespace IOW_A1_3 {
             } else {
                 clb.SetItemChecked(index, !value);
             }
+        }
+
+        private void Port0Output_ItemCheck(object sender, ItemCheckEventArgs e) {
+            const int port = 0;
+            var device = Convert.ToInt32(runDeviceSelecter.SelectedItem);
+            CheckOutputBit(sender, e, port, device);
+        }
+
+        private void Port1Output_ItemCheck(object sender, ItemCheckEventArgs e) {
+            const int port = 1;
+            var device = Convert.ToInt32(runDeviceSelecter.SelectedItem);
+            CheckOutputBit(sender, e, port, device);
+        }
+
+        private void CheckOutputBit(object sender, ItemCheckEventArgs e, int port, int device) {
+            if (!(sender is CheckedListBox)) return;
+            var clb = (CheckedListBox)sender;
+            var bit = Convert.ToInt32(clb.SelectedItem);
+            var value = e.NewValue == CheckState.Checked;
+            _deviceFactory.SetBit(device, port, bit, value);
         }
 
         private void checked_port1invert(object sender, EventArgs e) {

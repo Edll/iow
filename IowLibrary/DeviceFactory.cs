@@ -73,6 +73,7 @@ namespace IowLibrary {
             if (device == null) return;
             device.PortBitInChange += devicePortBitChange;
             RunTimeUpdate += deviceFactoryRunTimeUpdate;
+            RunDevice(device.DeviceNumber);
         }
 
         /// <summary>
