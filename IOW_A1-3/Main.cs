@@ -87,7 +87,7 @@ namespace IOW_A1_3 {
         private void bttReadInfos_Click(object sender, EventArgs e) {
             _deviceFactory.Refresh();
             var devices = _deviceFactory.Devices;
-            NumberOfConDevices.Text = devices?.Count.ToString() ?? "0";
+        //    NumberOfConDevices.Text = devices?.Count.ToString() ?? "0";
             dataGridView1.DataSource = IowDataTable.GetResultsTable(devices);
         }
 
@@ -96,7 +96,7 @@ namespace IOW_A1_3 {
         }
 
         private void SetErrorLog(string error) {
-            errorLogList.Items.Add(DateTime.Now + " : " + error);
+            ErrorLogList.Items.Add(DateTime.Now + " : " + error);
         }
 
         private void bttRun_Click(object sender, EventArgs e) {
