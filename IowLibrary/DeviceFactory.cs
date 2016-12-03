@@ -91,9 +91,8 @@ namespace IowLibrary {
             if (Devices == null) return;
             try {
                 foreach (var deviceEntry in Devices) {
-                  bool isClosed =  CloseDeviceFromFactory(deviceEntry.Key);
-                    if (isClosed)
-                    {
+                    bool isClosed = CloseDeviceFromFactory(deviceEntry.Key);
+                    if (isClosed) {
                         RemoveDevice(deviceEntry.Key);
                     }
                 }
@@ -101,7 +100,8 @@ namespace IowLibrary {
                 // kann ignoriert werden da alle Devices schon weg sind!
             }
 
-            Devices.Clear();
+            //   Devices.Clear();
+            Devices = null;
         }
 
         /// <summary>
@@ -193,7 +193,15 @@ namespace IowLibrary {
             return errors;
         }
 
+        /// <summary>
+        /// Initalitation of the Factory, Open and Load all devices
+        /// </summary>
+        /// <returns>Is Returning true on no errors</returns>
         public bool InitFactory() {
+            if (Devices != null) {
+                RemoveAllDevices();
+            }
+
             var isOpen = OpenConnectedDevices();
             if (!isOpen) {
                 return false;
@@ -241,6 +249,7 @@ namespace IowLibrary {
 
                 AddDeviceToFactory((int)handler, (int)i);
             }
+            AddDeviceFactoryEventLog("Alle Devices sind erfolgreich Connected worden.");
             return true;
         }
 
@@ -286,6 +295,7 @@ namespace IowLibrary {
         }
 
         private void RemoveDeviceAsCloseEvent(Device device) {
+            if (Devices == null) return;
             if (device.Handler == null) return;
 
             Device deviceFromFactroy;

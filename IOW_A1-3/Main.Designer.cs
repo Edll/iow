@@ -40,12 +40,14 @@
             this.endToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.readInToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.abouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.numberOfConnectedDevicesLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.NumberOfConDevices = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.runDeviceSelecter = new System.Windows.Forms.ComboBox();
             this.runtimeLabel = new System.Windows.Forms.Label();
             this.runStatus = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -64,7 +66,6 @@
             this.port0invert = new System.Windows.Forms.CheckBox();
             this.port0Output = new System.Windows.Forms.CheckedListBox();
             this.port0Input = new System.Windows.Forms.CheckedListBox();
-            this.abouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl2.SuspendLayout();
             this.ioWarriorInfoTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -188,14 +189,21 @@
             this.readInToolStripMenuItem1.Name = "readInToolStripMenuItem1";
             this.readInToolStripMenuItem1.Size = new System.Drawing.Size(100, 20);
             this.readInToolStripMenuItem1.Text = "Open Connected";
-            this.readInToolStripMenuItem1.Click += new System.EventHandler(this.bttReadInfos_Click);
+            this.readInToolStripMenuItem1.Click += new System.EventHandler(this.OnClick_OpenAllConnected);
             // 
             // closeAllToolStripMenuItem1
             // 
+            this.closeAllToolStripMenuItem1.Enabled = false;
             this.closeAllToolStripMenuItem1.Name = "closeAllToolStripMenuItem1";
             this.closeAllToolStripMenuItem1.Size = new System.Drawing.Size(100, 20);
             this.closeAllToolStripMenuItem1.Text = "Close Connected";
-            this.closeAllToolStripMenuItem1.Click += new System.EventHandler(this.CloseAll_Click);
+            this.closeAllToolStripMenuItem1.Click += new System.EventHandler(this.OnClick_CloseConnected);
+            // 
+            // abouteToolStripMenuItem
+            // 
+            this.abouteToolStripMenuItem.Name = "abouteToolStripMenuItem";
+            this.abouteToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.abouteToolStripMenuItem.Text = "Aboute";
             // 
             // statusStrip1
             // 
@@ -244,6 +252,7 @@
             // panel1
             // 
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.runDeviceSelecter);
             this.panel1.Controls.Add(this.runtimeLabel);
             this.panel1.Controls.Add(this.runStatus);
             this.panel1.Controls.Add(this.groupBox3);
@@ -256,10 +265,18 @@
             this.panel1.Size = new System.Drawing.Size(876, 414);
             this.panel1.TabIndex = 2;
             // 
+            // runDeviceSelecter
+            // 
+            this.runDeviceSelecter.FormattingEnabled = true;
+            this.runDeviceSelecter.Location = new System.Drawing.Point(9, 12);
+            this.runDeviceSelecter.Name = "runDeviceSelecter";
+            this.runDeviceSelecter.Size = new System.Drawing.Size(121, 21);
+            this.runDeviceSelecter.TabIndex = 11;
+            // 
             // runtimeLabel
             // 
             this.runtimeLabel.AutoSize = true;
-            this.runtimeLabel.Location = new System.Drawing.Point(212, 23);
+            this.runtimeLabel.Location = new System.Drawing.Point(326, 15);
             this.runtimeLabel.Name = "runtimeLabel";
             this.runtimeLabel.Size = new System.Drawing.Size(29, 13);
             this.runtimeLabel.TabIndex = 10;
@@ -269,7 +286,7 @@
             // 
             this.runStatus.BackColor = System.Drawing.Color.Red;
             this.runStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.runStatus.Location = new System.Drawing.Point(184, 18);
+            this.runStatus.Location = new System.Drawing.Point(298, 10);
             this.runStatus.Name = "runStatus";
             this.runStatus.Size = new System.Drawing.Size(22, 23);
             this.runStatus.TabIndex = 9;
@@ -282,7 +299,7 @@
             this.groupBox3.Controls.Add(this.port1invert);
             this.groupBox3.Controls.Add(this.port1Output);
             this.groupBox3.Controls.Add(this.port1Input);
-            this.groupBox3.Location = new System.Drawing.Point(260, 64);
+            this.groupBox3.Location = new System.Drawing.Point(268, 67);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(232, 226);
             this.groupBox3.TabIndex = 7;
@@ -347,7 +364,7 @@
             // bttStop
             // 
             this.bttStop.Enabled = false;
-            this.bttStop.Location = new System.Drawing.Point(103, 18);
+            this.bttStop.Location = new System.Drawing.Point(217, 10);
             this.bttStop.Name = "bttStop";
             this.bttStop.Size = new System.Drawing.Size(75, 23);
             this.bttStop.TabIndex = 8;
@@ -356,7 +373,7 @@
             // 
             // bttRun
             // 
-            this.bttRun.Location = new System.Drawing.Point(22, 18);
+            this.bttRun.Location = new System.Drawing.Point(136, 10);
             this.bttRun.Name = "bttRun";
             this.bttRun.Size = new System.Drawing.Size(75, 23);
             this.bttRun.TabIndex = 6;
@@ -371,7 +388,7 @@
             this.groupBox2.Controls.Add(this.port0invert);
             this.groupBox2.Controls.Add(this.port0Output);
             this.groupBox2.Controls.Add(this.port0Input);
-            this.groupBox2.Location = new System.Drawing.Point(20, 64);
+            this.groupBox2.Location = new System.Drawing.Point(9, 67);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(234, 226);
             this.groupBox2.TabIndex = 5;
@@ -432,12 +449,6 @@
             this.port0Input.Name = "port0Input";
             this.port0Input.Size = new System.Drawing.Size(55, 124);
             this.port0Input.TabIndex = 0;
-            // 
-            // abouteToolStripMenuItem
-            // 
-            this.abouteToolStripMenuItem.Name = "abouteToolStripMenuItem";
-            this.abouteToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.abouteToolStripMenuItem.Text = "Aboute";
             // 
             // Main
             // 
@@ -510,6 +521,7 @@
         private System.Windows.Forms.ToolStripMenuItem readInToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem closeAllToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem abouteToolStripMenuItem;
+        private System.Windows.Forms.ComboBox runDeviceSelecter;
     }
 }
 

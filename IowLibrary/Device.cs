@@ -22,6 +22,10 @@ namespace IowLibrary {
             DeviceInitialisation();
         }
 
+        ~Device() {
+            Close();
+        }
+
         public int? Handler { get; set; }
 
         public int DeviceNumber { get; set; }
