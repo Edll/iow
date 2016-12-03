@@ -47,11 +47,13 @@ namespace IowLibrary {
         /// <param name="deviceNumber">Number of the Device to Run</param>
         public void RunDevice(int deviceNumber) {
             var device = GetDeviceNumber(deviceNumber);
-            if (_deviceHandlerFactory == null)
-            {
+            if (_deviceHandlerFactory == null) {
                 _deviceHandlerFactory = new DeviceHandlerFactory();
             }
             var deviceHandler = _deviceHandlerFactory.AddNewDeviceThread(device);
+            if (deviceHandler == null) {
+                return;
+            }
             deviceHandler.RunTimeUpdate += DeviceHandler_RunTimeUpdate;
         }
 

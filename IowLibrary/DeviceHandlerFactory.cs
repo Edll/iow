@@ -20,6 +20,9 @@ namespace IowLibrary {
         /// </summary>
         /// <param name="device"></param>
         public DeviceHandler AddNewDeviceThread(Device device) {
+            if (device == null) {
+                return null;
+            }
             var deviceHandler = new DeviceHandler(device);
             var thread = new Thread(deviceHandler.RunDevice);
             deviceHandler.DeviceThread = thread;
@@ -35,6 +38,9 @@ namespace IowLibrary {
         /// </summary>
         /// <param name="device"></param>
         public void StopDeviceThread(Device device) {
+            if (device == null) {
+                return;
+            }
             DeviceHandler deviceHandler;
             _deviceThreadpool.TryGetValue(device.DeviceNumber, out deviceHandler);
             if (deviceHandler != null) {
