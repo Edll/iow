@@ -70,14 +70,14 @@ namespace IOW_A1_3 {
         }
 
         private void Port0Output_ItemCheck(object sender, ItemCheckEventArgs e) {
-            var port = 0;
-            var device = 1;
+            const int port = 0;
+            const int device = 1;
             CheckOutputBit(sender, e, port, device);
         }
 
         private void Port1Output_ItemCheck(object sender, ItemCheckEventArgs e) {
-            var port = 1;
-            var device = 1;
+            const int port = 1;
+            const int device = 1;
             CheckOutputBit(sender, e, port, device);
         }
 
