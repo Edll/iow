@@ -46,8 +46,8 @@ namespace IOW_A1_3 {
 
             // FIXME:
             // WORKAROUND für das DLL speicher problem
-            //      System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
-            //   Close();
+            System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
+            Close();
         }
 
         private void Click_RunSelectedDevice(object sender, EventArgs e) {
@@ -209,6 +209,8 @@ namespace IOW_A1_3 {
             } else {
 
                 ErrorLogList.Items.Add(DateTime.Now + " : " + errorItem);
+                int visibleItems = ErrorLogList.ClientSize.Height / ErrorLogList.ItemHeight;
+                ErrorLogList.TopIndex = Math.Max(ErrorLogList.Items.Count - visibleItems + 1, 0);
             }
         }
 
@@ -223,6 +225,8 @@ namespace IOW_A1_3 {
             } else {
 
                 EventLogList.Items.Add(DateTime.Now + " : " + eventItem);
+                int visibleItems = EventLogList.ClientSize.Height / EventLogList.ItemHeight;
+                EventLogList.TopIndex = Math.Max(EventLogList.Items.Count - visibleItems + 1, 0);
             }
         }
 
