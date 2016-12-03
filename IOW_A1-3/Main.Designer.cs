@@ -203,8 +203,9 @@
             // abouteToolStripMenuItem
             // 
             this.abouteToolStripMenuItem.Name = "abouteToolStripMenuItem";
-            this.abouteToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.abouteToolStripMenuItem.Text = "Aboute";
+            this.abouteToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.abouteToolStripMenuItem.Text = "About";
+            this.abouteToolStripMenuItem.Click += new System.EventHandler(this.OnClick_ShowAbout);
             // 
             // statusStrip1
             // 
@@ -468,7 +469,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Main";
-            this.Text = "IO Warrior";
+            this.Text = "IO Warrior I/O";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CloseProgramm);
             this.tabControl2.ResumeLayout(false);
             this.ioWarriorInfoTab.ResumeLayout(false);

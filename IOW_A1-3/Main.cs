@@ -230,5 +230,9 @@ namespace IOW_A1_3 {
             }
         }
 
+        private void OnClick_ShowAbout(object sender, EventArgs e) {
+            MessageBox.Show("Program M. Vervoorst (2016)" +
+                             " \nIcon pack by Icons8 https://icons8.com", "IO Warrior I/O");
+        }
     }
 }
