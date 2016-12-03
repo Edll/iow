@@ -21,7 +21,6 @@ namespace IowLibrary {
 
         public DeviceFactory(DeviceFactoryEventHandler deviceError) {
             DeviceError += deviceError;
-            InitFactory();
 
             if (_instance == null) {
                 _instance = this;
@@ -47,11 +46,13 @@ namespace IowLibrary {
         /// <param name="deviceNumber">Number of the Device to Run</param>
         public void RunDevice(int deviceNumber) {
             var device = GetDeviceNumber(deviceNumber);
-            if (_deviceHandlerFactory == null)
-            {
+            if (_deviceHandlerFactory == null) {
                 _deviceHandlerFactory = new DeviceHandlerFactory();
             }
             var deviceHandler = _deviceHandlerFactory.AddNewDeviceThread(device);
+            if (deviceHandler == null) {
+                return;
+            }
             deviceHandler.RunTimeUpdate += DeviceHandler_RunTimeUpdate;
         }
 
@@ -170,17 +171,17 @@ namespace IowLibrary {
             return errors;
         }
 
-        private void InitFactory() {
+        public bool InitFactory() {
             var isOpen = OpenConnectedDevices();
             if (!isOpen) {
-                return;
+                return false;
             }
 
             var isCountDevices = CountConnectedDevices();
             if (!isCountDevices) {
-                return;
+                return false;
             }
-            AddAllConnectedDeviceToFactory();
+            return AddAllConnectedDeviceToFactory();
         }
 
         private bool OpenConnectedDevices() {
@@ -206,7 +207,7 @@ namespace IowLibrary {
             return false;
         }
 
-        private void AddAllConnectedDeviceToFactory() {
+        private bool AddAllConnectedDeviceToFactory() {
             for (int? i = Defines.IOWKIT_START_NUMBERING; i <= _deviceCounter; i++) {
                 var handler = IowKit.GetHandlerForDevice(i);
 
@@ -218,6 +219,7 @@ namespace IowLibrary {
 
                 AddDeviceToFactory((int)handler, (int)i);
             }
+            return true;
         }
 
         private void AddDeviceToFactory(int handler, int deviceNumber) {
@@ -246,7 +248,7 @@ namespace IowLibrary {
         }
 
         private void RemoveDevice(int? handler) {
-            Console.WriteLine("Device will be removed: " + handler);
+            AddDeviceFactoryError("Device will be removed: " + handler);
             if (handler != null) _devices.Remove((int)handler);
         }
 

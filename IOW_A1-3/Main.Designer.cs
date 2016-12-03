@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabControl = new System.Windows.Forms.TabPage();
+            this.runtimeLabel = new System.Windows.Forms.Label();
             this.runStatus = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.port1selectAll = new System.Windows.Forms.CheckBox();
@@ -53,7 +54,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.NumberOfConDevices = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.runtimeLabel = new System.Windows.Forms.Label();
+            this.errorLogList = new System.Windows.Forms.ListBox();
+            this.errorLogLabel = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -76,6 +78,8 @@
             // 
             // tabControl
             // 
+            this.tabControl.Controls.Add(this.errorLogLabel);
+            this.tabControl.Controls.Add(this.errorLogList);
             this.tabControl.Controls.Add(this.runtimeLabel);
             this.tabControl.Controls.Add(this.runStatus);
             this.tabControl.Controls.Add(this.groupBox3);
@@ -89,6 +93,15 @@
             this.tabControl.TabIndex = 0;
             this.tabControl.Text = "Controll";
             this.tabControl.UseVisualStyleBackColor = true;
+            // 
+            // runtimeLabel
+            // 
+            this.runtimeLabel.AutoSize = true;
+            this.runtimeLabel.Location = new System.Drawing.Point(196, 11);
+            this.runtimeLabel.Name = "runtimeLabel";
+            this.runtimeLabel.Size = new System.Drawing.Size(29, 13);
+            this.runtimeLabel.TabIndex = 4;
+            this.runtimeLabel.Text = "0 ms";
             // 
             // runStatus
             // 
@@ -119,7 +132,7 @@
             this.port1selectAll.AutoSize = true;
             this.port1selectAll.Location = new System.Drawing.Point(68, 200);
             this.port1selectAll.Name = "port1selectAll";
-            this.port1selectAll.Size = new System.Drawing.Size(38, 17);
+            this.port1selectAll.Size = new System.Drawing.Size(37, 17);
             this.port1selectAll.TabIndex = 6;
             this.port1selectAll.Text = "All";
             this.port1selectAll.UseVisualStyleBackColor = true;
@@ -148,7 +161,7 @@
             this.port1invert.AutoSize = true;
             this.port1invert.Location = new System.Drawing.Point(7, 18);
             this.port1invert.Name = "port1invert";
-            this.port1invert.Size = new System.Drawing.Size(54, 17);
+            this.port1invert.Size = new System.Drawing.Size(53, 17);
             this.port1invert.TabIndex = 2;
             this.port1invert.Text = "Invert";
             this.port1invert.UseVisualStyleBackColor = true;
@@ -212,7 +225,7 @@
             this.port0selectAll.AutoSize = true;
             this.port0selectAll.Location = new System.Drawing.Point(68, 201);
             this.port0selectAll.Name = "port0selectAll";
-            this.port0selectAll.Size = new System.Drawing.Size(38, 17);
+            this.port0selectAll.Size = new System.Drawing.Size(37, 17);
             this.port0selectAll.TabIndex = 5;
             this.port0selectAll.Text = "All";
             this.port0selectAll.UseVisualStyleBackColor = true;
@@ -241,7 +254,7 @@
             this.port0invert.AutoSize = true;
             this.port0invert.Location = new System.Drawing.Point(7, 19);
             this.port0invert.Name = "port0invert";
-            this.port0invert.Size = new System.Drawing.Size(54, 17);
+            this.port0invert.Size = new System.Drawing.Size(53, 17);
             this.port0invert.TabIndex = 2;
             this.port0invert.Text = "Invert";
             this.port0invert.UseVisualStyleBackColor = true;
@@ -326,14 +339,23 @@
             this.dataGridView1.Size = new System.Drawing.Size(941, 464);
             this.dataGridView1.TabIndex = 3;
             // 
-            // runtimeLabel
+            // errorLogList
             // 
-            this.runtimeLabel.AutoSize = true;
-            this.runtimeLabel.Location = new System.Drawing.Point(196, 11);
-            this.runtimeLabel.Name = "runtimeLabel";
-            this.runtimeLabel.Size = new System.Drawing.Size(29, 13);
-            this.runtimeLabel.TabIndex = 4;
-            this.runtimeLabel.Text = "0 ms";
+            this.errorLogList.ForeColor = System.Drawing.Color.Red;
+            this.errorLogList.FormattingEnabled = true;
+            this.errorLogList.Location = new System.Drawing.Point(7, 423);
+            this.errorLogList.Name = "errorLogList";
+            this.errorLogList.Size = new System.Drawing.Size(938, 95);
+            this.errorLogList.TabIndex = 5;
+            // 
+            // errorLogLabel
+            // 
+            this.errorLogLabel.AutoSize = true;
+            this.errorLogLabel.Location = new System.Drawing.Point(9, 404);
+            this.errorLogLabel.Name = "errorLogLabel";
+            this.errorLogLabel.Size = new System.Drawing.Size(50, 13);
+            this.errorLogLabel.TabIndex = 6;
+            this.errorLogLabel.Text = "Error Log";
             // 
             // Main
             // 
@@ -387,6 +409,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox port0invert;
         private System.Windows.Forms.Label runtimeLabel;
+        private System.Windows.Forms.Label errorLogLabel;
+        private System.Windows.Forms.ListBox errorLogList;
     }
 }
 

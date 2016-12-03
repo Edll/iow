@@ -32,57 +32,70 @@ namespace IOW_A1_3 {
                     devicesList.Add(device);
                 }
 
+                // add number of needed rows
+                while (dataTable.Rows.Count < devices.Count) {
+                    dataTable.Rows.Add();
+                }
 
                 for (int i = 0; i < columnNames.Count; i++) {
-
+             
                     string name = columnNames[i];
                     dataTable.Columns.Add(name);
 
-                    // add number of needed rows
-                    while (dataTable.Rows.Count < devices.Count) {
-                        dataTable.Rows.Add();
-                    }
-
+                    int iRow;
                     switch (name) {
                         case columnNameNumber:
-                        foreach (Device device in devicesList) {
-                            for (int iRow = 0; iRow < devices.Count; iRow++) {
-                                dataTable.Rows[iRow][i] = device.DeviceNumber;
-                            }
-                        }
+                        iRow = 0;
+                        setDeviceValue(devicesList, dataTable, i);
                         break;
                         case columnNameProduct:
+                        iRow = 0;
                         foreach (Device device in devicesList) {
-                            for (int iRow = 0; iRow < devices.Count; iRow++) {
-                                dataTable.Rows[iRow][i] = device.ProductId;
-                            }
+
+                            dataTable.Rows[iRow][i] = device.ProductId;
+                            iRow++;
                         }
                         break;
                         case columnNameSoftware:
+                        iRow = 0;
                         foreach (Device device in devicesList) {
-                            for (int iRow = 0; iRow < devices.Count; iRow++) {
-                                dataTable.Rows[iRow][i] = device.SoftwareVersion;
-                            }
+
+                            dataTable.Rows[iRow][i] = device.SoftwareVersion;
+                            iRow++;
                         }
                         break;
                         case columnNameSerial:
+                        iRow = 0;
                         foreach (Device device in devicesList) {
-                            for (int iRow = 0; iRow < devices.Count; iRow++) {
-                                dataTable.Rows[iRow][i] = device.SoftwareVersion;
-                            }
+
+                            dataTable.Rows[iRow][i] = device.Serial;
+                            iRow++;
                         }
                         break;
+
                         case columnNameHandler:
+                        iRow = 0;
                         foreach (Device device in devicesList) {
-                            for (int iRow = 0; iRow < devices.Count; iRow++) {
-                                dataTable.Rows[iRow][i] = device.Handler;
-                            }
+
+                            dataTable.Rows[iRow][i] = device.Handler;
+                            iRow++;
                         }
                         break;
                     }
                 }
             }
             return dataTable;
+        }
+
+        private static void setDeviceValue(List<Device> devicesList, DataTable dataTable, int i)
+        {
+            int iRow = 0;
+            foreach (Device device in devicesList)
+            {
+            
+                dataTable.Rows[iRow][i] = device.DeviceNumber;
+                iRow++;
+            }
         }
     }
 }

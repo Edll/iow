@@ -21,7 +21,9 @@ namespace IowLibrary {
 
         public DeviceHandler(Device device) {
             Device = device;
-            device.PortBitOutChange += Device_PortBitOutChange;
+            if (Device != null) {
+                Device.PortBitOutChange += Device_PortBitOutChange;
+            }
         }
 
         public Thread DeviceThread { get; set; }
@@ -70,10 +72,9 @@ namespace IowLibrary {
             UpdateRuntime();
         }
 
-        private void UpdateRuntime()
-        {
+        private void UpdateRuntime() {
             var time = _stopWatchResult.Sum();
-            time = time/_stopWatchResult.Count();
+            time = time / _stopWatchResult.Count();
             Runtime = time;
             _stopWatchResult.Clear();
         }

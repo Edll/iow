@@ -15,6 +15,8 @@ namespace IowLibrary {
         public event PortChangeEventHandler PortBitInChange;
         public event PortChangeEventHandler PortBitOutChange;
 
+        private int _writeLoopCounter;
+
         public Device(int? handler) {
             Handler = handler;
             DeviceInitialisation();
@@ -112,13 +114,22 @@ namespace IowLibrary {
         }
 
         private byte[] ReadDeviceImmediate() {
+            if (_writeLoopCounter >= 3) {
+                DeviceAddError("Schreib schleife vorgang abgebrochen");
+                return new byte[IoReportsSize];
+            }
+            _writeLoopCounter++;
             var data = new byte[IoReportsSize];
             var ok = IowKit.ReadImmediate(Handler, data);
             if (!ok) {
-                // TODO: loop prevention!!!!!
+
                 data = ReadDeviceImmediate();
             }
-            return data;
+            _writeLoopCounter = 0;
+            if (data != null) { return data; }
+
+            DeviceAddError("Device ist offenbar nicht mehr angeschlossen");
+            return new byte[IoReportsSize];
         }
 
         private void DeviceInitialisation() {
@@ -151,13 +162,11 @@ namespace IowLibrary {
             }
         }
 
-        private void ReadDeviceSerial()
-        {
+        private void ReadDeviceSerial() {
             Serial = IowKit.GetProductSerial(Handler);
         }
 
-        private void ReadSoftwareVersion()
-        {
+        private void ReadSoftwareVersion() {
             SoftwareVersion = IowKit.GetProductSoftwareVersion(Handler);
         }
 
@@ -187,13 +196,11 @@ namespace IowLibrary {
             }
         }
 
-        private void PortBitOutChangeEvent(Port port, PortBit portBit)
-        {
+        private void PortBitOutChangeEvent(Port port, PortBit portBit) {
             PortBitOutChange?.Invoke(port, portBit);
         }
 
-        private void PortBitInChangeEvent(Port port, PortBit portBit)
-        {
+        private void PortBitInChangeEvent(Port port, PortBit portBit) {
             PortBitInChange?.Invoke(port, portBit);
         }
 
@@ -203,7 +210,7 @@ namespace IowLibrary {
         }
 
         private void DeviceErrorEvent() {
-            if (DeviceError == null) { return;}
+            if (DeviceError == null) { return; }
             Close();
             DeviceError(this);
         }
