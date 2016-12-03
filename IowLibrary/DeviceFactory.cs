@@ -66,7 +66,7 @@ namespace IowLibrary {
         /// <param name="deviceNumber">Device wich is to Run</param>
         /// <param name="devicePortBitChange">PortBit Change Event Listener</param>
         /// <param name="deviceFactoryRunTimeUpdate">Loop Timer Update Event</param>
-        public void RunDevice(object deviceNumber, PortChangeEventHandler devicePortBitChange,
+        public void RunDevice(object deviceNumber, DevicPortEventHandler devicePortBitChange,
             DeviceUpdateEventHandler deviceFactoryRunTimeUpdate) {
 
             var device = GetDeviceNumber(deviceNumber);

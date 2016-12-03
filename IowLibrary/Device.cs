@@ -4,7 +4,7 @@ using IowLibrary.DllWapper;
 
 namespace IowLibrary {
     public delegate void DeviceStatusEventHandler(Device device);
-
+    public delegate void DevicPortEventHandler(Device device, Port port, PortBit portBit);
     /// <summary>
     /// Representation Class for an IOWarrior Device
     /// </summary>
@@ -12,8 +12,8 @@ namespace IowLibrary {
         public event DeviceStatusEventHandler DeviceClose;
         public event DeviceStatusEventHandler DeviceError;
 
-        public event PortChangeEventHandler PortBitInChange;
-        public event PortChangeEventHandler PortBitOutChange;
+        public event DevicPortEventHandler PortBitInChange;
+        public event DevicPortEventHandler PortBitOutChange;
 
         private int _writeLoopCounter;
 
@@ -201,11 +201,11 @@ namespace IowLibrary {
         }
 
         private void PortBitOutChangeEvent(Port port, PortBit portBit) {
-            PortBitOutChange?.Invoke(port, portBit);
+            PortBitOutChange?.Invoke(this ,port, portBit);
         }
 
         private void PortBitInChangeEvent(Port port, PortBit portBit) {
-            PortBitInChange?.Invoke(port, portBit);
+            PortBitInChange?.Invoke(this, port, portBit);
         }
 
         private void DeviceCloseEvent() {

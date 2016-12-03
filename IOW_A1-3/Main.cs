@@ -63,13 +63,12 @@ namespace IOW_A1_3 {
         private void Click_StopSelectedDevice(object sender, EventArgs e) {
             if (runDeviceSelecter.SelectedItem == null) return;
 
-            _deviceFactory.StopDevice(runDeviceSelecter.SelectedItem);
+            ClearDevice(runDeviceSelecter.SelectedItem);
+
             bttRun.Enabled = true;
             bttStop.Enabled = false;
             runStatus.BackColor = Color.Red;
             SetRuntimeLabelText("0");
-
-            ClearDevice();
         }
 
         private void Port0Output_ItemCheck(object sender, ItemCheckEventArgs e) {
@@ -94,7 +93,7 @@ namespace IOW_A1_3 {
 
         private void InitDevice(object selectedDevice) {
 
-            _deviceFactory.RunDevice(selectedDevice, Device_PortBitChange, DeviceFactoryRunTimeUpdate);
+            _deviceFactory.RunDevice(selectedDevice, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate);
             // TODO wenn es eine anderer IOW ist mit mehr oder weniger ports sollte das hier dynamisch eingefügt werden....
             // TODO das sollte auch gemacht werden wenn wir mehr als einen IOW laufen lassen.....
             // create inputs
@@ -108,14 +107,18 @@ namespace IOW_A1_3 {
             port1Output.ItemCheck += Port1Output_ItemCheck;
         }
 
-        private void ClearDevice() {
+        private void ClearDevice(object selectedDevice) {
+            _deviceFactory.StopDevice(selectedDevice);
+
+            // TODO wenn mehrere Laufen sollte hier auch das entsprechende Device gelöscht werden....
             port0Input.Items.Clear();
             port1Input.Items.Clear();
             port0Output.Items.Clear();
             port1Output.Items.Clear();
         }
 
-        private void Device_PortBitChange(Port port, PortBit portbit) {
+        private void Device_PortChangeStatus(Device device, Port port, PortBit portbit) {
+            // TODO muss dynamisch werden je nach art des Devices
             if (port.PortNumber == 0) {
                 ChangeCheckOnList(port0Input, portbit.BitNumber, portbit.BitIn);
             }
@@ -125,7 +128,6 @@ namespace IOW_A1_3 {
         }
 
         private void ChangeCheckOnList(CheckedListBox clb, int index, bool value) {
-            // um das hier ThreadSafe zu machen wird ein Callback erzeugt wenn der aufrufer nicht gleich dem erzeuger ist.
             if (clb.InvokeRequired) {
                 var sbc = new SetBoolCallback(ChangeCheckOnList);
                 Invoke(sbc, clb, index, value);
@@ -133,20 +135,6 @@ namespace IOW_A1_3 {
                 clb.SetItemChecked(index, !value);
             }
         }
-
-        private void DeviceFactoryRunTimeUpdate(long runtime) {
-            if (runtimeLabel.InvokeRequired) {
-                var slc = new SetStringCallback(SetRuntimeLabelText);
-                Invoke(slc, Convert.ToString(runtime));
-            } else {
-                SetRuntimeLabelText(Convert.ToString(runtime));
-            }
-        }
-
-        private void SetRuntimeLabelText(string text) {
-            runtimeLabel.Text = text + " ms";
-        }
-
 
         private void checked_port1invert(object sender, EventArgs e) {
 
@@ -162,6 +150,20 @@ namespace IOW_A1_3 {
 
         private void checked_port1selectAll(object sender, EventArgs e) {
             GuiUtils.CheckboxListSetAllItems(sender, port1Output);
+        }
+
+
+        private void DeviceFactoryRunTimeUpdate(long runtime) {
+            if (runtimeLabel.InvokeRequired) {
+                var slc = new SetStringCallback(SetRuntimeLabelText);
+                Invoke(slc, Convert.ToString(runtime));
+            } else {
+                SetRuntimeLabelText(Convert.ToString(runtime));
+            }
+        }
+
+        private void SetRuntimeLabelText(string text) {
+            runtimeLabel.Text = text + " ms";
         }
 
         private void CloseProgramm(object sender, FormClosedEventArgs e) {

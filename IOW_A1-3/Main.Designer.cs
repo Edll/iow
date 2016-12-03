@@ -315,6 +315,7 @@
             this.port1selectAll.TabIndex = 6;
             this.port1selectAll.Text = "All";
             this.port1selectAll.UseVisualStyleBackColor = true;
+            this.port1selectAll.CheckedChanged += new System.EventHandler(this.checked_port1selectAll);
             // 
             // label5
             // 
@@ -406,6 +407,7 @@
             this.port0selectAll.TabIndex = 5;
             this.port0selectAll.Text = "All";
             this.port0selectAll.UseVisualStyleBackColor = true;
+            this.port0selectAll.CheckedChanged += new System.EventHandler(this.checked_port0selectAll);
             // 
             // label3
             // 

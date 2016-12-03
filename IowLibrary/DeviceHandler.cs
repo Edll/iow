@@ -79,7 +79,7 @@ namespace IowLibrary {
             _stopWatchResult.Clear();
         }
 
-        private void Device_PortBitOutChange(Port port, PortBit portbit) {
+        private void Device_PortBitOutChange(Device device, Port port, PortBit portbit) {
             _isDataWrite = true;
         }
     }
