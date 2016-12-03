@@ -11,12 +11,43 @@ namespace IOW_A1_3 {
         private delegate void SetStringCallback(string text);
 
         private readonly DeviceFactory _deviceFactory;
+
         public Main() {
 
             InitializeComponent();
+
             // open of the DeviceFactory
-            _deviceFactory = new DeviceFactory(DeviceFactory_OpenError);
+            _deviceFactory = new DeviceFactory(DeviceFactory_Error, DeviceFactory_EventLog);
         }
+
+        private void bttReadInfos_Click(object sender, EventArgs e) {
+            _deviceFactory.Refresh();
+            NumberOfConDevices.Text = _deviceFactory.GetNumberOfDevices().ToString();  
+            dataGridView1.DataSource = IowDataTable.GetResultsTable(_deviceFactory.Devices);
+        }
+
+        private void CloseAll_Click(object sender, EventArgs e) {
+            NumberOfConDevices.Text = "0";
+            dataGridView1.DataSource = null;
+            _deviceFactory.RemoveAllDevices();
+        }
+
+        private void DeviceFactory_Error(DeviceFactory deviceError) {
+            SetErrorLog(deviceError.GetAndResetErrorList());
+        }
+
+        private void SetErrorLog(string errorItem) {
+            ErrorLogList.Items.Add(DateTime.Now + " : " + errorItem);
+        }
+
+        private void DeviceFactory_EventLog(DeviceFactory deviceEvent) {
+            SetEventLog(deviceEvent.GetAndResetEventList());
+        }
+
+        private void SetEventLog(string eventItem) {
+            EventLogList.Items.Add(DateTime.Now + " : " + eventItem);
+        }
+
 
         private void Port0Output_ItemCheck(object sender, ItemCheckEventArgs e) {
             var port = 0;
@@ -57,9 +88,8 @@ namespace IOW_A1_3 {
             }
         }
 
-        private void ClearDevice()
-        {
-                port0Input.Items.Clear();
+        private void ClearDevice() {
+            port0Input.Items.Clear();
             port1Input.Items.Clear();
             port0Output.Items.Clear();
             port1Output.Items.Clear();
@@ -84,20 +114,7 @@ namespace IOW_A1_3 {
             }
         }
 
-        private void bttReadInfos_Click(object sender, EventArgs e) {
-            _deviceFactory.Refresh();
-            var devices = _deviceFactory.Devices;
-        //    NumberOfConDevices.Text = devices?.Count.ToString() ?? "0";
-            dataGridView1.DataSource = IowDataTable.GetResultsTable(devices);
-        }
-
-        private void DeviceFactory_OpenError(DeviceFactory deviceError) {
-            SetErrorLog(deviceError.GetAndResetErrorList());
-        }
-
-        private void SetErrorLog(string error) {
-            ErrorLogList.Items.Add(DateTime.Now + " : " + error);
-        }
+ 
 
         private void bttRun_Click(object sender, EventArgs e) {
             InitDevice();

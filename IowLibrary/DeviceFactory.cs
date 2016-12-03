@@ -11,16 +11,18 @@ namespace IowLibrary {
         public const int DeviceTimeout = 200;
 
         public event DeviceFactoryEventHandler DeviceError;
+        public event DeviceFactoryEventHandler DeviceEvent;
         public event DeviceUpdateEventHandler RunTimeUpate;
 
-        private Dictionary<int, Device> _devices;
         private int? _deviceCounter;
         private readonly DeviceFactory _instance;
         private DeviceHandlerFactory _deviceHandlerFactory = new DeviceHandlerFactory();
-        private readonly List<string> _errorsList = new List<string>();
+        private readonly List<string> _errorLogList = new List<string>();
+        private readonly List<string> _eventLogList = new List<string>();
 
-        public DeviceFactory(DeviceFactoryEventHandler deviceError) {
+        public DeviceFactory(DeviceFactoryEventHandler deviceError, DeviceFactoryEventHandler deviceEvent) {
             DeviceError += deviceError;
+            DeviceEvent += deviceEvent;
 
             if (_instance == null) {
                 _instance = this;
@@ -31,14 +33,7 @@ namespace IowLibrary {
             RemoveAllDevices();
         }
 
-        public Dictionary<int, Device> Devices {
-            get {
-                if (_devices != null) return _devices;
-                InitFactory();
-                return _devices;
-            }
-            set { _devices = value; }
-        }
+        public Dictionary<int, Device> Devices { get; set; }
 
         /// <summary>
         /// Runs the I/O Read/Write for the Device with the given devices Number
@@ -96,13 +91,17 @@ namespace IowLibrary {
             if (Devices == null) return;
             try {
                 foreach (var deviceEntry in Devices) {
-                    RemoveDeviceFromFactory(deviceEntry.Key);
+                  bool isClosed =  CloseDeviceFromFactory(deviceEntry.Key);
+                    if (isClosed)
+                    {
+                        RemoveDevice(deviceEntry.Key);
+                    }
                 }
             } catch (InvalidOperationException) {
                 // kann ignoriert werden da alle Devices schon weg sind!
             }
 
-            _devices.Clear();
+            Devices.Clear();
         }
 
         /// <summary>
@@ -114,8 +113,8 @@ namespace IowLibrary {
         public Device GetDeviceNumber(int deviceNumber) {
             LibaryUtils.CheckDeviceNumber(deviceNumber);
 
-            if (_devices != null) {
-                foreach (var deviceEntry in _devices) {
+            if (Devices != null) {
+                foreach (var deviceEntry in Devices) {
                     var device = deviceEntry.Value;
                     if (device.DeviceNumber == deviceNumber) {
                         return device;
@@ -132,7 +131,7 @@ namespace IowLibrary {
         public Device GetDeviceFromHandler(int handler) {
             Device device;
 
-            _devices.TryGetValue(handler, out device);
+            Devices.TryGetValue(handler, out device);
 
             if (device == null) {
                 AddDeviceFactoryError("Device mit dem Handler: " + handler + " konnte nicht enfernt werden.");
@@ -145,21 +144,21 @@ namespace IowLibrary {
         /// </summary>
         /// <returns>0 to Number of Devices</returns>
         public int GetNumberOfDevices() {
-            return _devices?.Count ?? 0;
+            return Devices?.Count ?? 0;
         }
 
         /// <summary>
         ///  Gets all Error stored in the Factory
         /// </summary>
         public string GetDeviceFactoryErrors() {
-            return _errorsList.Aggregate("", (current, error) => current + (error + "\n"));
+            return _errorLogList.Aggregate("", (current, error) => current + (error + "\n"));
         }
 
         /// <summary>
         /// Reset the Errors stored in the Factory
         /// </summary>
         public void ResetErrorList() {
-            _errorsList?.Clear();
+            _errorLogList?.Clear();
         }
 
         /// <summary>
@@ -168,6 +167,29 @@ namespace IowLibrary {
         public string GetAndResetErrorList() {
             var errors = GetDeviceFactoryErrors();
             ResetErrorList();
+            return errors;
+        }
+
+        /// <summary>
+        ///  Gets all Events stored in the Factory
+        /// </summary>
+        public string GetDeviceFactoryEventLog() {
+            return _eventLogList.Aggregate("", (current, error) => current + (error + "\n"));
+        }
+
+        /// <summary>
+        /// Reset the Events stored in the Factory
+        /// </summary>
+        public void ResetEventList() {
+            _eventLogList?.Clear();
+        }
+
+        /// <summary>
+        /// Get all Events form the Factory and Reset them.
+        /// </summary>
+        public string GetAndResetEventList() {
+            var errors = GetDeviceFactoryEventLog();
+            ResetEventList();
             return errors;
         }
 
@@ -191,7 +213,7 @@ namespace IowLibrary {
                 return true;
             }
 
-            AddDeviceFactoryError("Fehler beim öffnen der Devices. Sind welche Verbunden?");
+            AddDeviceFactoryEventLog("Fehler beim öffnen der Devices. Sind welche Verbunden?");
             return false;
 
         }
@@ -203,7 +225,7 @@ namespace IowLibrary {
                 return true;
             }
 
-            AddDeviceFactoryError("Fehler beim öffnen der Devices. Sind welche Verbunden?");
+            AddDeviceFactoryEventLog("Fehler beim öffnen der Devices. Sind welche Verbunden?");
             return false;
         }
 
@@ -212,8 +234,8 @@ namespace IowLibrary {
                 var handler = IowKit.GetHandlerForDevice(i);
 
                 if (handler == null) {
-                    AddDeviceFactoryError("Das Device mit der Nummer: " + i + " konnte nicht geöffnet " +
-                        "werden.");
+                    AddDeviceFactoryEventLog("Das Device mit der Nummer: " + i + " konnte nicht geöffnet " +
+                        "werden. Es wird nicht geladen.");
                     continue;
                 }
 
@@ -223,33 +245,38 @@ namespace IowLibrary {
         }
 
         private void AddDeviceToFactory(int handler, int deviceNumber) {
-            if (_devices == null) {
-                _devices = new Dictionary<int, Device>();
+            if (Devices == null) {
+                Devices = new Dictionary<int, Device>();
             }
 
             var device = new Device(handler) { DeviceNumber = deviceNumber };
             device.DeviceClose += Device_DeviceClose;
-            _devices.Add(handler, device);
+            Devices.Add(handler, device);
         }
 
-        private void RemoveDeviceFromFactory(int? handler) {
+        private bool CloseDeviceFromFactory(int? handler) {
             Device device;
 
-            if (handler == null) { return; }
+            if (handler == null) { return false; }
 
-            _devices.TryGetValue((int)handler, out device);
+            Devices.TryGetValue((int)handler, out device);
 
             if (device != null) {
                 device.Close();
-                RemoveDevice(handler);
+                return true;
             } else {
                 AddDeviceFactoryError("Device mit dem Handler: " + handler + " konnte nicht enfernt werden.");
+                return false;
             }
         }
 
         private void RemoveDevice(int? handler) {
-            AddDeviceFactoryError("Device will be removed: " + handler);
-            if (handler != null) _devices.Remove((int)handler);
+            if (handler != null) {
+                if (Devices.ContainsKey((int)handler)) {
+                    AddDeviceFactoryEventLog("Device mit dem Handler: " + handler + " wird enfernt");
+                    Devices.Remove((int)handler);
+                }
+            }
         }
 
         private void Device_DeviceClose(Device device) {
@@ -263,7 +290,7 @@ namespace IowLibrary {
 
             Device deviceFromFactroy;
 
-            _devices.TryGetValue((int)device.Handler, out deviceFromFactroy);
+            Devices.TryGetValue((int)device.Handler, out deviceFromFactroy);
 
             if (deviceFromFactroy != null) {
                 RemoveDevice(device.Handler);
@@ -271,11 +298,19 @@ namespace IowLibrary {
         }
 
         private void AddDeviceFactoryError(string msg) {
-            _errorsList.Add(msg);
+            _errorLogList.Add(msg);
             if (DeviceError == null) {
                 throw new SystemException("Error at Devices handling: " + msg);
             }
             DeviceError(this);
+        }
+
+        private void AddDeviceFactoryEventLog(string msg) {
+            _eventLogList.Add(msg);
+            if (DeviceEvent == null) {
+                throw new SystemException("Error at Devices handling: " + msg);
+            }
+            DeviceEvent(this);
         }
 
         private void DeviceHandler_RunTimeUpdate(long runtime) {

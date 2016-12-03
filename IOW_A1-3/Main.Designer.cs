@@ -34,36 +34,37 @@
             this.errorLogTab = new System.Windows.Forms.TabPage();
             this.ErrorLogList = new System.Windows.Forms.ListBox();
             this.eventLogTab = new System.Windows.Forms.TabPage();
+            this.EventLogList = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ioWarriorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.endToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.readInToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.numberOfConnectedDevicesLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.numberOfConnectedDevicesNumber = new System.Windows.Forms.ToolStripStatusLabel();
+            this.NumberOfConDevices = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.port0Input = new System.Windows.Forms.CheckedListBox();
-            this.port0Output = new System.Windows.Forms.CheckedListBox();
-            this.port0invert = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.port0selectAll = new System.Windows.Forms.CheckBox();
-            this.bttRun = new System.Windows.Forms.Button();
-            this.bttStop = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.port1Input = new System.Windows.Forms.CheckedListBox();
-            this.port1Output = new System.Windows.Forms.CheckedListBox();
-            this.port1invert = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.port1selectAll = new System.Windows.Forms.CheckBox();
-            this.runStatus = new System.Windows.Forms.Label();
-            this.runtimeLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.EventLogList = new System.Windows.Forms.ListBox();
-            this.readInToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.runtimeLabel = new System.Windows.Forms.Label();
+            this.runStatus = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.port1selectAll = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.port1invert = new System.Windows.Forms.CheckBox();
+            this.port1Output = new System.Windows.Forms.CheckedListBox();
+            this.port1Input = new System.Windows.Forms.CheckedListBox();
+            this.bttStop = new System.Windows.Forms.Button();
+            this.bttRun = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.port0selectAll = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.port0invert = new System.Windows.Forms.CheckBox();
+            this.port0Output = new System.Windows.Forms.CheckedListBox();
+            this.port0Input = new System.Windows.Forms.CheckedListBox();
+            this.abouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl2.SuspendLayout();
             this.ioWarriorInfoTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -72,9 +73,9 @@
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl2
@@ -145,12 +146,23 @@
             this.eventLogTab.Text = "Event Log";
             this.eventLogTab.UseVisualStyleBackColor = true;
             // 
+            // EventLogList
+            // 
+            this.EventLogList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EventLogList.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.EventLogList.FormattingEnabled = true;
+            this.EventLogList.Location = new System.Drawing.Point(3, 3);
+            this.EventLogList.Name = "EventLogList";
+            this.EventLogList.Size = new System.Drawing.Size(862, 105);
+            this.EventLogList.TabIndex = 8;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ioWarriorToolStripMenuItem,
             this.readInToolStripMenuItem1,
-            this.closeAllToolStripMenuItem1});
+            this.closeAllToolStripMenuItem1,
+            this.abouteToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(882, 24);
@@ -168,15 +180,29 @@
             // endToolStripMenuItem
             // 
             this.endToolStripMenuItem.Name = "endToolStripMenuItem";
-            this.endToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.endToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.endToolStripMenuItem.Text = "End";
+            // 
+            // readInToolStripMenuItem1
+            // 
+            this.readInToolStripMenuItem1.Name = "readInToolStripMenuItem1";
+            this.readInToolStripMenuItem1.Size = new System.Drawing.Size(100, 20);
+            this.readInToolStripMenuItem1.Text = "Open Connected";
+            this.readInToolStripMenuItem1.Click += new System.EventHandler(this.bttReadInfos_Click);
+            // 
+            // closeAllToolStripMenuItem1
+            // 
+            this.closeAllToolStripMenuItem1.Name = "closeAllToolStripMenuItem1";
+            this.closeAllToolStripMenuItem1.Size = new System.Drawing.Size(100, 20);
+            this.closeAllToolStripMenuItem1.Text = "Close Connected";
+            this.closeAllToolStripMenuItem1.Click += new System.EventHandler(this.CloseAll_Click);
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.numberOfConnectedDevicesLabel,
-            this.numberOfConnectedDevicesNumber});
+            this.NumberOfConDevices});
             this.statusStrip1.Location = new System.Drawing.Point(0, 587);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(882, 22);
@@ -194,11 +220,11 @@
             this.numberOfConnectedDevicesLabel.Size = new System.Drawing.Size(152, 17);
             this.numberOfConnectedDevicesLabel.Text = "Number of Connected Devices";
             // 
-            // numberOfConnectedDevicesNumber
+            // NumberOfConDevices
             // 
-            this.numberOfConnectedDevicesNumber.Name = "numberOfConnectedDevicesNumber";
-            this.numberOfConnectedDevicesNumber.Size = new System.Drawing.Size(13, 17);
-            this.numberOfConnectedDevicesNumber.Text = "0";
+            this.NumberOfConDevices.Name = "NumberOfConDevices";
+            this.NumberOfConDevices.Size = new System.Drawing.Size(13, 17);
+            this.NumberOfConDevices.Text = "0";
             // 
             // tableLayoutPanel1
             // 
@@ -215,94 +241,38 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(882, 563);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
-            // groupBox2
+            // panel1
             // 
-            this.groupBox2.Controls.Add(this.port0selectAll);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.port0invert);
-            this.groupBox2.Controls.Add(this.port0Output);
-            this.groupBox2.Controls.Add(this.port0Input);
-            this.groupBox2.Location = new System.Drawing.Point(20, 64);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(234, 226);
-            this.groupBox2.TabIndex = 5;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Port0";
+            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.runtimeLabel);
+            this.panel1.Controls.Add(this.runStatus);
+            this.panel1.Controls.Add(this.groupBox3);
+            this.panel1.Controls.Add(this.bttStop);
+            this.panel1.Controls.Add(this.bttRun);
+            this.panel1.Controls.Add(this.groupBox2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(876, 414);
+            this.panel1.TabIndex = 2;
             // 
-            // port0Input
+            // runtimeLabel
             // 
-            this.port0Input.FormattingEnabled = true;
-            this.port0Input.Location = new System.Drawing.Point(7, 70);
-            this.port0Input.Name = "port0Input";
-            this.port0Input.Size = new System.Drawing.Size(55, 124);
-            this.port0Input.TabIndex = 0;
+            this.runtimeLabel.AutoSize = true;
+            this.runtimeLabel.Location = new System.Drawing.Point(212, 23);
+            this.runtimeLabel.Name = "runtimeLabel";
+            this.runtimeLabel.Size = new System.Drawing.Size(29, 13);
+            this.runtimeLabel.TabIndex = 10;
+            this.runtimeLabel.Text = "0 ms";
             // 
-            // port0Output
+            // runStatus
             // 
-            this.port0Output.CheckOnClick = true;
-            this.port0Output.FormattingEnabled = true;
-            this.port0Output.Location = new System.Drawing.Point(68, 70);
-            this.port0Output.Name = "port0Output";
-            this.port0Output.Size = new System.Drawing.Size(55, 124);
-            this.port0Output.TabIndex = 1;
-            // 
-            // port0invert
-            // 
-            this.port0invert.AutoSize = true;
-            this.port0invert.Location = new System.Drawing.Point(7, 19);
-            this.port0invert.Name = "port0invert";
-            this.port0invert.Size = new System.Drawing.Size(53, 17);
-            this.port0invert.TabIndex = 2;
-            this.port0invert.Text = "Invert";
-            this.port0invert.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 54);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(31, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Input";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(65, 53);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(39, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Output";
-            // 
-            // port0selectAll
-            // 
-            this.port0selectAll.AutoSize = true;
-            this.port0selectAll.Location = new System.Drawing.Point(68, 201);
-            this.port0selectAll.Name = "port0selectAll";
-            this.port0selectAll.Size = new System.Drawing.Size(37, 17);
-            this.port0selectAll.TabIndex = 5;
-            this.port0selectAll.Text = "All";
-            this.port0selectAll.UseVisualStyleBackColor = true;
-            // 
-            // bttRun
-            // 
-            this.bttRun.Location = new System.Drawing.Point(22, 18);
-            this.bttRun.Name = "bttRun";
-            this.bttRun.Size = new System.Drawing.Size(75, 23);
-            this.bttRun.TabIndex = 6;
-            this.bttRun.Text = "run";
-            this.bttRun.UseVisualStyleBackColor = true;
-            // 
-            // bttStop
-            // 
-            this.bttStop.Enabled = false;
-            this.bttStop.Location = new System.Drawing.Point(103, 18);
-            this.bttStop.Name = "bttStop";
-            this.bttStop.Size = new System.Drawing.Size(75, 23);
-            this.bttStop.TabIndex = 8;
-            this.bttStop.Text = "stop";
-            this.bttStop.UseVisualStyleBackColor = true;
+            this.runStatus.BackColor = System.Drawing.Color.Red;
+            this.runStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.runStatus.Location = new System.Drawing.Point(184, 18);
+            this.runStatus.Name = "runStatus";
+            this.runStatus.Size = new System.Drawing.Size(22, 23);
+            this.runStatus.TabIndex = 9;
             // 
             // groupBox3
             // 
@@ -319,22 +289,33 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Port1";
             // 
-            // port1Input
+            // port1selectAll
             // 
-            this.port1Input.FormattingEnabled = true;
-            this.port1Input.Location = new System.Drawing.Point(7, 70);
-            this.port1Input.Name = "port1Input";
-            this.port1Input.Size = new System.Drawing.Size(55, 124);
-            this.port1Input.TabIndex = 0;
+            this.port1selectAll.AutoSize = true;
+            this.port1selectAll.Location = new System.Drawing.Point(68, 200);
+            this.port1selectAll.Name = "port1selectAll";
+            this.port1selectAll.Size = new System.Drawing.Size(37, 17);
+            this.port1selectAll.TabIndex = 6;
+            this.port1selectAll.Text = "All";
+            this.port1selectAll.UseVisualStyleBackColor = true;
             // 
-            // port1Output
+            // label5
             // 
-            this.port1Output.CheckOnClick = true;
-            this.port1Output.FormattingEnabled = true;
-            this.port1Output.Location = new System.Drawing.Point(68, 70);
-            this.port1Output.Name = "port1Output";
-            this.port1Output.Size = new System.Drawing.Size(55, 124);
-            this.port1Output.TabIndex = 1;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(65, 53);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(39, 13);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Output";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 54);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(31, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Input";
             // 
             // port1invert
             // 
@@ -346,88 +327,117 @@
             this.port1invert.Text = "Invert";
             this.port1invert.UseVisualStyleBackColor = true;
             // 
-            // label4
+            // port1Output
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 54);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(31, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Input";
+            this.port1Output.CheckOnClick = true;
+            this.port1Output.FormattingEnabled = true;
+            this.port1Output.Location = new System.Drawing.Point(68, 70);
+            this.port1Output.Name = "port1Output";
+            this.port1Output.Size = new System.Drawing.Size(55, 124);
+            this.port1Output.TabIndex = 1;
             // 
-            // label5
+            // port1Input
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(65, 53);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(39, 13);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "Output";
+            this.port1Input.FormattingEnabled = true;
+            this.port1Input.Location = new System.Drawing.Point(7, 70);
+            this.port1Input.Name = "port1Input";
+            this.port1Input.Size = new System.Drawing.Size(55, 124);
+            this.port1Input.TabIndex = 0;
             // 
-            // port1selectAll
+            // bttStop
             // 
-            this.port1selectAll.AutoSize = true;
-            this.port1selectAll.Location = new System.Drawing.Point(68, 200);
-            this.port1selectAll.Name = "port1selectAll";
-            this.port1selectAll.Size = new System.Drawing.Size(37, 17);
-            this.port1selectAll.TabIndex = 6;
-            this.port1selectAll.Text = "All";
-            this.port1selectAll.UseVisualStyleBackColor = true;
+            this.bttStop.Enabled = false;
+            this.bttStop.Location = new System.Drawing.Point(103, 18);
+            this.bttStop.Name = "bttStop";
+            this.bttStop.Size = new System.Drawing.Size(75, 23);
+            this.bttStop.TabIndex = 8;
+            this.bttStop.Text = "stop";
+            this.bttStop.UseVisualStyleBackColor = true;
             // 
-            // runStatus
+            // bttRun
             // 
-            this.runStatus.BackColor = System.Drawing.Color.Red;
-            this.runStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.runStatus.Location = new System.Drawing.Point(184, 18);
-            this.runStatus.Name = "runStatus";
-            this.runStatus.Size = new System.Drawing.Size(22, 23);
-            this.runStatus.TabIndex = 9;
+            this.bttRun.Location = new System.Drawing.Point(22, 18);
+            this.bttRun.Name = "bttRun";
+            this.bttRun.Size = new System.Drawing.Size(75, 23);
+            this.bttRun.TabIndex = 6;
+            this.bttRun.Text = "run";
+            this.bttRun.UseVisualStyleBackColor = true;
             // 
-            // runtimeLabel
+            // groupBox2
             // 
-            this.runtimeLabel.AutoSize = true;
-            this.runtimeLabel.Location = new System.Drawing.Point(212, 23);
-            this.runtimeLabel.Name = "runtimeLabel";
-            this.runtimeLabel.Size = new System.Drawing.Size(29, 13);
-            this.runtimeLabel.TabIndex = 10;
-            this.runtimeLabel.Text = "0 ms";
+            this.groupBox2.Controls.Add(this.port0selectAll);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.port0invert);
+            this.groupBox2.Controls.Add(this.port0Output);
+            this.groupBox2.Controls.Add(this.port0Input);
+            this.groupBox2.Location = new System.Drawing.Point(20, 64);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(234, 226);
+            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Port0";
             // 
-            // panel1
+            // port0selectAll
             // 
-            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel1.Controls.Add(this.runtimeLabel);
-            this.panel1.Controls.Add(this.runStatus);
-            this.panel1.Controls.Add(this.groupBox3);
-            this.panel1.Controls.Add(this.bttStop);
-            this.panel1.Controls.Add(this.bttRun);
-            this.panel1.Controls.Add(this.groupBox2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 3);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(876, 414);
-            this.panel1.TabIndex = 2;
+            this.port0selectAll.AutoSize = true;
+            this.port0selectAll.Location = new System.Drawing.Point(68, 201);
+            this.port0selectAll.Name = "port0selectAll";
+            this.port0selectAll.Size = new System.Drawing.Size(37, 17);
+            this.port0selectAll.TabIndex = 5;
+            this.port0selectAll.Text = "All";
+            this.port0selectAll.UseVisualStyleBackColor = true;
             // 
-            // EventLogList
+            // label3
             // 
-            this.EventLogList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EventLogList.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.EventLogList.FormattingEnabled = true;
-            this.EventLogList.Location = new System.Drawing.Point(3, 3);
-            this.EventLogList.Name = "EventLogList";
-            this.EventLogList.Size = new System.Drawing.Size(862, 105);
-            this.EventLogList.TabIndex = 8;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(65, 53);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(39, 13);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Output";
             // 
-            // readInToolStripMenuItem1
+            // label2
             // 
-            this.readInToolStripMenuItem1.Name = "readInToolStripMenuItem1";
-            this.readInToolStripMenuItem1.Size = new System.Drawing.Size(57, 20);
-            this.readInToolStripMenuItem1.Text = "Read In";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 54);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(31, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Input";
             // 
-            // closeAllToolStripMenuItem1
+            // port0invert
             // 
-            this.closeAllToolStripMenuItem1.Name = "closeAllToolStripMenuItem1";
-            this.closeAllToolStripMenuItem1.Size = new System.Drawing.Size(59, 20);
-            this.closeAllToolStripMenuItem1.Text = "Close All";
+            this.port0invert.AutoSize = true;
+            this.port0invert.Location = new System.Drawing.Point(7, 19);
+            this.port0invert.Name = "port0invert";
+            this.port0invert.Size = new System.Drawing.Size(53, 17);
+            this.port0invert.TabIndex = 2;
+            this.port0invert.Text = "Invert";
+            this.port0invert.UseVisualStyleBackColor = true;
+            // 
+            // port0Output
+            // 
+            this.port0Output.CheckOnClick = true;
+            this.port0Output.FormattingEnabled = true;
+            this.port0Output.Location = new System.Drawing.Point(68, 70);
+            this.port0Output.Name = "port0Output";
+            this.port0Output.Size = new System.Drawing.Size(55, 124);
+            this.port0Output.TabIndex = 1;
+            // 
+            // port0Input
+            // 
+            this.port0Input.FormattingEnabled = true;
+            this.port0Input.Location = new System.Drawing.Point(7, 70);
+            this.port0Input.Name = "port0Input";
+            this.port0Input.Size = new System.Drawing.Size(55, 124);
+            this.port0Input.TabIndex = 0;
+            // 
+            // abouteToolStripMenuItem
+            // 
+            this.abouteToolStripMenuItem.Name = "abouteToolStripMenuItem";
+            this.abouteToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.abouteToolStripMenuItem.Text = "Aboute";
             // 
             // Main
             // 
@@ -451,12 +461,12 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -475,7 +485,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel numberOfConnectedDevicesLabel;
-        private System.Windows.Forms.ToolStripStatusLabel numberOfConnectedDevicesNumber;
+        private System.Windows.Forms.ToolStripStatusLabel NumberOfConDevices;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label runtimeLabel;
@@ -499,6 +509,7 @@
         private System.Windows.Forms.ListBox EventLogList;
         private System.Windows.Forms.ToolStripMenuItem readInToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem closeAllToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem abouteToolStripMenuItem;
     }
 }
 
