@@ -379,6 +379,7 @@
             this.bttRun.TabIndex = 6;
             this.bttRun.Text = "run";
             this.bttRun.UseVisualStyleBackColor = true;
+            this.bttRun.Click += new System.EventHandler(this.bttRun_Click);
             // 
             // groupBox2
             // 

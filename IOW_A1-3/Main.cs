@@ -51,13 +51,14 @@ namespace IOW_A1_3 {
         }
 
         private void bttRun_Click(object sender, EventArgs e) {
-            InitDevice();
-
-            _deviceFactory.RunDevice(1);
-            _deviceFactory.RunTimeUpate += DeviceFactoryRunTimeUpate;
-            bttStop.Enabled = true;
-            bttRun.Enabled = false;
-            runStatus.BackColor = Color.Green;
+            if (runDeviceSelecter.SelectedItem != null)
+            {
+                InitDevice(runDeviceSelecter.SelectedItem);
+ 
+                bttStop.Enabled = true;
+                bttRun.Enabled = false;
+                runStatus.BackColor = Color.Green;
+            }
         }
 
         private void bttStop_Click(object sender, EventArgs e) {
@@ -90,9 +91,10 @@ namespace IOW_A1_3 {
             _deviceFactory.SetBit(device, port, bit, value);
         }
 
-        private void InitDevice() {
-            bool isTo = _deviceFactory.InitFactory();
+        private void InitDevice(Object selectedDevice) {
 
+            _deviceFactory.RunDevice(selectedDevice, Device_PortBitChange, DeviceFactoryRunTimeUpdate);
+      
             // create inputs
             GuiUtils.CreatePortEntrys(port0Input, false);
             GuiUtils.CreatePortEntrys(port1Input, false);
@@ -102,11 +104,6 @@ namespace IOW_A1_3 {
             port0Output.ItemCheck += Port0Output_ItemCheck;
             GuiUtils.CreatePortEntrys(port1Output, true);
             port1Output.ItemCheck += Port1Output_ItemCheck;
-
-            var device = _deviceFactory.GetDeviceNumber(1);
-            if (device != null) {
-                device.PortBitInChange += Device_PortBitChange;
-            }
         }
 
         private void ClearDevice() {
@@ -135,7 +132,7 @@ namespace IOW_A1_3 {
             }
         }
 
-        private void DeviceFactoryRunTimeUpate(long runtime) {
+        private void DeviceFactoryRunTimeUpdate(long runtime) {
             if (runtimeLabel.InvokeRequired) {
                 var slc = new SetStringCallback(SetRuntimeLabelText);
                 Invoke(slc, Convert.ToString(runtime));

@@ -12,7 +12,7 @@ namespace IowLibrary {
 
         public event DeviceFactoryEventHandler DeviceError;
         public event DeviceFactoryEventHandler DeviceEvent;
-        public event DeviceUpdateEventHandler RunTimeUpate;
+        public event DeviceUpdateEventHandler RunTimeUpdate;
 
         private int? _deviceCounter;
         private readonly DeviceFactory _instance;
@@ -49,6 +49,30 @@ namespace IowLibrary {
                 return;
             }
             deviceHandler.RunTimeUpdate += DeviceHandler_RunTimeUpdate;
+        }
+
+        public void RunDevice(object deviceNumber) {
+            try {
+                var selectedDevice = Convert.ToInt32(deviceNumber);
+                RunDevice(selectedDevice);
+            } catch (Exception) {
+                AddDeviceFactoryEventLog("Es wurde keine gültige Device Auswahl getroffen.");
+            }
+        }
+
+        /// <summary>
+        /// Runs the I/O Read/Write for the Device with the given devices Number
+        /// </summary>
+        /// <param name="deviceNumber">Device wich is to Run</param>
+        /// <param name="devicePortBitChange">PortBit Change Event Listener</param>
+        /// <param name="deviceFactoryRunTimeUpdate">Loop Timer Update Event</param>
+        public void RunDevice(object deviceNumber, PortChangeEventHandler devicePortBitChange,
+            DeviceUpdateEventHandler deviceFactoryRunTimeUpdate) {
+
+            var device = GetDeviceNumber(deviceNumber);
+            if (device == null) return;
+            device.PortBitInChange += devicePortBitChange;
+            RunTimeUpdate += deviceFactoryRunTimeUpdate;
         }
 
         /// <summary>
@@ -122,6 +146,23 @@ namespace IowLibrary {
                 }
             }
             AddDeviceFactoryError("Es wurde kein Device mit der Nummer: " + deviceNumber + " gefunden");
+            return null;
+        }
+
+        /// <summary>
+        /// Picks the Devices with the DeviceNumber.
+        /// </summary>
+        /// <param name="deviceNumber">Number of the Device we want to Pick</param>
+        /// <returns>Null if device is not found</returns>
+        /// <exception cref="ArgumentException">if number is not Valid</exception>
+        public Device GetDeviceNumber(object deviceNumber) {
+            try {
+                var selectedDevice = Convert.ToInt32(deviceNumber);
+                return GetDeviceNumber(selectedDevice);
+            } catch (Exception) {
+                AddDeviceFactoryEventLog("Es wurde keine gültige Device Auswahl getroffen.");
+
+            }
             return null;
         }
         /// <summary>
@@ -324,7 +365,7 @@ namespace IowLibrary {
         }
 
         private void DeviceHandler_RunTimeUpdate(long runtime) {
-            RunTimeUpate?.Invoke(runtime);
+            RunTimeUpdate?.Invoke(runtime);
         }
     }
 }
