@@ -344,6 +344,7 @@
             this.port1invert.TabIndex = 2;
             this.port1invert.Text = "Invert";
             this.port1invert.UseVisualStyleBackColor = true;
+            this.port1invert.CheckedChanged += new System.EventHandler(this.checked_port1invert);
             // 
             // port1Output
             // 
@@ -436,6 +437,7 @@
             this.port0invert.TabIndex = 2;
             this.port0invert.Text = "Invert";
             this.port0invert.UseVisualStyleBackColor = true;
+            this.port0invert.CheckedChanged += new System.EventHandler(this.checked_port0invert);
             // 
             // port0Output
             // 

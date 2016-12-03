@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using IowLibrary;
+using IOW_A1_3.Properties;
 
 namespace IOW_A1_3 {
 
@@ -40,14 +38,14 @@ namespace IOW_A1_3 {
         // das habe ich aber jetzt erstmal hinten angestellt.
         private void OnClick_CloseConnected(object sender, EventArgs e) {
             _deviceFactory.RemoveAllDevices();
-            NumberOfConDevices.Text = "0";
+            NumberOfConDevices.Text = Resources.Connect_0_devices;
             dataGridView1.DataSource = null;
             closeAllToolStripMenuItem1.Enabled = false;
             readInToolStripMenuItem1.Enabled = true;
             // FIXME:
             // WORKAROUND für das DLL speicher problem
             System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
-            this.Close();
+            Close();
         }
 
         private void Click_RunSelectedDevice(object sender, EventArgs e) {
@@ -137,11 +135,13 @@ namespace IOW_A1_3 {
         }
 
         private void checked_port1invert(object sender, EventArgs e) {
-
+            // TODO Invert funktion für port einfügen
+            SetEventLog("Invert Funktion ist noch nicht eingebaut");
         }
 
         private void checked_port0invert(object sender, EventArgs e) {
-
+            // TODO Invert funktion für port einfügen
+            SetEventLog("Invert Funktion ist noch nicht eingebaut");
         }
 
         private void checked_port0selectAll(object sender, EventArgs e) {
@@ -163,7 +163,7 @@ namespace IOW_A1_3 {
         }
 
         private void SetRuntimeLabelText(string text) {
-            runtimeLabel.Text = text + " ms";
+            runtimeLabel.Text = text + Resources.runtime_ms;
         }
 
         private void CloseProgramm(object sender, FormClosedEventArgs e) {
