@@ -18,8 +18,8 @@ namespace IowLibrary {
         public event DevicPortEventHandler PortBitOutChange;
 
         private int _writeLoopCounter;
-        private readonly List<string> _errorLogList = new List<string>();
-        private readonly List<string> _eventLogList = new List<string>();
+
+        Log _log = new Log();
 
         public Device(int? handler) {
             Handler = handler;
@@ -125,14 +125,14 @@ namespace IowLibrary {
         ///  Gets all Error stored in the Device
         /// </summary>
         public string GetDeviceErrors() {
-            return _errorLogList.Aggregate("", (current, error) => current + (error + "\n"));
+            return _log.GetLogEntrysError().ToString();
         }
 
         /// <summary>
         /// Reset the Errors stored in the Device
         /// </summary>
         public void ResetErrorList() {
-            _errorLogList?.Clear();
+            _log.ClearLog();
         }
 
         /// <summary>
@@ -148,14 +148,14 @@ namespace IowLibrary {
         ///  Gets all Events stored in the Device
         /// </summary>
         public string GetDeviceEventLog() {
-            return _eventLogList.Aggregate("", (current, error) => current + (error + "\n"));
+            return _log.GetLogEntrysEvent().ToString();
         }
 
         /// <summary>
         /// Reset the Events stored in the Device
         /// </summary>
         public void ResetEventList() {
-            _eventLogList?.Clear();
+            _log.ClearLog();
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace IowLibrary {
         }
 
         private void PortBitOutChangeEvent(Port port, PortBit portBit) {
-            PortBitOutChange?.Invoke(this ,port, portBit);
+            PortBitOutChange?.Invoke(this, port, portBit);
             AddDeviceEventLog("Out Port: " + port.PortNumber + " hat sich verändert zu: " + portBit.BitOut);
         }
 
@@ -265,14 +265,13 @@ namespace IowLibrary {
             AddDeviceEventLog("wurde erfolgreich geschlossen.");
         }
 
-        private void AddDeviceEventLog(String log)
-        {
-            _eventLogList.Add(log);
+        private void AddDeviceEventLog(String log) {
+            _log.AddEventLog(this, log);
             DeviceEventLog?.Invoke(this);
         }
 
         private void AddDeviceError(string msg) {
-            _errorLogList.Add(msg);
+            _log.AddErrorLog(this, msg);
             if (DeviceError == null) {
                 throw new SystemException("Error at Devices handling: " + msg);
             }
