@@ -11,12 +11,14 @@ namespace IowLibrary {
             _logs.Add(LogEntry.NewLogEntry(device, msg, level));
         }
 
-        public void AddEventLog(Device device, string msg) {
+        public Log AddEventLog(Device device, string msg) {
             _logs.Add(LogEntry.NewLogEntry(device, msg, LogEntry.LogLevel.Event));
+            return this;
         }
 
-        public void AddErrorLog(Device device, string msg) {
+        public Log AddErrorLog(Device device, string msg) {
             _logs.Add(LogEntry.NewLogEntry(device, msg, LogEntry.LogLevel.Error));
+            return this;
         }
 
         public List<LogEntry> GetAllLogEntries() {
@@ -41,6 +43,10 @@ namespace IowLibrary {
 
         public static Log NewInstance() {
             return new Log();
+        }
+
+        public void AddList(List<LogEntry> getAndResetErrorList) {
+            _logs.AddRange(getAndResetErrorList);
         }
     }
 
@@ -67,7 +73,10 @@ namespace IowLibrary {
         }
 
         public override string ToString() {
-            return "Device: " + Device.DeviceNumber + " - " + TimeStamp + " - " + Message;
+            if (Device == null) {
+                return TimeStamp + " - " + Message;
+            }
+            return TimeStamp + "Device: " + Device.DeviceNumber + " - " + " - " + Message;
         }
     }
 }

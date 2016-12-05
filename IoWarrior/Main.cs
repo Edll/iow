@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using IowLibrary;
@@ -9,6 +10,7 @@ namespace IoWarrior {
     public partial class Main : Form {
         private delegate void SetBoolCallback(CheckedListBox clb, int index, bool value);
         private delegate void SetStringCallback(string text);
+        private delegate void SetObjectCallback(List<LogEntry> ojc);
 
         private readonly DeviceFactory _deviceFactory;
 
@@ -140,12 +142,13 @@ namespace IoWarrior {
 
         private void checked_port1invert(object sender, EventArgs e) {
             // TODO Invert funktion für port einfügen
-            SetEventLog("Invert Funktion ist noch nicht eingebaut");
+
+            SetEventLog(Log.NewInstance().AddEventLog(null, "Invert Funktion ist noch nicht eingebaut").GetAllLogEntries());
         }
 
         private void checked_port0invert(object sender, EventArgs e) {
             // TODO Invert funktion für port einfügen
-            SetEventLog("Invert Funktion ist noch nicht eingebaut");
+            SetEventLog(Log.NewInstance().AddEventLog(null, "Invert Funktion ist noch nicht eingebaut").GetAllLogEntries());
         }
 
         private void checked_port0selectAll(object sender, EventArgs e) {
@@ -202,13 +205,17 @@ namespace IoWarrior {
             SetRuntimeLabelText("0");
         }
 
-        private void SetErrorLog(string errorItem) {
+        private void SetErrorLog(List<LogEntry> errorItem) {
             if (ErrorLogList.InvokeRequired) {
-                var slc = new SetStringCallback(SetErrorLog);
-                Invoke(slc, Convert.ToString(errorItem));
+                var slc = new SetObjectCallback(SetErrorLog);
+                Invoke(slc, errorItem);
             } else {
 
-                ErrorLogList.Items.Add(DateTime.Now + " : " + errorItem);
+                foreach (var logEntry in errorItem)
+                {
+                    ErrorLogList.Items.Add(logEntry.ToString());
+                }
+         
                 int visibleItems = ErrorLogList.ClientSize.Height / ErrorLogList.ItemHeight;
                 ErrorLogList.TopIndex = Math.Max(ErrorLogList.Items.Count - visibleItems + 1, 0);
             }
@@ -218,13 +225,14 @@ namespace IoWarrior {
             SetEventLog(deviceEvent.GetAndResetEventList());
         }
 
-        private void SetEventLog(string eventItem) {
+        private void SetEventLog(List<LogEntry> eventItem) {
             if (EventLogList.InvokeRequired) {
-                var slc = new SetStringCallback(SetEventLog);
-                Invoke(slc, Convert.ToString(eventItem));
+                var slc = new SetObjectCallback(SetEventLog);
+                Invoke(slc, eventItem);
             } else {
-
-                EventLogList.Items.Add(DateTime.Now + " : " + eventItem);
+                foreach (var logEntry in eventItem) {
+                    EventLogList.Items.Add(logEntry.ToString());
+                }
                 int visibleItems = EventLogList.ClientSize.Height / EventLogList.ItemHeight;
                 EventLogList.TopIndex = Math.Max(EventLogList.Items.Count - visibleItems + 1, 0);
             }

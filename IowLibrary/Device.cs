@@ -124,8 +124,8 @@ namespace IowLibrary {
         /// <summary>
         ///  Gets all Error stored in the Device
         /// </summary>
-        public string GetDeviceErrors() {
-            return _log.GetLogEntrysError().ToString();
+        public List<LogEntry> GetDeviceErrors() {
+            return _log.GetLogEntrysError();
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace IowLibrary {
         /// <summary>
         /// Get all Errors form the Device and Reset them.
         /// </summary>
-        public string GetAndResetErrorList() {
+        public List<LogEntry> GetAndResetErrorList() {
             var errors = GetDeviceErrors();
             ResetErrorList();
             return errors;
@@ -147,8 +147,8 @@ namespace IowLibrary {
         /// <summary>
         ///  Gets all Events stored in the Device
         /// </summary>
-        public string GetDeviceEventLog() {
-            return _log.GetLogEntrysEvent().ToString();
+        public List<LogEntry> GetDeviceEventLog() {
+            return _log.GetLogEntrysEvent();
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace IowLibrary {
         /// <summary>
         /// Get all Events form the Device and Reset them.
         /// </summary>
-        public string GetAndResetEventList() {
+        public List<LogEntry> GetAndResetEventList() {
             var errors = GetDeviceEventLog();
             ResetEventList();
             return errors;
@@ -169,7 +169,7 @@ namespace IowLibrary {
 
         private byte[] ReadDeviceImmediate() {
             if (_writeLoopCounter >= 3) {
-                AddDeviceError("Schreib schleife vorgang abgebrochen");
+                AddDeviceError("Der Versuch zu schreiben ist nach dem dritten versucht abgebrochen worden");
                 return new byte[IoReportsSize];
             }
             _writeLoopCounter++;
@@ -265,7 +265,7 @@ namespace IowLibrary {
             AddDeviceEventLog("wurde erfolgreich geschlossen.");
         }
 
-        private void AddDeviceEventLog(String log) {
+        private void AddDeviceEventLog(string log) {
             _log.AddEventLog(this, log);
             DeviceEventLog?.Invoke(this);
         }

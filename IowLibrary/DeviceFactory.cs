@@ -20,8 +20,8 @@ namespace IowLibrary {
         private int? _deviceCounter;
         private readonly DeviceFactory _instance;
         private DeviceHandlerFactory _deviceHandlerFactory = new DeviceHandlerFactory();
-        private readonly List<string> _errorLogList = new List<string>();
-        private readonly List<string> _eventLogList = new List<string>();
+
+        Log _log = Log.NewInstance();
 
         public DeviceFactory(DeviceFactoryEventHandler deviceError, DeviceFactoryEventHandler deviceEvent) {
             DeviceError += deviceError;
@@ -35,7 +35,6 @@ namespace IowLibrary {
         ~DeviceFactory() {
             RemoveAllDevices();
         }
-
 
         /// <summary>
         /// Initalitation of the Factory, Open and Load all devices
@@ -233,21 +232,21 @@ namespace IowLibrary {
         /// <summary>
         ///  Gets all Error stored in the Factory
         /// </summary>
-        public string GetDeviceFactoryErrors() {
-            return _errorLogList.Aggregate("", (current, error) => current + (error + "\n"));
+        public List<LogEntry> GetDeviceFactoryErrors() {
+            return _log.GetLogEntrysError();
         }
 
         /// <summary>
         /// Reset the Errors stored in the Factory
         /// </summary>
         public void ResetErrorList() {
-            _errorLogList?.Clear();
+            _log.ClearLog();
         }
 
         /// <summary>
         /// Get all Errors form the Factory and Reset them.
         /// </summary>
-        public string GetAndResetErrorList() {
+        public List<LogEntry> GetAndResetErrorList() {
             var errors = GetDeviceFactoryErrors();
             ResetErrorList();
             return errors;
@@ -256,21 +255,21 @@ namespace IowLibrary {
         /// <summary>
         ///  Gets all Events stored in the Factory
         /// </summary>
-        public string GetDeviceFactoryEventLog() {
-            return _eventLogList.Aggregate("", (current, error) => current + (error + "\n"));
+        public List<LogEntry> GetDeviceFactoryEventLog() {
+            return _log.GetLogEntrysEvent();
         }
 
         /// <summary>
         /// Reset the Events stored in the Factory
         /// </summary>
         public void ResetEventList() {
-            _eventLogList?.Clear();
+            _log.ClearLog();
         }
 
         /// <summary>
         /// Get all Events form the Factory and Reset them.
         /// </summary>
-        public string GetAndResetEventList() {
+        public List<LogEntry> GetAndResetEventList() {
             var errors = GetDeviceFactoryEventLog();
             ResetEventList();
             return errors;
@@ -359,14 +358,16 @@ namespace IowLibrary {
         }
 
         private void Device_DeviceEventLog(Device device) {
-            AddDeviceFactoryEventLog("Device: " + device.DeviceNumber + " meldet: " + device.GetAndResetEventList());
+            _log.AddList(device.GetAndResetEventList());
+            DeviceEvent?.Invoke(this);
         }
 
         private void Device_DeviceError(Device device) {
             device.Close();
 
-            AddDeviceFactoryEventLog("Device: " + device.DeviceNumber + " meldet: " + device.GetAndResetErrorList());
-            AddDeviceFactoryEventLog("Es wurde automatisch geschlossen und gestoppt!");
+            _log.AddList(device.GetAndResetEventList());
+            AddDeviceFactoryError("Es wurde automatisch geschlossen und gestoppt!");
+
         }
 
         private void RemoveDeviceAsCloseEvent(Device device) {
@@ -382,18 +383,16 @@ namespace IowLibrary {
             }
         }
 
-        // TODO das ganze in eine LogEventError Klasse packen so haben wir das ganze an mehr als einer Stelle Codedopplung!
         private void AddDeviceFactoryError(string msg) {
-            _errorLogList.Add(msg);
+            _log.AddErrorLog(null, msg);
             if (DeviceError == null) {
                 throw new SystemException("Error at Devices handling: " + msg);
             }
             DeviceError(this);
         }
 
-        // TODO das ganze in eine LogEventError Klasse packen so haben wir das ganze an mehr als einer Stelle Codedopplung!
         private void AddDeviceFactoryEventLog(string msg) {
-            _eventLogList.Add(msg);
+            _log.AddEventLog(null, msg);
             if (DeviceEvent == null) {
                 throw new SystemException("Error at Devices handling: " + msg);
             }
