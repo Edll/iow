@@ -5,7 +5,7 @@ using System.Text;
 using IowLibrary;
 using System.Data;
 
-namespace IOW_A1_3 {
+namespace IoWarrior {
     public class IowDataTable {
         private const String columnNameNumber = "Number";
         private const String columnNameProduct = "ProductId";

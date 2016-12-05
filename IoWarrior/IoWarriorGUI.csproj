@@ -7,8 +7,8 @@
     <ProjectGuid>{FAD93E5A-2F92-45A7-8A05-274AD582AAD3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IOW_A1_3</RootNamespace>
-    <AssemblyName>IOW_A1-3</AssemblyName>
+    <RootNamespace>IoWarrior</RootNamespace>
+    <AssemblyName>IoWarrior</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Ninja Head Filled-100.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>IoWarrior.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

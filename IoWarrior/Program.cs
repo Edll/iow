@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace IOW_A1_3 {
+namespace IoWarrior {
     public static class Program {
         /// <summary>
         /// The main entry point for the application.

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IOW_A1-3")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("IoWarrior")]
+[assembly: AssemblyDescription("IoWarrior Control")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("IOW_A1-3")]
+[assembly: AssemblyProduct("IoWarrior")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

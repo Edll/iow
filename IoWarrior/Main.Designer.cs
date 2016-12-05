@@ -1,4 +1,4 @@
-﻿namespace IOW_A1_3
+﻿namespace IoWarrior
 {
     partial class Main
     {

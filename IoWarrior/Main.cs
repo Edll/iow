@@ -2,9 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 using IowLibrary;
-using IOW_A1_3.Properties;
+using IoWarrior.Properties;
 
-namespace IOW_A1_3 {
+namespace IoWarrior {
 
     public partial class Main : Form {
         private delegate void SetBoolCallback(CheckedListBox clb, int index, bool value);

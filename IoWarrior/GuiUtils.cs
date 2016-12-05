@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using IowLibrary;
 
-namespace IOW_A1_3 {
+namespace IoWarrior {
    public class GuiUtils {
         public static void CheckboxListSetAllItems(object sender, CheckedListBox clb) {
             if (!(sender is CheckBox)) return;
