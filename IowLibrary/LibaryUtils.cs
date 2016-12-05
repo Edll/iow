@@ -1,7 +1,7 @@
 ﻿using System;
-using IowLibrary.DllWapper;
+using IowLibary.DllWapper;
 
-namespace IowLibrary {
+namespace IowLibary {
     public class LibaryUtils {
         /// <summary>
         /// Utils Class for the Libary

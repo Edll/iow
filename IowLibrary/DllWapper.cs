@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace IowLibrary
+namespace IowLibary
 {
     namespace DllWapper
     {

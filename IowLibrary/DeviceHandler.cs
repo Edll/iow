@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using IowLibrary.DllWapper;
+using IowLibary.DllWapper;
 
-namespace IowLibrary {
+namespace IowLibary {
     public delegate void DeviceHandlerEvent(long runtime);
     /// <summary>
     /// Handling for the Device Threads

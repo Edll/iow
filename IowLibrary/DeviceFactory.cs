@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using IowLibrary.DllWapper;
+using IowLibary.DllWapper;
 
-namespace IowLibrary {
+namespace IowLibary {
     public delegate void DeviceFactoryEventHandler(DeviceFactory device);
     public delegate void DeviceUpdateEventHandler(long runtime);
 

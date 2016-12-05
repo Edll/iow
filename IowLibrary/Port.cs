@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace IowLibrary {
+namespace IowLibary {
     public delegate void PortEventHandler(Port port);
     public delegate void PortChangeEventHandler(Port port, PortBit portBit);
 

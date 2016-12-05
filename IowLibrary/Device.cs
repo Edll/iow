@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using IowLibrary.DllWapper;
+using IowLibary.DllWapper;
 
-namespace IowLibrary {
+namespace IowLibary {
     public delegate void DeviceStatusEventHandler(Device device);
     public delegate void DevicPortEventHandler(Device device, Port port, PortBit portBit);
     /// <summary>

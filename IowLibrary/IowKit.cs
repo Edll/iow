@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using IowLibrary.DllWapper;
+using IowLibary.DllWapper;
 
-namespace IowLibrary {
+namespace IowLibary {
     /// <summary>
     /// IowKit calls methods from the DllWapper class. It will be Warp input 
     /// and output vars for this Api.

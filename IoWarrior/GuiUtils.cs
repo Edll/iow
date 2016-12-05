@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using IowLibrary;
+using IowLibary;
 
 namespace IoWarrior {
     /// <summary>

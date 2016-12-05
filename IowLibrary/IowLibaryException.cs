@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IowLibrary {
+namespace IowLibary {
     /// <summary>
     /// Exception Wapper
     /// </summary>

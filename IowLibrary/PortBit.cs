@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IowLibrary {
+namespace IowLibary {
     public delegate void PortBitChangeEventHandler(PortBit portbit);
 
     /// <summary>

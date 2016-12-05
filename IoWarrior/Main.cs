@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using IowLibrary;
+using IowLibary;
 using IoWarrior.Properties;
 
 namespace IoWarrior {

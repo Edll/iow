@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IowLibrary {
+namespace IowLibary {
     /// <summary>
     /// LogHandler for the Libary
     /// </summary>

@@ -7,8 +7,8 @@
     <ProjectGuid>{C2606D6F-DB64-4BA3-9139-BE9E63139AD8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IowLibrary</RootNamespace>
-    <AssemblyName>IowLibrary</AssemblyName>
+    <RootNamespace>IowLibary</RootNamespace>
+    <AssemblyName>IowLibary</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
