@@ -48,6 +48,7 @@
     <Compile Include="IowKit.cs" />
     <Compile Include="IowLibaryException.cs" />
     <Compile Include="LibaryUtils.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Port.cs" />
     <Compile Include="PortBit.cs" />
     <Compile Include="DeviceHandler.cs" />
