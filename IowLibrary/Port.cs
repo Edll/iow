@@ -5,6 +5,11 @@ namespace IowLibrary {
     public delegate void PortEventHandler(Port port);
     public delegate void PortChangeEventHandler(Port port, PortBit portBit);
 
+
+    /// <summary>
+    /// Port of a Device
+    /// </summary>
+    /// <author>M. Vervoorst junk@edlly.de</author>
     public class Port {
         public event PortChangeEventHandler PortBitInChange;
         public event PortChangeEventHandler PortBitOutChange;

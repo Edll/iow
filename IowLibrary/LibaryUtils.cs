@@ -3,6 +3,10 @@ using IowLibrary.DllWapper;
 
 namespace IowLibrary {
     public class LibaryUtils {
+        /// <summary>
+        /// Utils Class for the Libary
+        /// </summary>
+        /// <author>M. Vervoorst junk@edlly.de</author>
         private LibaryUtils() {
 
         }

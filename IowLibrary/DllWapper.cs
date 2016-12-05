@@ -7,10 +7,10 @@ namespace IowLibrary
     namespace DllWapper
     {
         /// <summary>
-        /// Die Klasse IowKitFunctions kapselt die Funktionen der IowKit.dll. 
-        /// Die Klasse IowKitDefines kapeslt die Konstanten der Iowkit.dll
+        /// Wapper for CodeMercs dll.
         /// </summary>
-        ///
+        /// <author>CodeMercs www.codemercs.com</author>
+        ///<author>M. Vervoorst junk@edlly.de</author>
 
         public static class Defines
         {

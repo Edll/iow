@@ -3,6 +3,10 @@
 namespace IowLibrary {
     public delegate void PortBitChangeEventHandler(PortBit portbit);
 
+    /// <summary>
+    /// Bit of a Port
+    /// </summary>
+    /// <author>M. Vervoorst junk@edlly.de</author>
     public class PortBit {
         public event PortBitChangeEventHandler ChangeOut;
         public event PortBitChangeEventHandler ChangeIn;

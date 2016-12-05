@@ -6,6 +6,7 @@ namespace IoWarrior {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// <author>M. Vervoorst junk@edlly.de</author>
         [STAThread]
         public static void Main() {
             Application.EnableVisualStyles();

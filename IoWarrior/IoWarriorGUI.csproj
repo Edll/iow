@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GuiUtils.cs" />
-    <Compile Include="IowDataTable.cs" />
+    <Compile Include="IowDataModelTable.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>

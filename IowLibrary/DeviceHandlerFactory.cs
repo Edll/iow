@@ -5,6 +5,7 @@ namespace IowLibrary {
     /// <summary>
     /// Controlls and Handel Threads for the DeviceFactory.
     /// </summary>
+    /// <author>M. Vervoorst junk@edlly.de</author>
     public class DeviceHandlerFactory {
         private readonly Dictionary<int, DeviceHandler> _deviceThreadpool = new Dictionary<int, DeviceHandler>();
 

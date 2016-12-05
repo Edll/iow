@@ -2,7 +2,11 @@
 using IowLibrary;
 
 namespace IoWarrior {
-   public class GuiUtils {
+    /// <summary>
+    /// Utils for the GUI
+    /// </summary>
+    /// <author>M. Vervoorst junk@edlly.de</author>
+    public class GuiUtils {
         public static void CheckboxListSetAllItems(object sender, CheckedListBox clb) {
             if (!(sender is CheckBox)) return;
             var cb = (CheckBox)sender;

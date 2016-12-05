@@ -9,6 +9,7 @@ namespace IowLibrary {
     /// <summary>
     /// Representation Class for an IOWarrior Device
     /// </summary>
+    /// <author>M. Vervoorst junk@edlly.de</author>
     public class Device {
         public event DeviceStatusEventHandler DeviceClose;
         public event DeviceStatusEventHandler DeviceError;

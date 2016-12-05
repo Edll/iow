@@ -6,7 +6,11 @@ using IowLibrary;
 using System.Data;
 
 namespace IoWarrior {
-    public class IowDataTable {
+    /// <summary>
+    /// Model Class for the Device Table
+    /// </summary>
+    /// <author>M. Vervoorst junk@edlly.de</author>
+    public class IowDataModelTable {
         private const String columnNameNumber = "Number";
         private const String columnNameProduct = "ProductId";
         private const String columnNameSoftware = "Software Version";

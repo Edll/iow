@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 
 namespace IowLibrary {
+    /// <summary>
+    /// LogHandler for the Libary
+    /// </summary>
+    /// <author>M. Vervoorst junk@edlly.de</author>
     public class Log {
         private readonly List<LogEntry> _logs = new List<LogEntry>();
 

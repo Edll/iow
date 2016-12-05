@@ -8,6 +8,7 @@ namespace IowLibrary {
     /// IowKit calls methods from the DllWapper class. It will be Warp input 
     /// and output vars for this Api.
     /// </summary>
+    /// <author>M. Vervoorst junk@edlly.de</author>
     public class IowKit {
 
         /// <summary>

@@ -6,7 +6,10 @@ using IowLibrary.DllWapper;
 
 namespace IowLibrary {
     public delegate void DeviceHandlerEvent(long runtime);
-
+    /// <summary>
+    /// Handling for the Device Threads
+    /// </summary>
+    /// <author>M. Vervoorst junk@edlly.de</author>
     public class DeviceHandler {
         private const int CountRuntimeRounds = 50;
 

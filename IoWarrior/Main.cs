@@ -6,7 +6,11 @@ using IowLibrary;
 using IoWarrior.Properties;
 
 namespace IoWarrior {
-
+    /// <summary>
+    /// Main Class for GUI
+    /// TODO: eine Menge!
+    /// </summary>
+    /// <author>M. Vervoorst junk@edlly.de</author>
     public partial class Main : Form {
         private delegate void SetBoolCallback(CheckedListBox clb, int index, bool value);
         private delegate void SetStringCallback(string text);
@@ -178,7 +182,7 @@ namespace IoWarrior {
 
         private void SetDevices() {
             if (_deviceFactory.Devices == null) return;
-            dataGridView1.DataSource = IowDataTable.GetResultsTable(_deviceFactory.Devices);
+            dataGridView1.DataSource = IowDataModelTable.GetResultsTable(_deviceFactory.Devices);
 
             NumberOfConDevices.Text = _deviceFactory.GetNumberOfDevices().ToString();
 

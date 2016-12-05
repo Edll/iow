@@ -39,6 +39,7 @@ namespace IowLibrary {
         /// <summary>
         /// Initalitation of the Factory, Open and Load all devices
         /// </summary>
+        /// <author>M. Vervoorst junk@edlly.de</author>
         /// <returns>Is Returning true on no errors</returns>
         public bool InitFactory() {
             if (Devices != null) {
