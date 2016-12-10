@@ -5,15 +5,25 @@ using System.Threading;
 using IowLibary.DllWapper;
 
 namespace IowLibary {
-    public delegate void DeviceHandlerEvent(long runtime);
+
+    /// <summary>
+    /// Delegates Runtimes events
+    /// </summary>
+    /// <param name="runtime">Runtime in ms</param>
+    /// 
+    public delegate void DeviceHandlerRuntimeEvent(long runtime);
     /// <summary>
     /// Handling for the Device Threads
     /// </summary>
     /// <author>M. Vervoorst junk@edlly.de</author>
-    public class DeviceHandler {
+    public class DeviceThreadHandler {
         private const int CountRuntimeRounds = 50;
 
-        public event DeviceHandlerEvent RunTimeUpdate;
+
+        /// <summary>
+        /// When a new Runtime measure result is available this event will it report
+        /// </summary>
+        public event DeviceHandlerRuntimeEvent RunTimeUpdate;
 
         private volatile bool _stopHandler;
         private bool _isDataWrite;
@@ -22,17 +32,30 @@ namespace IowLibary {
         private readonly Stopwatch _stopwatch = new Stopwatch();
         private readonly List<long> _stopWatchResult = new List<long>();
 
-        public DeviceHandler(Device device) {
+        /// <summary>
+        /// Holds Methode for the Device to handel IO Loop
+        /// </summary>
+        /// <param name="device">device wich will be threaded</param>
+        public DeviceThreadHandler(Device device) {
             Device = device;
             if (Device != null) {
                 Device.PortBitOutChange += Device_PortBitOutChange;
             }
         }
 
+        /// <summary>
+        /// the device Thread
+        /// </summary>
         public Thread DeviceThread { get; set; }
 
+        /// <summary>
+        /// is set with the param ctor
+        /// </summary>
         public Device Device { get; set; }
 
+        /// <summary>
+        /// Runtime of the this device thread
+        /// </summary>
         public long Runtime {
             get { return _runtime; }
             set {
@@ -41,12 +64,15 @@ namespace IowLibary {
             }
         }
 
+        /// <summary>
+        /// Starts the Device I/O Loop
+        /// </summary>
         public void RunDevice() {
             _stopHandler = false;
 
-            Device.PortsInitialisation(Defines.IOW_PIPE_IO_PINS);
+            Device.PortsInitialisation(Defines.IowPipeIoPins);
 
-            Device.SetReadTimeout(DeviceFactory.DeviceTimeout);
+            Device.SetReadTimeout(Defines.DeviceTimeout);
 
             while (!_stopHandler) {
                 _stopwatch.Reset();
@@ -57,12 +83,15 @@ namespace IowLibary {
                         _isDataWrite = false;
                     }
                 }
-                Device.ReadInPortState(Defines.IOW_PIPE_IO_PINS);
+                Device.ReadInPortState(Defines.IowPipeIoPins);
                 _stopwatch.Stop();
                 AddStopWatchResult(_stopwatch.ElapsedMilliseconds);
             }
         }
 
+        /// <summary>
+        /// Stops the I/O loop at the next cycle
+        /// </summary>
         public void RequestStop() {
             _stopHandler = true;
         }

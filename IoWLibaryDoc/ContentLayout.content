@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="2c8d9d1b-7cf9-43c9-bcdc-ccb748852f58" visible="True" isDefault="true" isSelected="true" title="Welcome to the [TODO: Add project name]">
+  <Topic id="2c8d9d1b-7cf9-43c9-bcdc-ccb748852f58" visible="True" isSelected="true" title="Welcome to the IowLibary">
     <HelpKeywords>
       <HelpKeyword index="K" term="Welcome" />
     </HelpKeywords>

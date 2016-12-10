@@ -18,6 +18,9 @@ namespace IoWarrior {
 
         private readonly DeviceFactory _deviceFactory;
 
+        /// <summary>
+        /// Start Point for GUI
+        /// </summary>
         public Main() {
 
             InitializeComponent();
@@ -193,7 +196,7 @@ namespace IoWarrior {
         }
 
         private void DeviceFactory_Error(DeviceFactory deviceError) {
-            SetErrorLog(deviceError.GetAndResetErrorList());
+            SetErrorLog(deviceError.Log.GetLogEntrysErrorAndReset());
         }
 
         private void SetButtonStatusRun() {
@@ -226,7 +229,7 @@ namespace IoWarrior {
         }
 
         private void DeviceFactory_EventLog(DeviceFactory deviceEvent) {
-            SetEventLog(deviceEvent.GetAndResetEventList());
+            SetEventLog(deviceEvent.Log.GetLogEntrysEvent());
         }
 
         private void SetEventLog(List<LogEntry> eventItem) {
@@ -243,6 +246,7 @@ namespace IoWarrior {
         }
 
         private void OnClick_ShowAbout(object sender, EventArgs e) {
+            // ReSharper disable once LocalizableElement
             MessageBox.Show("Program M. Vervoorst (2016)" +
                              " \nIcon pack by Icons8 https://icons8.com", "IO Warrior I/O");
         }

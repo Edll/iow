@@ -115,7 +115,7 @@ namespace IowLibary {
             var software = Method.IowKitGetRevision(ConvertIntToIntPtr(handler));
             // Es sind 4 Hex-Stellen gültig. Wäre die gegenwärtige Softwareversion 1.0.2.1 so wird
             // 0x1021 zurückgegeben.
-            return software == Defines.IOW_NON_LEGACY_REVISION ? "no Software Version" : $"{software:X}";
+            return software == Defines.IowNonLegacyRevision ? "no Software Version" : $"{software:X}";
         }
 
         /// <summary>
@@ -126,6 +126,7 @@ namespace IowLibary {
         /// <param name="data">Data Buffer for Result</param>
         /// <param name="byteLength">length for the Data bytes.</param>
         /// <returns>Real number of bits wich was readin</returns>
+  /// <exception cref="IowLibaryException">If handler is null</exception> 
         public static int? Read(int? handler, int numPipe, byte[] data, int byteLength) {
             if (handler == null) {
                 throw new IowLibaryException("handler to to read is null");
@@ -138,7 +139,13 @@ namespace IowLibary {
             }
             return result;
         }
-
+        /// <summary>
+        /// Reads ar Device Immediat
+        /// </summary>
+        /// <param name="handler">handler</param>
+        /// <param name="data">report object for the result</param>
+        /// <returns>true if read was valid</returns>
+        /// <exception cref="IowLibaryException">If handler is null</exception> 
         public static bool ReadImmediate(int? handler, byte[] data) {
             if (handler == null) {
                 throw new IowLibaryException("handler to to read is null");
@@ -156,6 +163,7 @@ namespace IowLibary {
         /// <param name="data">data wich are write to the device</param>
         /// <param name="byteLength">lenght of the Data bytes</param>
         /// <returns>Real number of bits wich was write to the device</returns>
+        /// <exception cref="IowLibaryException">If handler is null</exception> 
         public static int? Write(int? handler, int numPipe, byte[] data, int byteLength) {
             if (handler == null) {
                 throw new IowLibaryException("handler to to write is null");
@@ -170,6 +178,13 @@ namespace IowLibary {
             return result;
         }
 
+        /// <summary>
+        /// Set Timeout Read/Write time for the device
+        /// </summary>
+        /// <param name="handler">valid device handler</param>
+        /// <param name="timeout">time in ms</param>
+        /// <returns>True if set was valid</returns>
+        /// <exception cref="IowLibaryException">If handler is null</exception> 
         public static bool Timeout(int? handler, int timeout) {
             if (handler == null) {
                 throw new IowLibaryException("handler to to write is null");

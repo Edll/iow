@@ -2,6 +2,9 @@
 using System.Windows.Forms;
 
 namespace IoWarrior {
+    /// <summary>
+    /// Progam start class
+    /// </summary>
     public static class Program {
         /// <summary>
         /// The main entry point for the application.

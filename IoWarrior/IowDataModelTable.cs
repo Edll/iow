@@ -11,90 +11,93 @@ namespace IoWarrior {
     /// </summary>
     /// <author>M. Vervoorst junk@edlly.de</author>
     public class IowDataModelTable {
-        private const String columnNameNumber = "Number";
-        private const String columnNameProduct = "ProductId";
-        private const String columnNameSoftware = "Software Version";
-        private const String columnNameSerial = "Serial Number";
-        private const String columnNameHandler = "Handler";
+        private const string ColumnNameNumber = "Number";
+        private const string ColumnNameProduct = "ProductId";
+        private const string ColumnNameSoftware = "Software Version";
+        private const string ColumnNameSerial = "Serial Number";
+        private const string ColumnNameHandler = "Handler";
 
+        /// <summary>
+        /// Create a DataTable object for an Tabel form the given device list
+        /// </summary>
+        /// <param name="devices">List of divces</param>
+        /// <returns>DataTabele object where every device is in own row</returns>
         public static DataTable GetResultsTable(Dictionary<int, Device> devices) {
 
-            List<string> columnNames = new List<string>();
+            var columnNames = new List<string>
+            {
+                ColumnNameNumber,
+                ColumnNameProduct,
+                ColumnNameSoftware,
+                ColumnNameSerial,
+                ColumnNameHandler
+            };
 
-            columnNames.Add(columnNameNumber);
-            columnNames.Add(columnNameProduct);
-            columnNames.Add(columnNameSoftware);
-            columnNames.Add(columnNameSerial);
-            columnNames.Add(columnNameHandler);
 
-            DataTable dataTable = new DataTable();
+            var dataTable = new DataTable();
 
-            List<Device> devicesList = new List<Device>();
-            if (devices != null) {
-                foreach (KeyValuePair<int, Device> deviceEntry in devices) {
-                    Device device = deviceEntry.Value;
-                    devicesList.Add(device);
-                }
+            if (devices == null) return dataTable;
 
-                // add number of needed rows
-                while (dataTable.Rows.Count < devices.Count) {
-                    dataTable.Rows.Add();
-                }
+            var devicesList = devices.Select(deviceEntry => deviceEntry.Value).ToList();
 
-                for (int i = 0; i < columnNames.Count; i++) {
+            // add number of needed rows
+            while (dataTable.Rows.Count < devices.Count) {
+                dataTable.Rows.Add();
+            }
+
+            for (var i = 0; i < columnNames.Count; i++) {
              
-                    string name = columnNames[i];
-                    dataTable.Columns.Add(name);
+                var name = columnNames[i];
+                dataTable.Columns.Add(name);
 
-                    int iRow;
-                    switch (name) {
-                        case columnNameNumber:
+                int iRow;
+                switch (name)
+                {
+                    case ColumnNameNumber:
                         iRow = 0;
-                        setDeviceValue(devicesList, dataTable, i);
+                        SetDeviceValue(devicesList, dataTable, i);
                         break;
-                        case columnNameProduct:
+                    case ColumnNameProduct:
                         iRow = 0;
-                        foreach (Device device in devicesList) {
-
+                        foreach (var device in devicesList)
+                        {
                             dataTable.Rows[iRow][i] = device.ProductId;
                             iRow++;
                         }
                         break;
-                        case columnNameSoftware:
+                    case ColumnNameSoftware:
                         iRow = 0;
-                        foreach (Device device in devicesList) {
-
+                        foreach (var device in devicesList)
+                        {
                             dataTable.Rows[iRow][i] = device.SoftwareVersion;
                             iRow++;
                         }
                         break;
-                        case columnNameSerial:
+                    case ColumnNameSerial:
                         iRow = 0;
-                        foreach (Device device in devicesList) {
-
+                        foreach (var device in devicesList)
+                        {
                             dataTable.Rows[iRow][i] = device.Serial;
                             iRow++;
                         }
                         break;
-
-                        case columnNameHandler:
+                    case ColumnNameHandler:
                         iRow = 0;
-                        foreach (Device device in devicesList) {
-
+                        foreach (var device in devicesList)
+                        {
                             dataTable.Rows[iRow][i] = device.Handler;
                             iRow++;
                         }
                         break;
-                    }
                 }
             }
             return dataTable;
         }
 
-        private static void setDeviceValue(List<Device> devicesList, DataTable dataTable, int i)
+        private static void SetDeviceValue(IEnumerable<Device> devicesList, DataTable dataTable, int i)
         {
-            int iRow = 0;
-            foreach (Device device in devicesList)
+            var iRow = 0;
+            foreach (var device in devicesList)
             {
             
                 dataTable.Rows[iRow][i] = device.DeviceNumber;

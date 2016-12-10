@@ -1,58 +1,118 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using IowLibary.DllWapper;
 
 namespace IowLibary {
+    /// <summary>
+    /// Event delegater for Devices
+    /// </summary>
+    /// <param name="device">this</param>
     public delegate void DeviceStatusEventHandler(Device device);
+
+    /// <summary>
+    /// Event delegater for the Device Ports
+    /// </summary>
+    /// <param name="device">this</param>
+    /// <param name="port">Port which has the event</param>
+    /// <param name="portBit">Bit which has the event</param>
     public delegate void DevicPortEventHandler(Device device, Port port, PortBit portBit);
+
     /// <summary>
     /// Representation Class for an IOWarrior Device
     /// </summary>
     /// <author>M. Vervoorst junk@edlly.de</author>
     public class Device {
+        /// <summary>
+        /// When the device is Close it self or from external it will be report
+        /// </summary>
         public event DeviceStatusEventHandler DeviceClose;
+
+        /// <summary>
+        /// When the device has an error it will be logged and reported
+        /// </summary>
         public event DeviceStatusEventHandler DeviceError;
+
+        /// <summary>
+        /// When the device has an event logged it will be reported
+        /// </summary>
         public event DeviceStatusEventHandler DeviceEventLog;
 
+        /// <summary>
+        /// When the status of an in bit has changed device will report
+        /// </summary>
+        /// 
         public event DevicPortEventHandler PortBitInChange;
+        /// <summary>
+        /// when the status of an out bit has changed device will report
+        /// </summary>
         public event DevicPortEventHandler PortBitOutChange;
 
         private int _writeLoopCounter;
 
-        Log _log = new Log();
 
+        /// <summary>
+        /// Logging for device
+        /// </summary>
+        public Log Log { get; set; } = new Log();
+
+        /// <summary>
+        /// Paramtered Ctor for an device. It will Init the device with the given handler.
+        /// </summary>
+        /// <param name="handler">handler of the device to startup</param>
         public Device(int? handler) {
             Handler = handler;
             DeviceInitialisation();
         }
 
+        /// <inheritdoc />
         ~Device() {
             Close();
         }
 
+        /// <summary>
+        /// individual device handler from the iow driver
+        /// </summary>
         public int? Handler { get; set; }
 
+        /// <summary>
+        /// individual deviceNumber from the iow driver
+        /// </summary>
         public int DeviceNumber { get; set; }
 
+        /// <summary>
+        /// will be readout at initialization of the device
+        /// </summary>
         public int? ProductId { get; set; }
 
+        /// <summary>
+        /// will be readout at initialization of the device
+        /// </summary>
         public string Serial { get; set; }
 
+        /// <summary>
+        /// will be readout at initialization of the device
+        /// </summary>
         public string SoftwareVersion { get; set; }
 
+        /// <summary>
+        /// Contains the Ports which will be generated on device initialization
+        /// </summary>
         public Dictionary<int, Port> Ports { get; set; }
 
+        /// <summary>
+        /// will be set automatical at initialization of the device
+        /// </summary>
         public int ReportSize { get; set; }
 
+        /// <summary>
+        /// will be set automatical at initialization of the device
+        /// </summary>
         public int IoReportsSize { get; set; }
-
-        public string LastError { get; set; }
 
         /// <summary>
         /// Set the Timeout for this Device
         /// </summary>
-        /// <param name="timeout"></param>
+        /// <param name="timeout">timeout in ms</param>
         public void SetReadTimeout(int timeout) {
             var result = IowKit.Timeout(Handler, timeout);
             if (result) { return; }
@@ -106,7 +166,7 @@ namespace IowLibary {
         }
 
         /// <summary>
-        /// Write the Current out state of the Ports to the Device
+        /// Write the Current out state of the ports to the Device
         /// </summary>
         /// <returns>true if all Bits write to the device</returns>
         public bool WritePortStateToDevice() {
@@ -120,52 +180,6 @@ namespace IowLibary {
             var size = IowKit.Write(Handler, 0, data, IoReportsSize);
 
             return size != null && size == IoReportsSize;
-        }
-
-        /// <summary>
-        ///  Gets all Error stored in the Device
-        /// </summary>
-        public List<LogEntry> GetDeviceErrors() {
-            return _log.GetLogEntrysError();
-        }
-
-        /// <summary>
-        /// Reset the Errors stored in the Device
-        /// </summary>
-        public void ResetErrorList() {
-            _log.ClearLog();
-        }
-
-        /// <summary>
-        /// Get all Errors form the Device and Reset them.
-        /// </summary>
-        public List<LogEntry> GetAndResetErrorList() {
-            var errors = GetDeviceErrors();
-            ResetErrorList();
-            return errors;
-        }
-
-        /// <summary>
-        ///  Gets all Events stored in the Device
-        /// </summary>
-        public List<LogEntry> GetDeviceEventLog() {
-            return _log.GetLogEntrysEvent();
-        }
-
-        /// <summary>
-        /// Reset the Events stored in the Device
-        /// </summary>
-        public void ResetEventList() {
-            _log.ClearLog();
-        }
-
-        /// <summary>
-        /// Get all Events form the Device and Reset them.
-        /// </summary>
-        public List<LogEntry> GetAndResetEventList() {
-            var errors = GetDeviceEventLog();
-            ResetEventList();
-            return errors;
         }
 
         private byte[] ReadDeviceImmediate() {
@@ -206,13 +220,13 @@ namespace IowLibary {
 
         private void SetDeviceReportSize() {
             switch (ProductId) {
-                case Defines.IOWKIT_PID_IOW24:
-                ReportSize = Defines.IOWKIT_REPORT_SIZE;
-                IoReportsSize = Defines.IOWKIT24_IO_REPORT_SIZE;
+                case Defines.IowkitPidIow24:
+                ReportSize = Defines.IowkitReportSize;
+                IoReportsSize = Defines.Iowkit24IoReportSize;
                 break;
                 default:
-                ReportSize = Defines.IOWKIT_SPECIAL_REPORT_SIZE;
-                IoReportsSize = Defines.IOWKIT_SPECIAL_REPORT_SIZE;
+                ReportSize = Defines.IowkitSpecialReportSize;
+                IoReportsSize = Defines.IowkitSpecialReportSize;
                 break;
             }
         }
@@ -243,7 +257,7 @@ namespace IowLibary {
             foreach (var dataIn in data) {
                 if ((i + 1) <= Ports.Count) {
                     var port = Ports[i];
-                    port.SetInputData(dataIn);
+                    port.SetBitState(dataIn);
                 } else {
                     break;
                 }
@@ -267,12 +281,12 @@ namespace IowLibary {
         }
 
         private void AddDeviceEventLog(string log) {
-            _log.AddEventLog(this, log);
+            Log.AddEventLog(this, log);
             DeviceEventLog?.Invoke(this);
         }
 
         private void AddDeviceError(string msg) {
-            _log.AddErrorLog(this, msg);
+            Log.AddErrorLog(this, msg);
             if (DeviceError == null) {
                 throw new SystemException("Error at Devices handling: " + msg);
             }

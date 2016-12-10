@@ -7,7 +7,7 @@ namespace IowLibary {
     /// </summary>
     /// <author>M. Vervoorst junk@edlly.de</author>
     public class DeviceHandlerFactory {
-        private readonly Dictionary<int, DeviceHandler> _deviceThreadpool = new Dictionary<int, DeviceHandler>();
+        private readonly Dictionary<int, DeviceThreadHandler> _deviceThreadpool = new Dictionary<int, DeviceThreadHandler>();
 
         /// <summary>
         /// Destroys on Deconstrution all Runninig Threads
@@ -19,12 +19,13 @@ namespace IowLibary {
         /// <summary>
         /// Start a new Thread for the given Devices and add it to the Threadpool
         /// </summary>
-        /// <param name="device"></param>
-        public DeviceHandler AddNewDeviceThread(Device device) {
+        /// <param name="device">device for the new thread</param>
+        /// <returns>null if device is null else the new DeviceThread object</returns>
+        public DeviceThreadHandler AddNewDeviceThread(Device device) {
             if (device == null) {
                 return null;
             }
-            var deviceHandler = new DeviceHandler(device);
+            var deviceHandler = new DeviceThreadHandler(device);
             var thread = new Thread(deviceHandler.RunDevice);
             deviceHandler.DeviceThread = thread;
             thread.Start();
@@ -37,16 +38,16 @@ namespace IowLibary {
         /// <summary>
         /// Start a new Thread for the given Devices and add it to the Threadpool
         /// </summary>
-        /// <param name="device"></param>
+        /// <param name="device">device for the new thread</param>
         public void StopDeviceThread(Device device) {
             if (device == null) {
                 return;
             }
-            DeviceHandler deviceHandler;
-            _deviceThreadpool.TryGetValue(device.DeviceNumber, out deviceHandler);
-            if (deviceHandler != null) {
-                deviceHandler.RequestStop();
-                deviceHandler.DeviceThread.Join();
+            DeviceThreadHandler deviceThreadHandler;
+            _deviceThreadpool.TryGetValue(device.DeviceNumber, out deviceThreadHandler);
+            if (deviceThreadHandler != null) {
+                deviceThreadHandler.RequestStop();
+                deviceThreadHandler.DeviceThread.Join();
             }
             _deviceThreadpool.Remove(device.DeviceNumber);
         }
