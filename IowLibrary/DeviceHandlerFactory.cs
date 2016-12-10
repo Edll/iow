@@ -47,7 +47,7 @@ namespace IowLibary {
             _deviceThreadpool.TryGetValue(device.DeviceNumber, out deviceThreadHandler);
             if (deviceThreadHandler != null) {
                 deviceThreadHandler.RequestStop();
-                deviceThreadHandler.DeviceThread.Join();
+       //         deviceThreadHandler.DeviceThread.Join();
             }
             _deviceThreadpool.Remove(device.DeviceNumber);
         }

@@ -327,7 +327,7 @@ namespace IowLibary {
             var device = new Device(handler) { DeviceNumber = deviceNumber };
             device.DeviceClose += Device_DeviceClose;
             device.DeviceError += Device_DeviceError;
-            device.DeviceEventLog += Device_DeviceEventLog; 
+            device.DeviceEventLog += Device_DeviceEventLog;
             Devices.Add(handler, device);
         }
 
@@ -347,9 +347,13 @@ namespace IowLibary {
         }
 
         private void RemoveDevice(int? handler) {
+
             if (handler != null) {
                 if (Devices.ContainsKey((int)handler)) {
                     AddDeviceFactoryEventLog("Device mit dem Handler: " + handler + " wird enfernt");
+                    Device device;
+                    Devices.TryGetValue((int)handler, out device);
+                    StopDevice(device);
                     Devices.Remove((int)handler);
                 }
             }
@@ -367,10 +371,11 @@ namespace IowLibary {
         }
 
         private void Device_DeviceError(Device device) {
+            StopDevice(device.DeviceNumber);
+            RemoveDevice(device.Handler);
             device.Close();
-
             Log.AddList(device.Log.GetLogEntrysErrorAndReset());
-            AddDeviceFactoryError("Es wurde automatisch geschlossen und gestoppt!");
+            AddDeviceFactoryError("Es wurde automatisch geschlossen und gestoppt! " + device.Handler);
         }
 
         private void RemoveDeviceAsCloseEvent(Device device) {
