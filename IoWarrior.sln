@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoWarriorGUI", "IoWarrior\I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IowLibary", "IowLibrary\IowLibary.csproj", "{C2606D6F-DB64-4BA3-9139-BE9E63139AD8}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "IoWLibaryDoc", "IoWLibaryDoc\IoWLibaryDoc.shfbproj", "{31A9FB73-BD21-4A90-A7E2-B8C72D3A6D39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C2606D6F-DB64-4BA3-9139-BE9E63139AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2606D6F-DB64-4BA3-9139-BE9E63139AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2606D6F-DB64-4BA3-9139-BE9E63139AD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31A9FB73-BD21-4A90-A7E2-B8C72D3A6D39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31A9FB73-BD21-4A90-A7E2-B8C72D3A6D39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31A9FB73-BD21-4A90-A7E2-B8C72D3A6D39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31A9FB73-BD21-4A90-A7E2-B8C72D3A6D39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
