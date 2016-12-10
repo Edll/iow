@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IowLibary", "IowLibrary\IowLibary.csproj", "{C2606D6F-DB64-4BA3-9139-BE9E63139AD8}"
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "IoWLibaryDoc", "IoWLibaryDoc\IoWLibaryDoc.shfbproj", "{31A9FB73-BD21-4A90-A7E2-B8C72D3A6D39}"
+	ProjectSection(ProjectDependencies) = postProject
+		{93F614E7-EC10-44A2-9776-834552447152} = {93F614E7-EC10-44A2-9776-834552447152}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IowLibaryTest", "IowLibaryTest\IowLibaryTest.csproj", "{93F614E7-EC10-44A2-9776-834552447152}"
 EndProject
