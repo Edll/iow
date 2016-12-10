@@ -9,6 +9,12 @@ To compile use the VisualStudio2015 and the .net 3.5
 
 ## Use
 1.) tart the Programm
+
 2.) go to menu "Open Connected"
+
 3.) select device in combox you want to control
+
 4.) play with input and output
+
+## Code Dokumentation
+http://edlly.de/iowlibary/html/2c8d9d1b-7cf9-43c9-bcdc-ccb748852f58.htm
