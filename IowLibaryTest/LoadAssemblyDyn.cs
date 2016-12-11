@@ -11,8 +11,8 @@ namespace IowLibaryTest {
         [TestMethod]
         public void LoadTest() {
             LoadAssemblyDyn load = new LoadAssemblyDyn();
-            Assembly actual = load.Load("iowkit.dll");
-            Assert.IsNotNull(actual);
+            var actual = load.Load<Delegate>("iowkit.dll" , "IowKitOpenDevice");
+            Assert.AreEqual(actual, 0);
         }
     }
 }
