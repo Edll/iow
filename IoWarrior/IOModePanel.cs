@@ -129,5 +129,13 @@ namespace IoWarrior {
             var value = e.NewValue == CheckState.Checked;
             _deviceFactory.SetBit(device, port, bit, value);
         }
+
+        private void checked_port0selectAll(object sender, EventArgs e) {
+            GuiUtils.CheckboxListSetAllItems(sender, port0Output);
+        }
+
+        private void checked_port1selectAll(object sender, EventArgs e) {
+            GuiUtils.CheckboxListSetAllItems(sender, port1Output);
+        }
     }
 }
