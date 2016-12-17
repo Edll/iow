@@ -12,6 +12,9 @@ using IowLibary.DllWapper;
 namespace IowLibary {
     /// <summary>
     /// Loads the iowdll dynamical, this allows us to give feedback for the installation of the dll.
+    /// D
+    /// FIXME: Das geht nicht. Weil IOW DLL keine .net anwendung ist 
+    /// sonder c++ und mit marsheling eingebunden wird.
     /// </summary>
     public class  LoadAssemblyDyn {
         // das kann man sicher auch als programm einstellung machen...
