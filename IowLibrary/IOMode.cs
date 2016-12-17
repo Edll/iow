@@ -23,7 +23,6 @@ namespace IowLibary {
         /// <summary>
         /// Initalisation of the Ports device.
         /// </summary>
-        /// <param name="pipeNumber"></param>
         /// <returns></returns>
         public bool PortsInitialisation() {
             var write = new byte[_device.IoReportsSize];
@@ -69,6 +68,18 @@ namespace IowLibary {
             var size = IowKit.Write(_device.Handler, 0, data, _device.IoReportsSize);
 
             return size != null && size == _device.IoReportsSize;
+        }
+
+        /// <summary>
+        /// Set the ReadtimeOut to the Device
+        /// </summary>
+        /// <param name="readTimeout">timeout in ms</param>
+        /// <returns>true on success</returns>
+        public bool ReadTimeout(int readTimeout) {
+            var result = IowKit.Timeout(_device.Handler, readTimeout);
+            if (result) { return true; }
+            _device.AddDeviceError("Timeout konnte nicht gesetzt werden");
+            return false;
         }
 
         private byte[] ReadDeviceImmediate() {

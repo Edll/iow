@@ -53,6 +53,7 @@
     <Compile Include="IOMode.cs" />
     <Compile Include="IowKit.cs" />
     <Compile Include="IowLibaryException.cs" />
+    <Compile Include="LCDMode.cs" />
     <Compile Include="LibaryUtils.cs" />
     <Compile Include="LoadAssemblyDyn.cs" />
     <Compile Include="Log.cs" />
