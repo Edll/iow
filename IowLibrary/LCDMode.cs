@@ -68,6 +68,39 @@ namespace IowLibary {
             _device.SetBit(0, 7, true);
             WriteData();
             Thread.Sleep(3);
+
+
+            _device.SetAllPortBits(1, true);
+            _device.SetBit(1, 3, true);
+            _device.SetBit(0, 7, false);
+            WriteData();
+            Thread.Sleep(3);
+
+            _device.SetBit(0, 7, true);
+            WriteData();
+            Thread.Sleep(3);
+
+            _device.SetAllPortBits(1, true);
+            _device.SetBit(1, 0, true);
+            _device.SetBit(0, 7, false);
+            WriteData();
+            Thread.Sleep(3);
+
+            _device.SetBit(0, 7, true);
+            WriteData();
+            Thread.Sleep(3);
+
+            _device.SetAllPortBits(1, true);
+            _device.SetBit(1, 0, true);
+            _device.SetBit(1, 1, true);
+            _device.SetBit(1, 2, true);
+            _device.SetBit(0, 7, false);
+            WriteData();
+            Thread.Sleep(3);
+
+            _device.SetBit(0, 7, true);
+            WriteData();
+            Thread.Sleep(3);
             return true;
         }
 
