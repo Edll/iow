@@ -70,20 +70,24 @@ namespace IowLibary {
         public void RunDevice() {
             _stopHandler = false;
 
-            Device.PortsInitialisation(Defines.IowPipeIoPins);
+          //  Device.PortsInitialisation(Defines.IowPipeIoPins);
+            Device.Modes.PortsInitialisation();
 
+            // TODO in Imodes aufnehmen!
             Device.SetReadTimeout(Defines.DeviceTimeout);
 
             while (!_stopHandler) {
                 _stopwatch.Reset();
                 _stopwatch.Start();
                 if (_isDataWrite) {
-                    var ok = Device.WritePortStateToDevice();
+                    //     var ok = Device.WritePortStateToDevice();
+                    var ok = Device.Modes.Write(Device.Ports);
                     if (ok) {
                         _isDataWrite = false;
                     }
                 }
-                Device.ReadInPortState(Defines.IowPipeIoPins);
+                //   Device.ReadInPortState(Defines.IowPipeIoPins);
+                Device.Modes.Read();
                 _stopwatch.Stop();
                 AddStopWatchResult(_stopwatch.ElapsedMilliseconds);
             }

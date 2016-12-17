@@ -8,8 +8,7 @@ namespace IowLibary {
     /// <summary>
     /// All function Modes represention by this class.
     /// </summary>
-    public interface IModes
-    {
+    public interface IModes {
         /// <summary>
         /// Read the current state from the Ports
         /// </summary>
@@ -26,8 +25,13 @@ namespace IowLibary {
         /// <summary>
         /// Initialisation for the pictured device mode
         /// </summary>
-        /// <param name="pipeNumber">pipe for the initialisiation</param>
         /// <returns>tue if initialisation was successful</returns>
-        bool PortsInitialisation(int pipeNumber);
+        bool PortsInitialisation();
+
+        /// <summary>
+        /// Set the device for the datasize an port information to the mode
+        /// </summary>
+        /// <param name="device"></param>
+        void SetDevice(Device device);
     }
 }

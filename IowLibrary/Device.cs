@@ -49,7 +49,6 @@ namespace IowLibary {
 
         private int _writeLoopCounter;
 
-
         /// <summary>
         /// Logging for device
         /// </summary>
@@ -108,6 +107,21 @@ namespace IowLibary {
         /// will be set automatical at initialization of the device
         /// </summary>
         public int IoReportsSize { get; set; }
+
+        private IModes modes;
+
+        /// <summary>
+        /// Mode for the device.
+        /// </summary>
+        public IModes Modes {
+            get { return modes; }
+            set
+            {
+                modes = value; 
+                modes.SetDevice(this);
+            }
+        }
+
 
         /// <summary>
         /// Set the Timeout for this Device
@@ -182,7 +196,12 @@ namespace IowLibary {
             return size != null && size == IoReportsSize;
         }
 
-        private byte[] ReadDeviceImmediate() {
+        /// <summary>
+        /// Reads the ports state Immediate from the conntected device. Retrys it on error 3 
+        /// times. If there is no succes device reports error and close it self.
+        /// </summary>
+        /// <returns>byte array with current port state. </returns>
+        public byte[] ReadDeviceImmediate() {
             if (_writeLoopCounter >= 3) {
                 AddDeviceError("Der Versuch zu schreiben ist nach dem dritten versucht abgebrochen worden");
                 return new byte[IoReportsSize];
@@ -251,7 +270,11 @@ namespace IowLibary {
             }
         }
 
-        private void SetDataStateToPort(IEnumerable<byte> data) {
+        /// <summary>
+        /// Set a ArrayList of byte Data Reports to the Device
+        /// </summary>
+        /// <param name="data">Byte of data für ports</param>
+        public void SetDataStateToPort(IEnumerable<byte> data) {
             // Da wir mit readImm arbeiten ist das result byte 0 das erste
             var i = 0;
             foreach (var dataIn in data) {
@@ -285,7 +308,11 @@ namespace IowLibary {
             DeviceEventLog?.Invoke(this);
         }
 
-        private void AddDeviceError(string msg) {
+        /// <summary>
+        /// Add an error to the device error log
+        ///  </summary>
+        /// <param name="msg">error log entry</param>
+        public void AddDeviceError(string msg) {
             Log.AddErrorLog(this, msg);
             if (DeviceError == null) {
                 throw new SystemException("Error at Devices handling: " + msg);

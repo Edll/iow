@@ -50,6 +50,7 @@
     <Compile Include="DeviceHandlerFactory.cs" />
     <Compile Include="DllWapper.cs" />
     <Compile Include="IModes.cs" />
+    <Compile Include="IOMode.cs" />
     <Compile Include="IowKit.cs" />
     <Compile Include="IowLibaryException.cs" />
     <Compile Include="LibaryUtils.cs" />

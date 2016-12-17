@@ -328,6 +328,8 @@ namespace IowLibary {
             device.DeviceClose += Device_DeviceClose;
             device.DeviceError += Device_DeviceError;
             device.DeviceEventLog += Device_DeviceEventLog;
+            // TODO das hier muss eine methode werden damit device zur laufzeit den mode wechseln können....!
+            device.Modes = new IoMode();
             Devices.Add(handler, device);
         }
 
