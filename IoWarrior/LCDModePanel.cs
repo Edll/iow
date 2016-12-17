@@ -11,9 +11,9 @@ using IoWarrior.Properties;
 
 namespace IoWarrior {
     /// <summary>
-    /// IOMode Panel 
+    /// LcdMode Panel for LCD connection
     /// </summary>
-    public partial class IoModePanel : UserControl {
+    public partial class LcdModePanel : UserControl {
         private delegate void SetBoolCallback(CheckedListBox clb, int index, bool value);
         private delegate void SetStringCallback(string text);
         private delegate void SetObjectCallback(List<LogEntry> ojc);
@@ -26,7 +26,7 @@ namespace IoWarrior {
         /// </summary>
         /// <param name="deviceFactory">current instacen of device Factory</param>
         /// <param name="device">device which should be show</param>
-        public IoModePanel(DeviceFactory deviceFactory, Device device) {
+        public LcdModePanel(DeviceFactory deviceFactory, Device device) {
             _deviceFactory = deviceFactory;
             _device = device;
             InitializeComponent();
@@ -47,31 +47,13 @@ namespace IoWarrior {
         }
 
         private void InitDevice() {
-            // TODO wenn es eine anderer IOW ist mit mehr oder weniger ports sollte das hier dynamisch eingefügt werden....
-
-            // create inputs
-            IModes mode = new IoMode();
-
-            GuiUtils.CreatePortEntrys(port0Input, false);
-            GuiUtils.CreatePortEntrys(port1Input, false);
-
-            // create outputs
-            GuiUtils.CreatePortEntrys(port0Output, true);
-            port0Output.ItemCheck += Port0Output_ItemCheck;
-            GuiUtils.CreatePortEntrys(port1Output, true);
-            port1Output.ItemCheck += Port1Output_ItemCheck;
+            IModes mode = new LCDMode();
 
             _deviceFactory.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
-
         }
 
         private void ClearDevice() {
             _deviceFactory.StopDevice(_device.DeviceNumber);
-
-            port0Input.Items.Clear();
-            port1Input.Items.Clear();
-            port0Output.Items.Clear();
-            port1Output.Items.Clear();
         }
 
         private void SetButtonStatusRun() {
@@ -87,32 +69,15 @@ namespace IoWarrior {
             SetRuntimeLabelText("0");
         }
 
-        private void Port0Output_ItemCheck(object sender, ItemCheckEventArgs e) {
-            const int port = 0;
-            CheckOutputBit(sender, e, port, _device.DeviceNumber);
-        }
 
-        private void Port1Output_ItemCheck(object sender, ItemCheckEventArgs e) {
-            const int port = 1;
-            CheckOutputBit(sender, e, port, _device.DeviceNumber);
-        }
 
         private void Device_PortChangeStatus(Device device, Port port, PortBit portbit) {
             // TODO muss dynamisch werden je nach art des Devices
             if (port.PortNumber == 0) {
-                ChangeCheckOnList(port0Input, portbit.BitNumber, portbit.BitIn);
+
             }
             if (port.PortNumber == 1) {
-                ChangeCheckOnList(port1Input, portbit.BitNumber, portbit.BitIn);
-            }
-        }
 
-        private void ChangeCheckOnList(CheckedListBox clb, int index, bool value) {
-            if (clb.InvokeRequired) {
-                var sbc = new SetBoolCallback(ChangeCheckOnList);
-                Invoke(sbc, clb, index, value);
-            } else {
-                clb.SetItemChecked(index, !value);
             }
         }
 
@@ -127,22 +92,6 @@ namespace IoWarrior {
 
         private void SetRuntimeLabelText(string text) {
             runtimeLabel.Text = text + Resources.runtime_ms;
-        }
-
-        private void CheckOutputBit(object sender, ItemCheckEventArgs e, int port, int device) {
-            if (!(sender is CheckedListBox)) return;
-            var clb = (CheckedListBox)sender;
-            var bit = Convert.ToInt32(clb.SelectedItem);
-            var value = e.NewValue == CheckState.Checked;
-            _deviceFactory.SetBit(device, port, bit, value);
-        }
-
-        private void checked_port0selectAll(object sender, EventArgs e) {
-            GuiUtils.CheckboxListSetAllItems(sender, port0Output);
-        }
-
-        private void checked_port1selectAll(object sender, EventArgs e) {
-            GuiUtils.CheckboxListSetAllItems(sender, port1Output);
         }
     }
 }

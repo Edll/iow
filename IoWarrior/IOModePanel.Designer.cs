@@ -1,5 +1,5 @@
 ﻿namespace IoWarrior {
-    partial class IOModePanel {
+    partial class IoModePanel {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -270,7 +270,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
-            this.Name = "IOModePanel";
+            this.Name = "IoModePanel";
             this.Size = new System.Drawing.Size(874, 575);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

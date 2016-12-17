@@ -52,6 +52,12 @@
   <ItemGroup>
     <Compile Include="GuiUtils.cs" />
     <Compile Include="IowDataModelTable.cs" />
+    <Compile Include="LCDModePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LCDModePanel.Designer.cs">
+      <DependentUpon>LCDModePanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +72,9 @@
     <Compile Include="IOModePanel.Designer.cs">
       <DependentUpon>IOModePanel.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="LCDModePanel.resx">
+      <DependentUpon>LCDModePanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>

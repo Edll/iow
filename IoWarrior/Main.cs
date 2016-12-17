@@ -63,12 +63,18 @@ namespace IoWarrior {
         }
 
         private void Click_AddSelectedDevice(object sender, EventArgs e) {
-            int deviceNumber = GetDeviceNumber();
+            var deviceNumber = GetDeviceNumber();
 
-            string title = "Device " + deviceNumber;
-            TabPage tabPage = new TabPage(title);
-  
-            IOModePanel panel = new IOModePanel(_deviceFactory, _deviceFactory.GetDeviceNumber(deviceNumber));
+            var title = "Device " + deviceNumber;
+            var tabPage = new TabPage(title);
+            Control panel = null;
+            if (rbIOMode.Checked)
+            {
+                 panel = new IoModePanel(_deviceFactory, _deviceFactory.GetDeviceNumber(deviceNumber));
+            }else if (rbLCDMode.Checked)
+            {
+                 panel = new LcdModePanel(_deviceFactory, _deviceFactory.GetDeviceNumber(deviceNumber));
+            }
 
             tabPage.Controls.Add(panel);
             tabControlDevices.TabPages.Add(tabPage);
@@ -76,10 +82,9 @@ namespace IoWarrior {
 
 
         private void Click_RemoveSelectedDevice(object sender, EventArgs e) {
-            int deviceNumber = GetDeviceNumber();
-            string title = "Device " + deviceNumber;
-            tabControlDevices.TabPages.RemoveAt(0);
+            var deviceNumber = GetDeviceNumber();
 
+            tabControlDevices.TabPages.RemoveAt(0);
             _deviceFactory.StopDevice(deviceNumber);
         }
 
