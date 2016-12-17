@@ -30,6 +30,9 @@ namespace IowLibary {
             deviceHandler.DeviceThread = thread;
             thread.Start();
             if (thread.IsAlive) {
+                if (_deviceThreadpool.ContainsKey(device.DeviceNumber)) {
+                    StopDeviceThread(device);
+                }
                 _deviceThreadpool.Add(device.DeviceNumber, deviceHandler);
             }
             return deviceHandler;
@@ -47,7 +50,7 @@ namespace IowLibary {
             _deviceThreadpool.TryGetValue(device.DeviceNumber, out deviceThreadHandler);
             if (deviceThreadHandler != null) {
                 deviceThreadHandler.RequestStop();
-       //         deviceThreadHandler.DeviceThread.Join();
+                //         deviceThreadHandler.DeviceThread.Join();
             }
             _deviceThreadpool.Remove(device.DeviceNumber);
         }

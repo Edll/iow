@@ -20,6 +20,7 @@ namespace IoWarrior {
 
         private readonly DeviceFactory _deviceFactory;
         private readonly Device _device;
+        private LCDMode mode = new LCDMode();
 
         /// <summary>
         /// Panel to show the IOMode
@@ -47,8 +48,6 @@ namespace IoWarrior {
         }
 
         private void InitDevice() {
-            IModes mode = new LCDMode();
-
             _deviceFactory.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
         }
 
@@ -92,6 +91,12 @@ namespace IoWarrior {
 
         private void SetRuntimeLabelText(string text) {
             runtimeLabel.Text = text + Resources.runtime_ms;
+        }
+
+        private void bttWrite_Click(object sender, EventArgs e) {
+
+            mode.SetLine(1, line1.Text);
+            mode.SetLine(2, line2.Text);
         }
     }
 }

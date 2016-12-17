@@ -100,7 +100,24 @@ namespace IowLibary {
 
             _device.SetBit(0, 7, true);
             WriteData();
-          //  Thread.Sleep(3);
+            Thread.Sleep(10);
+
+            _device.SetAllPortBits(0, true);
+            _device.SetAllPortBits(1, true);
+            WriteData();
+            Thread.Sleep(10);
+
+            _device.SetBit(0, 5, false);
+            _device.SetBit(1, 0, false);
+            _device.SetBit(1, 1, false);
+            _device.SetBit(0, 7, false);
+            WriteData();
+            Thread.Sleep(10);
+
+            _device.SetBit(0, 7, true);
+            WriteData();
+            Thread.Sleep(10);
+
             return true;
         }
 
@@ -110,6 +127,11 @@ namespace IowLibary {
         /// <param name="device">instance</param>
         public void SetDevice(Device device) {
             _device = device;
+        }
+
+       public void SetLine(int p0, string text)
+        {
+            
         }
 
         public bool ReadTimeout(int readTimeout) {

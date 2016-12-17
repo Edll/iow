@@ -127,12 +127,13 @@
             // 
             // bttWrite
             // 
-            this.bttWrite.Location = new System.Drawing.Point(373, 115);
+            this.bttWrite.Location = new System.Drawing.Point(372, 111);
             this.bttWrite.Name = "bttWrite";
             this.bttWrite.Size = new System.Drawing.Size(75, 23);
             this.bttWrite.TabIndex = 15;
             this.bttWrite.Text = "write";
             this.bttWrite.UseVisualStyleBackColor = true;
+            this.bttWrite.Click += new System.EventHandler(this.bttWrite_Click);
             // 
             // LcdModePanel
             // 
