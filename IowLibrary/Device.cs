@@ -133,6 +133,19 @@ namespace IowLibary {
         }
 
         /// <summary>
+        /// Set all bit of a ports to a value
+        /// </summary>
+        /// <param name="port">port number</param>
+        /// <param name="value">ture or false</param>
+        public void SetAllPortBits(int port, bool value)
+        {
+            for (var bit = 0; bit < Defines.MaxBitNumber+1; bit++)
+            {
+                SetBit(port, bit, value);
+            }
+        }
+
+        /// <summary>
         /// Close this Device. Triggers the Devices close Event
         /// </summary>
         public void Close() {

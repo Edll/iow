@@ -77,7 +77,7 @@ namespace IoWarrior {
 
         private void InitDevice(object selectedDevice) {
 
-            _deviceFactory.RunDevice(selectedDevice, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate);
+            _deviceFactory.RunDevice(selectedDevice, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, new LCDMode());
             // TODO wenn es eine anderer IOW ist mit mehr oder weniger ports sollte das hier dynamisch eingefügt werden....
             // TODO das sollte auch gemacht werden wenn wir mehr als einen IOW laufen lassen.....
             // create inputs
