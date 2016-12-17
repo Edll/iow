@@ -67,6 +67,8 @@
             this.port0invert = new System.Windows.Forms.CheckBox();
             this.port0Output = new System.Windows.Forms.CheckedListBox();
             this.port0Input = new System.Windows.Forms.CheckedListBox();
+            this.rbIOMode = new System.Windows.Forms.RadioButton();
+            this.rbLCDMode = new System.Windows.Forms.RadioButton();
             this.tabControl2.SuspendLayout();
             this.ioWarriorInfoTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -254,6 +256,8 @@
             // panel1
             // 
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.rbLCDMode);
+            this.panel1.Controls.Add(this.rbIOMode);
             this.panel1.Controls.Add(this.runDeviceSelecter);
             this.panel1.Controls.Add(this.runtimeLabel);
             this.panel1.Controls.Add(this.runStatus);
@@ -458,6 +462,28 @@
             this.port0Input.Size = new System.Drawing.Size(55, 124);
             this.port0Input.TabIndex = 0;
             // 
+            // rbIOMode
+            // 
+            this.rbIOMode.AutoSize = true;
+            this.rbIOMode.Checked = true;
+            this.rbIOMode.Location = new System.Drawing.Point(9, 40);
+            this.rbIOMode.Name = "rbIOMode";
+            this.rbIOMode.Size = new System.Drawing.Size(66, 17);
+            this.rbIOMode.TabIndex = 12;
+            this.rbIOMode.TabStop = true;
+            this.rbIOMode.Text = "IO Mode";
+            this.rbIOMode.UseVisualStyleBackColor = true;
+            // 
+            // rbLCDMode
+            // 
+            this.rbLCDMode.AutoSize = true;
+            this.rbLCDMode.Location = new System.Drawing.Point(81, 40);
+            this.rbLCDMode.Name = "rbLCDMode";
+            this.rbLCDMode.Size = new System.Drawing.Size(76, 17);
+            this.rbLCDMode.TabIndex = 13;
+            this.rbLCDMode.Text = "LCD Mode";
+            this.rbLCDMode.UseVisualStyleBackColor = true;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -531,6 +557,8 @@
         private System.Windows.Forms.ToolStripMenuItem closeAllToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem abouteToolStripMenuItem;
         private System.Windows.Forms.ComboBox runDeviceSelecter;
+        private System.Windows.Forms.RadioButton rbLCDMode;
+        private System.Windows.Forms.RadioButton rbIOMode;
     }
 }
 

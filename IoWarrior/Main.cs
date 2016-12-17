@@ -45,6 +45,9 @@ namespace IoWarrior {
         // 4.) Workaround bei einem Close Connected starten wird das ganze programm neu dadruch wird die DLL auch neu geladen. Eventuell kann man durch ein Dynamisches laden des Assembleys das lösen.
         // https://www.codeproject.com/articles/18729/loading-and-unloading-an-assembly-at-runtime
         // das habe ich aber jetzt erstmal hinten angestellt.
+        //
+        // Neue erkenntnis:
+        // Das laden der Assemlby ist nicht so einfach da die iowkit.dll kein .net ist sondern native
         private void OnClick_CloseConnected(object sender, EventArgs e) {
             _deviceFactory.RemoveAllDevices();
             NumberOfConDevices.Text = Resources.Connect_0_devices;
@@ -76,19 +79,29 @@ namespace IoWarrior {
         }
 
         private void InitDevice(object selectedDevice) {
+            IModes mode = null;
+            if (rbIOMode.Checked) {
+                // TODO wenn es eine anderer IOW ist mit mehr oder weniger ports sollte das hier dynamisch eingefügt werden....
+                // TODO das sollte auch gemacht werden wenn wir mehr als einen IOW laufen lassen.....
+                // create inputs
 
-            _deviceFactory.RunDevice(selectedDevice, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, new LCDMode());
-            // TODO wenn es eine anderer IOW ist mit mehr oder weniger ports sollte das hier dynamisch eingefügt werden....
-            // TODO das sollte auch gemacht werden wenn wir mehr als einen IOW laufen lassen.....
-            // create inputs
-            GuiUtils.CreatePortEntrys(port0Input, false);
-            GuiUtils.CreatePortEntrys(port1Input, false);
+                mode = new IoMode();
 
-            // create outputs
-            GuiUtils.CreatePortEntrys(port0Output, true);
-            port0Output.ItemCheck += Port0Output_ItemCheck;
-            GuiUtils.CreatePortEntrys(port1Output, true);
-            port1Output.ItemCheck += Port1Output_ItemCheck;
+                GuiUtils.CreatePortEntrys(port0Input, false);
+                GuiUtils.CreatePortEntrys(port1Input, false);
+
+                // create outputs
+                GuiUtils.CreatePortEntrys(port0Output, true);
+                port0Output.ItemCheck += Port0Output_ItemCheck;
+                GuiUtils.CreatePortEntrys(port1Output, true);
+                port1Output.ItemCheck += Port1Output_ItemCheck;
+
+            } else if (rbLCDMode.Checked) {
+
+                mode = new LCDMode();
+            }
+            _deviceFactory.RunDevice(selectedDevice, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
+
         }
 
         private void ClearDevice(object selectedDevice) {
@@ -218,11 +231,10 @@ namespace IoWarrior {
                 Invoke(slc, errorItem);
             } else {
 
-                foreach (var logEntry in errorItem)
-                {
+                foreach (var logEntry in errorItem) {
                     ErrorLogList.Items.Add(logEntry.ToString());
                 }
-         
+
                 int visibleItems = ErrorLogList.ClientSize.Height / ErrorLogList.ItemHeight;
                 ErrorLogList.TopIndex = Math.Max(ErrorLogList.Items.Count - visibleItems + 1, 0);
             }
