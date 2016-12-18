@@ -98,6 +98,12 @@ namespace IowLibary {
             return true;
         }
 
+        /// <summary>
+        /// Write methode will call, if device register a 
+        /// port change on a cycel or TriggerWriteData() is called on the Device. 
+        /// </summary>
+        /// <param name="ports">Data from the Ports to Write, could be ignore on other modes then IO</param>
+        /// <returns>true on successe if we retrun true ThreadHandler will not call on net cycle</returns>
         public bool Write(Dictionary<int, Port> ports) {
             if (_newText) {
                 WriteText();
@@ -110,17 +116,31 @@ namespace IowLibary {
             if (_lineTexts.Count != 0) {
                 foreach (var line in _lineTexts) {
                     if (line.Key == 1) {
+                        // Reset Curser
                         _device.SetAllPortBits(0, false);
-                        //  _device.SetAllPortBits(1, false);
+                        _device.SetAllPortBits(1, false);
+                        _device.SetBit(1, 1, true);
+                        SendEnablePulse();
+                    } else if (line.Key == 2) {
+                        // Reset Curser line 2
+                        _device.SetAllPortBits(0, false);
+                        _device.SetAllPortBits(1, false);
+                        _device.SetBit(1, 6, true);
+                        _device.SetBit(1, 7, true);
+                        SendEnablePulse();
+                    }
 
-                        // RS to high
-                        _device.SetBit(0, 5, true);
+                    _device.SetAllPortBits(0, false);
 
-                        foreach (Char _char in line.Value) {
-                            SendCharToLcd(_char);
-                        }
+                    // RS to high
+                    _device.SetBit(0, 5, true);
+
+                    foreach (Char _char in line.Value) {
+                        SendCharToLcd(_char);
                     }
                 }
+
+
             }
             return true;
         }
@@ -157,7 +177,8 @@ namespace IowLibary {
         private void SendCharToLcd(char _char) {
             _device.SetAllPortBits(1, false);
             byte _charByte = Convert.ToByte(_char);
-            for (int bit = 0; bit <= Defines.MaxBitNumber; bit++) {
+            int bitSize = Defines.MaxBitNumber;
+            for (int bit = 0; bit <= bitSize; bit++) {
                 var mask = (byte)(1 << bit);
                 _device.SetBit(1, bit, ((_charByte & mask) == mask));
             }
