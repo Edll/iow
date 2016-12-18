@@ -46,6 +46,10 @@ namespace IowLibary {
         /// when the status of an out bit has changed device will report
         /// </summary>
         public event DevicPortEventHandler PortBitOutChange;
+        /// <summary>
+        /// Data Write Trigger Event for Threadhandler
+        /// </summary>
+        public event DeviceStatusEventHandler TriggerData;
 
         /// <summary>
         /// Logging for device
@@ -186,6 +190,14 @@ namespace IowLibary {
                 }
                 i++;
             }
+        }
+
+        /// <summary>
+        /// Trigger for DataWrite of device Threadhandler
+        /// </summary>
+        public void TriggerDataWrite()
+        {
+            TriggerData?.Invoke(this);
         }
 
         private void DeviceInitialisation() {

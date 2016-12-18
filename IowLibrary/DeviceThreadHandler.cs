@@ -40,6 +40,7 @@ namespace IowLibary {
             Device = device;
             if (Device != null) {
                 Device.PortBitOutChange += Device_PortBitOutChange;
+                Device.TriggerData += Device_TriggerData;
             }
         }
 
@@ -113,6 +114,10 @@ namespace IowLibary {
         }
 
         private void Device_PortBitOutChange(Device device, Port port, PortBit portbit) {
+            _isDataWrite = true;
+        }
+
+        private void Device_TriggerData(Device device) {
             _isDataWrite = true;
         }
     }
