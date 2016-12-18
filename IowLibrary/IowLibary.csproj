@@ -55,7 +55,6 @@
     <Compile Include="IowLibaryException.cs" />
     <Compile Include="LCDMode.cs" />
     <Compile Include="LibaryUtils.cs" />
-    <Compile Include="LoadAssemblyDyn.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Modes.cs" />
     <Compile Include="Port.cs" />

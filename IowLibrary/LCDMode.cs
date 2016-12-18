@@ -145,9 +145,11 @@ namespace IowLibary {
             return true;
         }
 
-
+        /// <summary>
+        /// Current not in use
+        /// </summary>
+        /// <returns>device port list</returns>
         public Dictionary<int, Port> Read() {
-            //   throw new NotImplementedException();
             return _device.Ports;
         }
 
