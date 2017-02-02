@@ -113,22 +113,25 @@ namespace IowLibary {
         /// <param name="deviceNumber">Device wich is to Run</param>
         /// <param name="devicePortBitChange">PortBit Change Event Listener</param>
         /// <param name="deviceFactoryRunTimeUpdate">Loop Timer Update Event</param>
+        /// <param name="mode">Device Mode we will use at Run</param>
         public void RunDevice(object deviceNumber, DevicPortEventHandler devicePortBitChange,
-            DeviceUpdateEventHandler deviceFactoryRunTimeUpdate) {
+            DeviceUpdateEventHandler deviceFactoryRunTimeUpdate, IModes mode) {
 
             var device = GetDeviceNumber(deviceNumber);
             if (device == null) return;
             device.PortBitInChange += devicePortBitChange;
             RunTimeUpdate += deviceFactoryRunTimeUpdate;
-            RunDevice(device.DeviceNumber);
+            RunDevice(device.DeviceNumber, mode);
         }
 
         /// <summary>
         /// Runs the I/O Read/Write for the Device with the given devices Number
         /// </summary>
         /// <param name="deviceNumber">Number of the Device to Run</param>
-        public void RunDevice(int deviceNumber) {
+        /// <param name="mode">Device Mode we will use at Run</param>
+        public void RunDevice(int deviceNumber, IModes mode) {
             var device = GetDeviceNumber(deviceNumber);
+            device.Modes = mode;
             if (_deviceHandlerFactory == null) {
                 _deviceHandlerFactory = new DeviceHandlerFactory();
             }
@@ -143,10 +146,11 @@ namespace IowLibary {
         /// Runs the I/O Read/Write for the Device with the given devices Number
         /// </summary>
         /// <param name="deviceNumber">Number of the Device to Run</param>
-        public void RunDevice(object deviceNumber) {
+        /// <param name="mode">Device Mode we will use at Run</param>
+        public void RunDeviceFromSenderObject(object deviceNumber, IModes mode) {
             try {
                 var selectedDevice = Convert.ToInt32(deviceNumber);
-                RunDevice(selectedDevice);
+                RunDevice(selectedDevice, mode);
             } catch (Exception) {
                 AddDeviceFactoryEventLog("Es wurde keine gültige Device Auswahl getroffen.");
             }
@@ -328,6 +332,8 @@ namespace IowLibary {
             device.DeviceClose += Device_DeviceClose;
             device.DeviceError += Device_DeviceError;
             device.DeviceEventLog += Device_DeviceEventLog;
+            // TODO das hier muss eine methode werden damit device zur laufzeit den mode wechseln können....!
+            device.Modes = new IoMode();
             Devices.Add(handler, device);
         }
 

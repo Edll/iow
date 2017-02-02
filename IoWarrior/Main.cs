@@ -45,13 +45,16 @@ namespace IoWarrior {
         // 4.) Workaround bei einem Close Connected starten wird das ganze programm neu dadruch wird die DLL auch neu geladen. Eventuell kann man durch ein Dynamisches laden des Assembleys das lösen.
         // https://www.codeproject.com/articles/18729/loading-and-unloading-an-assembly-at-runtime
         // das habe ich aber jetzt erstmal hinten angestellt.
+        //
+        // Neue erkenntnis:
+        // Das laden der Assemlby ist nicht so einfach da die iowkit.dll kein .net ist sondern native
         private void OnClick_CloseConnected(object sender, EventArgs e) {
             _deviceFactory.RemoveAllDevices();
             NumberOfConDevices.Text = Resources.Connect_0_devices;
             dataGridView1.DataSource = null;
             closeAllToolStripMenuItem1.Enabled = false;
             readInToolStripMenuItem1.Enabled = true;
-            ClearAllDevice();
+            ClearDeviceSelectorList();
 
             // FIXME:
             // WORKAROUND für das DLL speicher problem
@@ -59,129 +62,40 @@ namespace IoWarrior {
             Close();
         }
 
-        private void Click_RunSelectedDevice(object sender, EventArgs e) {
-            if (runDeviceSelecter.SelectedItem == null) return;
+        private void Click_AddSelectedDevice(object sender, EventArgs e) {
+            var deviceNumber = GetDeviceNumber();
 
-            InitDevice(runDeviceSelecter.SelectedItem);
+            var title = "Device " + deviceNumber;
+            var tabPage = new TabPage(title);
+            Control panel = null;
+            if (rbIOMode.Checked)
+            {
+                 panel = new IoModePanel(_deviceFactory, _deviceFactory.GetDeviceNumber(deviceNumber));
+            }else if (rbLCDMode.Checked)
+            {
+                 panel = new LcdModePanel(_deviceFactory, _deviceFactory.GetDeviceNumber(deviceNumber));
+            }
 
-            SetButtonStatusRun();
+            tabPage.Controls.Add(panel);
+            tabControlDevices.TabPages.Add(tabPage);
         }
 
-        private void Click_StopSelectedDevice(object sender, EventArgs e) {
-            if (runDeviceSelecter.SelectedItem == null) return;
 
-            ClearDevice(runDeviceSelecter.SelectedItem);
+        private void Click_RemoveSelectedDevice(object sender, EventArgs e) {
+            var deviceNumber = GetDeviceNumber();
 
-            SetButtonStatusStop();
+            tabControlDevices.TabPages.RemoveAt(0);
+            _deviceFactory.StopDevice(deviceNumber);
         }
 
-        private void InitDevice(object selectedDevice) {
-
-            _deviceFactory.RunDevice(selectedDevice, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate);
-            // TODO wenn es eine anderer IOW ist mit mehr oder weniger ports sollte das hier dynamisch eingefügt werden....
-            // TODO das sollte auch gemacht werden wenn wir mehr als einen IOW laufen lassen.....
-            // create inputs
-            GuiUtils.CreatePortEntrys(port0Input, false);
-            GuiUtils.CreatePortEntrys(port1Input, false);
-
-            // create outputs
-            GuiUtils.CreatePortEntrys(port0Output, true);
-            port0Output.ItemCheck += Port0Output_ItemCheck;
-            GuiUtils.CreatePortEntrys(port1Output, true);
-            port1Output.ItemCheck += Port1Output_ItemCheck;
-        }
-
-        private void ClearDevice(object selectedDevice) {
-            _deviceFactory.StopDevice(selectedDevice);
-
-            // TODO wenn mehrere Laufen sollte hier auch das entsprechende Device gelöscht werden....
-            port0Input.Items.Clear();
-            port1Input.Items.Clear();
-            port0Output.Items.Clear();
-            port1Output.Items.Clear();
-        }
-
-        private void ClearAllDevice() {
-            // TODO wenn die ansicht der Device Dynamisch werden soll muss das hier auch um einen dynamisches löschen erweitert werden....
-            ClearDevice(runDeviceSelecter.SelectedItem);
+        private void ClearDeviceSelectorList() {
             runDeviceSelecter.Items.Clear();
-            SetButtonStatusStop();
-        }
-
-        private void Device_PortChangeStatus(Device device, Port port, PortBit portbit) {
-            // TODO muss dynamisch werden je nach art des Devices
-            if (port.PortNumber == 0) {
-                ChangeCheckOnList(port0Input, portbit.BitNumber, portbit.BitIn);
-            }
-            if (port.PortNumber == 1) {
-                ChangeCheckOnList(port1Input, portbit.BitNumber, portbit.BitIn);
-            }
-        }
-
-        private void ChangeCheckOnList(CheckedListBox clb, int index, bool value) {
-            if (clb.InvokeRequired) {
-                var sbc = new SetBoolCallback(ChangeCheckOnList);
-                Invoke(sbc, clb, index, value);
-            } else {
-                clb.SetItemChecked(index, !value);
-            }
-        }
-
-        private void Port0Output_ItemCheck(object sender, ItemCheckEventArgs e) {
-            const int port = 0;
-            var device = Convert.ToInt32(runDeviceSelecter.SelectedItem);
-            CheckOutputBit(sender, e, port, device);
-        }
-
-        private void Port1Output_ItemCheck(object sender, ItemCheckEventArgs e) {
-            const int port = 1;
-            var device = Convert.ToInt32(runDeviceSelecter.SelectedItem);
-            CheckOutputBit(sender, e, port, device);
-        }
-
-        private void CheckOutputBit(object sender, ItemCheckEventArgs e, int port, int device) {
-            if (!(sender is CheckedListBox)) return;
-            var clb = (CheckedListBox)sender;
-            var bit = Convert.ToInt32(clb.SelectedItem);
-            var value = e.NewValue == CheckState.Checked;
-            _deviceFactory.SetBit(device, port, bit, value);
-        }
-
-        private void checked_port1invert(object sender, EventArgs e) {
-            // TODO Invert funktion für port einfügen
-
-            SetEventLog(Log.NewInstance().AddEventLog(null, "Invert Funktion ist noch nicht eingebaut").GetAllLogEntries());
-        }
-
-        private void checked_port0invert(object sender, EventArgs e) {
-            // TODO Invert funktion für port einfügen
-            SetEventLog(Log.NewInstance().AddEventLog(null, "Invert Funktion ist noch nicht eingebaut").GetAllLogEntries());
-        }
-
-        private void checked_port0selectAll(object sender, EventArgs e) {
-            GuiUtils.CheckboxListSetAllItems(sender, port0Output);
-        }
-
-        private void checked_port1selectAll(object sender, EventArgs e) {
-            GuiUtils.CheckboxListSetAllItems(sender, port1Output);
         }
 
         private void CloseProgramm(object sender, FormClosedEventArgs e) {
             _deviceFactory.RemoveAllDevices();
         }
 
-        private void DeviceFactoryRunTimeUpdate(long runtime) {
-            if (runtimeLabel.InvokeRequired) {
-                var slc = new SetStringCallback(SetRuntimeLabelText);
-                Invoke(slc, Convert.ToString(runtime));
-            } else {
-                SetRuntimeLabelText(Convert.ToString(runtime));
-            }
-        }
-
-        private void SetRuntimeLabelText(string text) {
-            runtimeLabel.Text = text + Resources.runtime_ms;
-        }
 
         private void SetDevices() {
             if (_deviceFactory.Devices == null) return;
@@ -199,30 +113,16 @@ namespace IoWarrior {
             SetErrorLog(deviceError.Log.GetLogEntrysErrorAndReset());
         }
 
-        private void SetButtonStatusRun() {
-            bttStop.Enabled = true;
-            bttRun.Enabled = false;
-            runStatus.BackColor = Color.Green;
-        }
-
-        private void SetButtonStatusStop() {
-            bttRun.Enabled = true;
-            bttStop.Enabled = false;
-            runStatus.BackColor = Color.Red;
-            SetRuntimeLabelText("0");
-        }
-
         private void SetErrorLog(List<LogEntry> errorItem) {
             if (ErrorLogList.InvokeRequired) {
                 var slc = new SetObjectCallback(SetErrorLog);
                 Invoke(slc, errorItem);
             } else {
 
-                foreach (var logEntry in errorItem)
-                {
+                foreach (var logEntry in errorItem) {
                     ErrorLogList.Items.Add(logEntry.ToString());
                 }
-         
+
                 int visibleItems = ErrorLogList.ClientSize.Height / ErrorLogList.ItemHeight;
                 ErrorLogList.TopIndex = Math.Max(ErrorLogList.Items.Count - visibleItems + 1, 0);
             }
@@ -249,6 +149,19 @@ namespace IoWarrior {
             // ReSharper disable once LocalizableElement
             MessageBox.Show("Program M. Vervoorst (2016)" +
                              " \nIcon pack by Icons8 https://icons8.com", "IO Warrior I/O");
+        }
+
+
+        private int GetDeviceNumber() {
+            try {
+                return Convert.ToInt32(runDeviceSelecter.SelectedItem.ToString());
+            } catch (FormatException) {
+                MessageBox.Show("Keine gültig auswahl getroffen!");
+            } catch (NullReferenceException) {
+                MessageBox.Show("Keine gültig auswahl getroffen!");
+            }
+
+            return 0;
         }
     }
 }

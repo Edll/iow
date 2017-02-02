@@ -75,12 +75,12 @@ namespace IowLibary {
         /// <returns>state of out bit as byte</returns>
         public byte GetBitStateAsByte()
         {
-            byte portMaskState = 0xff;
+            byte portMaskState = 0x00;
             foreach(var bit in PortBits) {
                 var value = PortBit.ConvertToInt(bit.BitOut);
                 var bitNum = bit.BitNumber;
 
-                portMaskState &= (byte) ~(value << bitNum);
+                portMaskState |= (byte) (value << bitNum);
             }
             return portMaskState;
         }

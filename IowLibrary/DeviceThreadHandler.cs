@@ -40,6 +40,7 @@ namespace IowLibary {
             Device = device;
             if (Device != null) {
                 Device.PortBitOutChange += Device_PortBitOutChange;
+                Device.TriggerData += Device_TriggerData;
             }
         }
 
@@ -70,20 +71,21 @@ namespace IowLibary {
         public void RunDevice() {
             _stopHandler = false;
 
-            Device.PortsInitialisation(Defines.IowPipeIoPins);
+            Device.Modes.PortsInitialisation();
 
-            Device.SetReadTimeout(Defines.DeviceTimeout);
+            Device.Modes.ReadTimeout(Defines.DeviceTimeout);
 
             while (!_stopHandler) {
                 _stopwatch.Reset();
                 _stopwatch.Start();
                 if (_isDataWrite) {
-                    var ok = Device.WritePortStateToDevice();
+                    var ok = Device.Modes.Write(Device.Ports);
                     if (ok) {
                         _isDataWrite = false;
                     }
                 }
-                Device.ReadInPortState(Defines.IowPipeIoPins);
+
+                Device.Modes.Read();
                 _stopwatch.Stop();
                 AddStopWatchResult(_stopwatch.ElapsedMilliseconds);
             }
@@ -112,6 +114,10 @@ namespace IowLibary {
         }
 
         private void Device_PortBitOutChange(Device device, Port port, PortBit portbit) {
+            _isDataWrite = true;
+        }
+
+        private void Device_TriggerData(Device device) {
             _isDataWrite = true;
         }
     }

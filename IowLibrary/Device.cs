@@ -46,9 +46,10 @@ namespace IowLibary {
         /// when the status of an out bit has changed device will report
         /// </summary>
         public event DevicPortEventHandler PortBitOutChange;
-
-        private int _writeLoopCounter;
-
+        /// <summary>
+        /// Data Write Trigger Event for Threadhandler
+        /// </summary>
+        public event DeviceStatusEventHandler TriggerData;
 
         /// <summary>
         /// Logging for device
@@ -109,31 +110,18 @@ namespace IowLibary {
         /// </summary>
         public int IoReportsSize { get; set; }
 
-        /// <summary>
-        /// Set the Timeout for this Device
-        /// </summary>
-        /// <param name="timeout">timeout in ms</param>
-        public void SetReadTimeout(int timeout) {
-            var result = IowKit.Timeout(Handler, timeout);
-            if (result) { return; }
-            AddDeviceError("Timeout konnte nicht gesetzt werden");
-        }
+        private IModes _modes;
 
         /// <summary>
-        /// initialisat ports for I/O Reading of this Device
+        /// Mode for the device.
         /// </summary>
-        /// <param name="pipeNum">pipe to use Write</param>
-        public void PortsInitialisation(int pipeNum) {
-            var write = new byte[IoReportsSize];
-
-            write[0] = 0x00;
-            write[1] = 0xff;
-            write[2] = 0xff;
-            var writebyts = IowKit.Write(Handler, pipeNum, write, IoReportsSize);
-            if (writebyts == IoReportsSize) { return; }
-            writebyts = IowKit.Write(Handler, pipeNum, write, IoReportsSize);
-            if (writebyts == IoReportsSize) { return; }
-            AddDeviceError("Beim Device: " + DeviceNumber + " konnten die I/O Ports nicht Initalisiert werden.");
+        public IModes Modes {
+            get { return _modes; }
+            set
+            {
+                _modes = value;
+                _modes.SetDevice(this);
+            }
         }
 
         /// <summary>
@@ -149,12 +137,16 @@ namespace IowLibary {
         }
 
         /// <summary>
-        /// Read in the current State of all Ports of this Device
+        /// Set all bit of a ports to a value
         /// </summary>
-        /// <param name="pipeNum">Pipe for Read In</param>
-        public void ReadInPortState(int pipeNum) {
-            var data = ReadDeviceImmediate();
-            SetDataStateToPort(data);
+        /// <param name="port">port number</param>
+        /// <param name="value">ture or false</param>
+        public void SetAllPortBits(int port, bool value)
+        {
+            for (var bit = 0; bit < Defines.MaxBitNumber+1; bit++)
+            {
+                SetBit(port, bit, value);
+            }
         }
 
         /// <summary>
@@ -182,23 +174,30 @@ namespace IowLibary {
             return size != null && size == IoReportsSize;
         }
 
-        private byte[] ReadDeviceImmediate() {
-            if (_writeLoopCounter >= 3) {
-                AddDeviceError("Der Versuch zu schreiben ist nach dem dritten versucht abgebrochen worden");
-                return new byte[IoReportsSize];
+        /// <summary>
+        /// Set a ArrayList of byte Data Reports to the Device
+        /// </summary>
+        /// <param name="data">Byte of data für ports</param>
+        public void SetDataStateToPort(IEnumerable<byte> data) {
+            // Da wir mit readImm arbeiten ist das result byte 0 das erste
+            var i = 0;
+            foreach (var dataIn in data) {
+                if ((i + 1) <= Ports.Count) {
+                    var port = Ports[i];
+                    port.SetBitState(dataIn);
+                } else {
+                    break;
+                }
+                i++;
             }
-            _writeLoopCounter++;
-            var data = new byte[IoReportsSize];
-            var ok = IowKit.ReadImmediate(Handler, data);
-            if (!ok) {
+        }
 
-                data = ReadDeviceImmediate();
-            }
-            _writeLoopCounter = 0;
-            if (data != null) { return data; }
-
-            AddDeviceError("Device ist offenbar nicht mehr angeschlossen");
-            return new byte[IoReportsSize];
+        /// <summary>
+        /// Trigger for DataWrite of device Threadhandler
+        /// </summary>
+        public void TriggerDataWrite()
+        {
+            TriggerData?.Invoke(this);
         }
 
         private void DeviceInitialisation() {
@@ -251,20 +250,6 @@ namespace IowLibary {
             }
         }
 
-        private void SetDataStateToPort(IEnumerable<byte> data) {
-            // Da wir mit readImm arbeiten ist das result byte 0 das erste
-            var i = 0;
-            foreach (var dataIn in data) {
-                if ((i + 1) <= Ports.Count) {
-                    var port = Ports[i];
-                    port.SetBitState(dataIn);
-                } else {
-                    break;
-                }
-                i++;
-            }
-        }
-
         private void PortBitOutChangeEvent(Port port, PortBit portBit) {
             PortBitOutChange?.Invoke(this, port, portBit);
             AddDeviceEventLog("Out Port: " + port.PortNumber + " hat sich verändert zu: " + portBit.BitOut);
@@ -285,7 +270,11 @@ namespace IowLibary {
             DeviceEventLog?.Invoke(this);
         }
 
-        private void AddDeviceError(string msg) {
+        /// <summary>
+        /// Add an error to the device error log
+        ///  </summary>
+        /// <param name="msg">error log entry</param>
+        public void AddDeviceError(string msg) {
             Log.AddErrorLog(this, msg);
             if (DeviceError == null) {
                 throw new SystemException("Error at Devices handling: " + msg);

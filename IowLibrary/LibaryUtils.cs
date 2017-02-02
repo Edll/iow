@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using IowLibary.DllWapper;
 
 namespace IowLibary {
@@ -18,7 +19,7 @@ namespace IowLibary {
         /// <exception cref="ArgumentException">if number is not Valid</exception>
         public static void CheckDeviceNumber(int deviceNumber) {
             if (deviceNumber < Defines.IowkitStartNumbering) {
-                throw new ArgumentException("Die angegebene Device Nummer ist zu klein");
+              throw new ArgumentException("Die angegebene Device Nummer ist zu klein");
             }
         }
     }
