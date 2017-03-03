@@ -54,6 +54,7 @@
             this.bttRemoveMode = new System.Windows.Forms.Button();
             this.bttAddMode = new System.Windows.Forms.Button();
             this.tabControlDevices = new System.Windows.Forms.TabControl();
+            this.rbI2C = new System.Windows.Forms.RadioButton();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -202,7 +203,7 @@
             this.errorLogTab.Location = new System.Drawing.Point(4, 4);
             this.errorLogTab.Name = "errorLogTab";
             this.errorLogTab.Padding = new System.Windows.Forms.Padding(3);
-            this.errorLogTab.Size = new System.Drawing.Size(868, 77);
+            this.errorLogTab.Size = new System.Drawing.Size(868, 76);
             this.errorLogTab.TabIndex = 0;
             this.errorLogTab.Text = "Error Log";
             this.errorLogTab.UseVisualStyleBackColor = true;
@@ -214,7 +215,7 @@
             this.ErrorLogList.FormattingEnabled = true;
             this.ErrorLogList.Location = new System.Drawing.Point(3, 3);
             this.ErrorLogList.Name = "ErrorLogList";
-            this.ErrorLogList.Size = new System.Drawing.Size(862, 71);
+            this.ErrorLogList.Size = new System.Drawing.Size(862, 70);
             this.ErrorLogList.TabIndex = 7;
             // 
             // eventLogTab
@@ -223,7 +224,7 @@
             this.eventLogTab.Location = new System.Drawing.Point(4, 4);
             this.eventLogTab.Name = "eventLogTab";
             this.eventLogTab.Padding = new System.Windows.Forms.Padding(3);
-            this.eventLogTab.Size = new System.Drawing.Size(868, 77);
+            this.eventLogTab.Size = new System.Drawing.Size(868, 76);
             this.eventLogTab.TabIndex = 1;
             this.eventLogTab.Text = "Event Log";
             this.eventLogTab.UseVisualStyleBackColor = true;
@@ -235,12 +236,13 @@
             this.EventLogList.FormattingEnabled = true;
             this.EventLogList.Location = new System.Drawing.Point(3, 3);
             this.EventLogList.Name = "EventLogList";
-            this.EventLogList.Size = new System.Drawing.Size(862, 71);
+            this.EventLogList.Size = new System.Drawing.Size(862, 70);
             this.EventLogList.TabIndex = 8;
             // 
             // panel1
             // 
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.rbI2C);
             this.panel1.Controls.Add(this.rbLCDMode);
             this.panel1.Controls.Add(this.rbIOMode);
             this.panel1.Controls.Add(this.runDeviceSelecter);
@@ -285,7 +287,7 @@
             // bttRemoveMode
             // 
             this.bttRemoveMode.Enabled = false;
-            this.bttRemoveMode.Location = new System.Drawing.Point(372, 12);
+            this.bttRemoveMode.Location = new System.Drawing.Point(452, 13);
             this.bttRemoveMode.Name = "bttRemoveMode";
             this.bttRemoveMode.Size = new System.Drawing.Size(75, 23);
             this.bttRemoveMode.TabIndex = 8;
@@ -295,7 +297,7 @@
             // 
             // bttAddMode
             // 
-            this.bttAddMode.Location = new System.Drawing.Point(290, 12);
+            this.bttAddMode.Location = new System.Drawing.Point(371, 13);
             this.bttAddMode.Name = "bttAddMode";
             this.bttAddMode.Size = new System.Drawing.Size(75, 23);
             this.bttAddMode.TabIndex = 6;
@@ -311,6 +313,16 @@
             this.tabControlDevices.SelectedIndex = 0;
             this.tabControlDevices.Size = new System.Drawing.Size(876, 397);
             this.tabControlDevices.TabIndex = 4;
+            // 
+            // rbI2C
+            // 
+            this.rbI2C.AutoSize = true;
+            this.rbI2C.Location = new System.Drawing.Point(290, 16);
+            this.rbI2C.Name = "rbI2C";
+            this.rbI2C.Size = new System.Drawing.Size(71, 17);
+            this.rbI2C.TabIndex = 14;
+            this.rbI2C.Text = "I2C Mode";
+            this.rbI2C.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
@@ -368,6 +380,7 @@
         private System.Windows.Forms.TabPage eventLogTab;
         private System.Windows.Forms.ListBox EventLogList;
         private System.Windows.Forms.TabControl tabControlDevices;
+        private System.Windows.Forms.RadioButton rbI2C;
     }
 }
 

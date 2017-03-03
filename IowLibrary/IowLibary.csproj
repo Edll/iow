@@ -49,6 +49,7 @@
     <Compile Include="DeviceFactory.cs" />
     <Compile Include="DeviceHandlerFactory.cs" />
     <Compile Include="DllWapper.cs" />
+    <Compile Include="I2CMode.cs" />
     <Compile Include="IModes.cs" />
     <Compile Include="IOMode.cs" />
     <Compile Include="IowKit.cs" />

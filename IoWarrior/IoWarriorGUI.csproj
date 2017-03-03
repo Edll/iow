@@ -71,6 +71,12 @@
   <ItemGroup>
     <Compile Include="GuiUtils.cs" />
     <Compile Include="IowDataModelTable.cs" />
+    <Compile Include="I2CModePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="I2CModePanel.Designer.cs">
+      <DependentUpon>I2CModePanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="LCDModePanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -91,6 +97,9 @@
     <Compile Include="IOModePanel.Designer.cs">
       <DependentUpon>IOModePanel.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="I2CModePanel.resx">
+      <DependentUpon>I2CModePanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LCDModePanel.resx">
       <DependentUpon>LCDModePanel.cs</DependentUpon>
     </EmbeddedResource>

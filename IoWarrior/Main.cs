@@ -74,6 +74,8 @@ namespace IoWarrior {
             }else if (rbLCDMode.Checked)
             {
                  panel = new LcdModePanel(_deviceFactory, _deviceFactory.GetDeviceNumber(deviceNumber));
+            } else if (rbI2C.Checked) {
+                panel = new I2CModePanel(_deviceFactory, _deviceFactory.GetDeviceNumber(deviceNumber));
             }
 
             tabPage.Controls.Add(panel);
