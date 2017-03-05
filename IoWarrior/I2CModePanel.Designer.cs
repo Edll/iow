@@ -30,6 +30,19 @@
             this.runtimeLabel = new System.Windows.Forms.Label();
             this.runStatus = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.port0selectAll = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.port0Output = new System.Windows.Forms.CheckedListBox();
+            this.port0Input = new System.Windows.Forms.CheckedListBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.port1selectAll = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.port1Output = new System.Windows.Forms.CheckedListBox();
+            this.port1Input = new System.Windows.Forms.CheckedListBox();
+            this.bttSetFre = new System.Windows.Forms.Button();
             this.tbA4 = new System.Windows.Forms.TrackBar();
             this.tbA3 = new System.Windows.Forms.TrackBar();
             this.tbA2 = new System.Windows.Forms.TrackBar();
@@ -43,19 +56,13 @@
             this.txtA1Min = new System.Windows.Forms.TextBox();
             this.tbA1 = new System.Windows.Forms.TrackBar();
             this.bttWrite = new System.Windows.Forms.Button();
-            this.bttSetFre = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.port1selectAll = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.port1Output = new System.Windows.Forms.CheckedListBox();
-            this.port1Input = new System.Windows.Forms.CheckedListBox();
             this.panel1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbA4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbA3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbA2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbA1)).BeginInit();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // bttStop
@@ -118,6 +125,7 @@
             // panel1
             // 
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.groupBox2);
             this.panel1.Controls.Add(this.groupBox3);
             this.panel1.Controls.Add(this.bttSetFre);
             this.panel1.Controls.Add(this.tbA4);
@@ -144,6 +152,134 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(854, 557);
             this.panel1.TabIndex = 4;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.port0selectAll);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.port0Output);
+            this.groupBox2.Controls.Add(this.port0Input);
+            this.groupBox2.Location = new System.Drawing.Point(667, 13);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(132, 184);
+            this.groupBox2.TabIndex = 33;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Port0";
+            // 
+            // port0selectAll
+            // 
+            this.port0selectAll.AutoSize = true;
+            this.port0selectAll.Location = new System.Drawing.Point(68, 162);
+            this.port0selectAll.Name = "port0selectAll";
+            this.port0selectAll.Size = new System.Drawing.Size(37, 17);
+            this.port0selectAll.TabIndex = 5;
+            this.port0selectAll.Text = "All";
+            this.port0selectAll.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(65, 15);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(39, 13);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Output";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 16);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(31, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Input";
+            // 
+            // port0Output
+            // 
+            this.port0Output.CheckOnClick = true;
+            this.port0Output.FormattingEnabled = true;
+            this.port0Output.Location = new System.Drawing.Point(68, 32);
+            this.port0Output.Name = "port0Output";
+            this.port0Output.Size = new System.Drawing.Size(55, 124);
+            this.port0Output.TabIndex = 1;
+            // 
+            // port0Input
+            // 
+            this.port0Input.FormattingEnabled = true;
+            this.port0Input.Location = new System.Drawing.Point(7, 32);
+            this.port0Input.Name = "port0Input";
+            this.port0Input.Size = new System.Drawing.Size(55, 124);
+            this.port0Input.TabIndex = 0;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.port1selectAll);
+            this.groupBox3.Controls.Add(this.label5);
+            this.groupBox3.Controls.Add(this.label4);
+            this.groupBox3.Controls.Add(this.port1Output);
+            this.groupBox3.Controls.Add(this.port1Input);
+            this.groupBox3.Location = new System.Drawing.Point(667, 221);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(132, 184);
+            this.groupBox3.TabIndex = 32;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Port1";
+            // 
+            // port1selectAll
+            // 
+            this.port1selectAll.AutoSize = true;
+            this.port1selectAll.Location = new System.Drawing.Point(68, 162);
+            this.port1selectAll.Name = "port1selectAll";
+            this.port1selectAll.Size = new System.Drawing.Size(37, 17);
+            this.port1selectAll.TabIndex = 6;
+            this.port1selectAll.Text = "All";
+            this.port1selectAll.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(65, 16);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(39, 13);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Output";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 16);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(31, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Input";
+            // 
+            // port1Output
+            // 
+            this.port1Output.CheckOnClick = true;
+            this.port1Output.FormattingEnabled = true;
+            this.port1Output.Location = new System.Drawing.Point(67, 32);
+            this.port1Output.Name = "port1Output";
+            this.port1Output.Size = new System.Drawing.Size(55, 124);
+            this.port1Output.TabIndex = 1;
+            // 
+            // port1Input
+            // 
+            this.port1Input.FormattingEnabled = true;
+            this.port1Input.Location = new System.Drawing.Point(6, 32);
+            this.port1Input.Name = "port1Input";
+            this.port1Input.Size = new System.Drawing.Size(55, 124);
+            this.port1Input.TabIndex = 0;
+            // 
+            // bttSetFre
+            // 
+            this.bttSetFre.Location = new System.Drawing.Point(279, 38);
+            this.bttSetFre.Name = "bttSetFre";
+            this.bttSetFre.Size = new System.Drawing.Size(125, 23);
+            this.bttSetFre.TabIndex = 31;
+            this.bttSetFre.Text = "SetFre";
+            this.bttSetFre.UseVisualStyleBackColor = true;
+            this.bttSetFre.Click += new System.EventHandler(this.bttSetFre_Click);
             // 
             // tbA4
             // 
@@ -238,7 +374,6 @@
             this.txtA1Min.Size = new System.Drawing.Size(100, 20);
             this.txtA1Min.TabIndex = 20;
             this.txtA1Min.Text = "150";
-            this.txtA1Min.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // tbA1
             // 
@@ -260,75 +395,6 @@
             this.bttWrite.UseVisualStyleBackColor = true;
             this.bttWrite.Click += new System.EventHandler(this.bttWrite_Click);
             // 
-            // bttSetFre
-            // 
-            this.bttSetFre.Location = new System.Drawing.Point(279, 38);
-            this.bttSetFre.Name = "bttSetFre";
-            this.bttSetFre.Size = new System.Drawing.Size(125, 23);
-            this.bttSetFre.TabIndex = 31;
-            this.bttSetFre.Text = "SetFre";
-            this.bttSetFre.UseVisualStyleBackColor = true;
-            this.bttSetFre.Click += new System.EventHandler(this.bttSetFre_Click);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.port1selectAll);
-            this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Controls.Add(this.port1Output);
-            this.groupBox3.Controls.Add(this.port1Input);
-            this.groupBox3.Location = new System.Drawing.Point(590, 43);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(132, 226);
-            this.groupBox3.TabIndex = 32;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Port1";
-            // 
-            // port1selectAll
-            // 
-            this.port1selectAll.AutoSize = true;
-            this.port1selectAll.Location = new System.Drawing.Point(68, 200);
-            this.port1selectAll.Name = "port1selectAll";
-            this.port1selectAll.Size = new System.Drawing.Size(37, 17);
-            this.port1selectAll.TabIndex = 6;
-            this.port1selectAll.Text = "All";
-            this.port1selectAll.UseVisualStyleBackColor = true;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(65, 53);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(39, 13);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "Output";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 54);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(31, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Input";
-            // 
-            // port1Output
-            // 
-            this.port1Output.CheckOnClick = true;
-            this.port1Output.FormattingEnabled = true;
-            this.port1Output.Location = new System.Drawing.Point(68, 70);
-            this.port1Output.Name = "port1Output";
-            this.port1Output.Size = new System.Drawing.Size(55, 124);
-            this.port1Output.TabIndex = 1;
-            // 
-            // port1Input
-            // 
-            this.port1Input.FormattingEnabled = true;
-            this.port1Input.Location = new System.Drawing.Point(7, 70);
-            this.port1Input.Name = "port1Input";
-            this.port1Input.Size = new System.Drawing.Size(55, 124);
-            this.port1Input.TabIndex = 0;
-            // 
             // I2CModePanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -338,12 +404,14 @@
             this.Size = new System.Drawing.Size(854, 557);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbA4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbA3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbA2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbA1)).EndInit();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -376,5 +444,11 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckedListBox port1Output;
         private System.Windows.Forms.CheckedListBox port1Input;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.CheckBox port0selectAll;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckedListBox port0Output;
+        private System.Windows.Forms.CheckedListBox port0Input;
     }
 }
