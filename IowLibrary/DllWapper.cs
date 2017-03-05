@@ -175,7 +175,7 @@ namespace IowLibary {
             [DllImport("iowkit.dll")]
             public static extern uint IowKitRead(IntPtr iowHandle,
                                                     uint numPipe,
-                                                    byte[] buffer,
+                                                   byte[] buffer,
                                                     uint length);
             /// <summary>
             /// Liest Daten vom IO-Warrior. Der aufrufende Thread wird nicht blockiert, wenn

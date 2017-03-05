@@ -32,7 +32,7 @@ namespace IoWarrior {
             _device = device;
             InitializeComponent();
 
-            lbDeviceNumber.Text = _device.DeviceNumber.ToString();
+            lbDeviceNumber.Text = Convert.ToString(_device?.DeviceNumber ?? 0);
         }
 
         private void bttRun_Click(object sender, EventArgs e) {
@@ -49,8 +49,28 @@ namespace IoWarrior {
 
         private void InitDevice() {
             _deviceFactory.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
-        }
+     
+            GuiUtils.CreatePortEntrys(port1Input, false);
 
+            // create outputs
+            GuiUtils.CreatePortEntrys(port1Output, true);
+            port1Output.ItemCheck += Port1Output_ItemCheck;
+
+            _deviceFactory.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
+
+
+        }
+        private void Port1Output_ItemCheck(object sender, ItemCheckEventArgs e) {
+            const int port = 1;
+            CheckOutputBit(sender, e, port, _device.DeviceNumber);
+        }
+        private void CheckOutputBit(object sender, ItemCheckEventArgs e, int port, int device) {
+            if (!(sender is CheckedListBox)) return;
+            var clb = (CheckedListBox)sender;
+            var bit = Convert.ToInt32(clb.SelectedItem);
+            var value = e.NewValue == CheckState.Checked;
+            _deviceFactory.SetBit(device, port, bit, value);
+        }
         private void ClearDevice() {
             _deviceFactory.StopDevice(_device.DeviceNumber);
         }
@@ -76,10 +96,18 @@ namespace IoWarrior {
 
             }
             if (port.PortNumber == 1) {
-
+                ChangeCheckOnList(port1Input, portbit.BitNumber, portbit.BitIn);
             }
         }
 
+        private void ChangeCheckOnList(CheckedListBox clb, int index, bool value) {
+            if (clb.InvokeRequired) {
+                var sbc = new SetBoolCallback(ChangeCheckOnList);
+                Invoke(sbc, clb, index, value);
+            } else {
+                clb.SetItemChecked(index, !value);
+            }
+        }
         private void DeviceFactoryRunTimeUpdate(long runtime) {
             if (runtimeLabel.InvokeRequired) {
                 var slc = new SetStringCallback(SetRuntimeLabelText);
@@ -101,6 +129,10 @@ namespace IoWarrior {
 
         private void textBox1_TextChanged(object sender, EventArgs e) {
 
+        }
+
+        private void bttSetFre_Click(object sender, EventArgs e) {
+            mode.SetFrequenz(false);
         }
     }
 }

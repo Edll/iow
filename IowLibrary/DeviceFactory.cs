@@ -230,7 +230,12 @@ namespace IowLibary {
         /// <returns>Null if device is not found</returns>
         /// <exception cref="ArgumentException">if number is not Valid</exception>
         public Device GetDeviceNumber(int deviceNumber) {
-            LibaryUtils.CheckDeviceNumber(deviceNumber);
+            try {
+                LibaryUtils.CheckDeviceNumber(deviceNumber);
+            }
+            catch (ArgumentException e) {
+                AddDeviceFactoryError(e.Message);
+            }
 
             if (Devices != null) {
                 foreach (var deviceEntry in Devices) {
