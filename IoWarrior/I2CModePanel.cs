@@ -95,8 +95,7 @@ namespace IoWarrior {
 
         private void bttWrite_Click(object sender, EventArgs e) {
 
-          //  mode.SetLine(1, line1.Text);
-          //  mode.SetLine(2, line2.Text);
+            mode.SetText("Hallo Welt");
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e) {
