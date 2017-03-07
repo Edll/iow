@@ -11,6 +11,8 @@ namespace IowLibary {
     public class IoMode : IModes {
         private Device _device;
         private int _writeLoopCounter;
+        private bool run;
+        private int _timing;
 
         /// <summary>
         /// Device set for mode will normaly call from the device at mode set.
@@ -58,16 +60,52 @@ namespace IowLibary {
         /// <param name="ports"></param>
         /// <returns></returns>
         public bool Write(Dictionary<int, Port> ports) {
-            var data = new byte[_device.IoReportsSize];
-            data[0] = 0x00;
-            foreach (var kvp in ports) {
-                var p = kvp.Value;
-                data[kvp.Key + Port.PortOffset] = p.GetBitStateAsByte();
+            if (run) {
+                int portValue = 1;
+                var data = new byte[_device.IoReportsSize];
+                int counter = 2;
+                while (run) {
+    
+                    data[1] = (byte)portValue;
+                    data[2] = (byte)portValue;
+                    var size = IowKit.Write(_device.Handler, 0, data, _device.IoReportsSize);
+                    System.Threading.Thread.Sleep(_timing);
+
+                    if (portValue == 1) {
+                        portValue = 2;
+                    } else {
+                        portValue = (int)Math.Pow(2, (double)counter);
+                        counter++;
+                        if (counter > 8) {
+                            counter = 2;
+                            portValue = 1;
+                        }
+                    }
+                    byte[] dataCopy = new byte[3];
+                    dataCopy[0] = data[1];
+                    dataCopy[1] = data[2];
+                    _device.SetDataStateToPort(dataCopy);
+                }
+                return true;
+            } else {
+                var data = new byte[_device.IoReportsSize];
+                data[0] = 0x00;
+                foreach (var kvp in ports) {
+                    var p = kvp.Value;
+                    data[kvp.Key + Port.PortOffset] = p.GetBitStateAsByte();
+                }
+
+                var size = IowKit.Write(_device.Handler, 0, data, _device.IoReportsSize);
+
+                return size != null && size == _device.IoReportsSize;
             }
+        }
 
-            var size = IowKit.Write(_device.Handler, 0, data, _device.IoReportsSize);
-
-            return size != null && size == _device.IoReportsSize;
+        public bool LaufLicht(int timing, bool run) {
+            this.run = run;
+            _timing = timing;
+            _device.TriggerDataWrite();
+            return true;
         }
 
         /// <summary>

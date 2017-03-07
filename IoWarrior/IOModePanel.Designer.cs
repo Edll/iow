@@ -44,6 +44,9 @@
             this.port0invert = new System.Windows.Forms.CheckBox();
             this.port0Output = new System.Windows.Forms.CheckedListBox();
             this.port0Input = new System.Windows.Forms.CheckedListBox();
+            this.timing = new System.Windows.Forms.TextBox();
+            this.bttLauflicht = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -52,6 +55,9 @@
             // panel1
             // 
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.label6);
+            this.panel1.Controls.Add(this.bttLauflicht);
+            this.panel1.Controls.Add(this.timing);
             this.panel1.Controls.Add(this.lbDeviceNumber);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.runtimeLabel);
@@ -265,7 +271,34 @@
             this.port0Input.Size = new System.Drawing.Size(55, 124);
             this.port0Input.TabIndex = 0;
             // 
-            // IOModePanel
+            // timing
+            // 
+            this.timing.Location = new System.Drawing.Point(595, 137);
+            this.timing.Name = "timing";
+            this.timing.Size = new System.Drawing.Size(100, 20);
+            this.timing.TabIndex = 13;
+            this.timing.Text = "200";
+            // 
+            // bttLauflicht
+            // 
+            this.bttLauflicht.Location = new System.Drawing.Point(595, 164);
+            this.bttLauflicht.Name = "bttLauflicht";
+            this.bttLauflicht.Size = new System.Drawing.Size(75, 23);
+            this.bttLauflicht.TabIndex = 14;
+            this.bttLauflicht.Text = "Start";
+            this.bttLauflicht.UseVisualStyleBackColor = true;
+            this.bttLauflicht.Click += new System.EventHandler(this.bttLauflicht_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(595, 118);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(47, 13);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Lauflicht";
+            // 
+            // IoModePanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -305,5 +338,8 @@
         private System.Windows.Forms.CheckedListBox port0Input;
         private System.Windows.Forms.Label lbDeviceNumber;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button bttLauflicht;
+        private System.Windows.Forms.TextBox timing;
     }
 }

@@ -21,6 +21,10 @@ namespace IoWarrior {
         private readonly DeviceFactory _deviceFactory;
         private readonly Device _device;
 
+        private bool lauflichtRun;
+        // create inputs
+       private IoMode mode = new IoMode();
+
         /// <summary>
         /// Panel to show the IOMode
         /// </summary>
@@ -49,8 +53,7 @@ namespace IoWarrior {
         private void InitDevice() {
             // TODO wenn es eine anderer IOW ist mit mehr oder weniger ports sollte das hier dynamisch eingefügt werden....
 
-            // create inputs
-            IModes mode = new IoMode();
+         
 
             GuiUtils.CreatePortEntrys(port0Input, false);
             GuiUtils.CreatePortEntrys(port1Input, false);
@@ -143,6 +146,18 @@ namespace IoWarrior {
 
         private void checked_port1selectAll(object sender, EventArgs e) {
             GuiUtils.CheckboxListSetAllItems(sender, port1Output);
+        }
+
+        private void bttLauflicht_Click(object sender, EventArgs e) {
+            if (lauflichtRun) {
+                bttLauflicht.Text = "Start";
+                lauflichtRun = false;
+            }else {
+                bttLauflicht.Text = "Stop";
+                lauflichtRun = true;
+            }
+            int timer = int.Parse(timing.Text);
+            mode.LaufLicht(timer, lauflichtRun);
         }
     }
 }
