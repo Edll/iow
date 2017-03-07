@@ -10,13 +10,11 @@ namespace IowLibary {
     /// </summary>
     public class I2CMode : IModes {
         private Device _device;
-        private byte _frequenz;
-        private byte _i2cAddrs;
         private int _writeLoopCounter;
         private IList<I2CData> dataQueue = new List<I2CData>();
 
         /// <summary>
-        /// Starten des Modus
+        /// Starten des Modus und setzt den IOW in den I2C Special Mode
         /// </summary>
         /// <returns></returns>
         public bool PortsInitialisation() {

@@ -64,6 +64,10 @@ namespace IoWarrior {
 
         private void Click_AddSelectedDevice(object sender, EventArgs e) {
             var deviceNumber = GetDeviceNumber();
+            if(deviceNumber == 0) {
+                return;
+            }
+            bttRemoveMode.Enabled = true;
 
             var title = "Device " + deviceNumber;
             var tabPage = new TabPage(title);
