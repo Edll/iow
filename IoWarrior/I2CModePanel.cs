@@ -22,7 +22,9 @@ namespace IoWarrior {
 
         private readonly DeviceFactory _deviceFactory;
         private readonly Device _device;
+
         private I2CMode mode = new I2CMode();
+        private IowLibary.robot.PMW _pmw;
 
         /// <summary>
         /// Panel to show the IOMode
@@ -62,6 +64,8 @@ namespace IoWarrior {
             port1Output.ItemCheck += Port1Output_ItemCheck;
 
             _deviceFactory.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
+
+            _pmw = new IowLibary.robot.PMW(_device, (byte)0x00);
         }
 
         private void ClearDevice() {
@@ -77,7 +81,12 @@ namespace IoWarrior {
         }
 
         private void bttSetFre_Click(object sender, EventArgs e) {
-            mode.SetFrequenz(false);
+            try {
+                int range = Convert.ToInt32(tbPmwWeite.Text);
+                _pmw.SetFrequenz(50);
+            }catch(FormatException) {
+                tbPmwWeite.BackColor = Color.IndianRed;
+            }
         }
 
         private void SetButtonStatusRun() {

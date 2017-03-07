@@ -56,6 +56,7 @@
             this.txtA1Min = new System.Windows.Forms.TextBox();
             this.tbA1 = new System.Windows.Forms.TrackBar();
             this.bttWrite = new System.Windows.Forms.Button();
+            this.tbPmwWeite = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -125,6 +126,7 @@
             // panel1
             // 
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.tbPmwWeite);
             this.panel1.Controls.Add(this.groupBox2);
             this.panel1.Controls.Add(this.groupBox3);
             this.panel1.Controls.Add(this.bttSetFre);
@@ -273,11 +275,11 @@
             // 
             // bttSetFre
             // 
-            this.bttSetFre.Location = new System.Drawing.Point(279, 38);
+            this.bttSetFre.Location = new System.Drawing.Point(295, 39);
             this.bttSetFre.Name = "bttSetFre";
             this.bttSetFre.Size = new System.Drawing.Size(125, 23);
             this.bttSetFre.TabIndex = 31;
-            this.bttSetFre.Text = "SetFre";
+            this.bttSetFre.Text = "PMW weite Schreiben";
             this.bttSetFre.UseVisualStyleBackColor = true;
             this.bttSetFre.Click += new System.EventHandler(this.bttSetFre_Click);
             // 
@@ -395,6 +397,14 @@
             this.bttWrite.UseVisualStyleBackColor = true;
             this.bttWrite.Click += new System.EventHandler(this.bttWrite_Click);
             // 
+            // tbPmwWeite
+            // 
+            this.tbPmwWeite.Location = new System.Drawing.Point(255, 41);
+            this.tbPmwWeite.Name = "tbPmwWeite";
+            this.tbPmwWeite.Size = new System.Drawing.Size(34, 20);
+            this.tbPmwWeite.TabIndex = 34;
+            this.tbPmwWeite.Text = "200";
+            // 
             // I2CModePanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -450,5 +460,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckedListBox port0Output;
         private System.Windows.Forms.CheckedListBox port0Input;
+        private System.Windows.Forms.TextBox tbPmwWeite;
     }
 }
