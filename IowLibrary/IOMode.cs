@@ -101,6 +101,12 @@ namespace IowLibary {
             }
         }
 
+        /// <summary>
+        /// Lauflicht versetzt alle Ports in eine Lauflicht Funktion
+        /// </summary>
+        /// <param name="timing">Timinig für die lauflicht pulse</param>
+        /// <param name="run">true startet das ganze im nächsten durchlauf, false stop es</param>
+        /// <returns></returns>
         public bool LaufLicht(int timing, bool run) {
             this.run = run;
             _timing = timing;

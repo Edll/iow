@@ -85,8 +85,7 @@ namespace IowLibary {
             foreach (I2CData i2CData in removeList) {
                 try {
                     dataQueue.Remove(i2CData);
-                }
-                catch (Exception) {
+                } catch (Exception) {
                     _device.Log.AddErrorLog(_device,
                         "Fehler beim entfernen von Element aus der Data Queue, alles wurde zurück gesetzt");
                     dataQueue.Clear();
@@ -120,20 +119,13 @@ namespace IowLibary {
             return true;
         }
 
-        public void SetFrequenz(bool digi) {
-            int localafer = 50;
-            if (digi) {
-                localafer = 200;
-            }
-
-            _frequenz = (byte) ((25000000/4096/localafer) - 1);
-
-            AddDataToQueue(_i2cAddrs, 0x00, 0x10);
-            AddDataToQueue(_i2cAddrs, 0xfe, 0x10);
-            AddDataToQueue(_i2cAddrs, 0xfe, _frequenz);
-        }
-
-        private void AddDataToQueue(byte adress, byte register, byte value) {
+        /// <summary>
+        /// Fügt eine neuen Befehlsatz in die Befehls Queue ein
+        /// </summary>
+        /// <param name="adress">Adresse auf dem I2C Bus</param>
+        /// <param name="register">Register im I2C Baustein</param>
+        /// <param name="value">Wert für das Register</param>
+        public void AddDataToQueue(byte adress, byte register, byte value) {
             dataQueue.Add(I2CData.create(adress, register, value));
             _device.TriggerDataWrite();
         }
@@ -158,7 +150,7 @@ namespace IowLibary {
         }
     }
 
-  
+
 
     class I2CData {
         public byte Adress { get; set; }
@@ -176,31 +168,6 @@ namespace IowLibary {
         }
 
         public void SetText(string msg) {
-            
-        }
-        // writes Data from Ports to the LCD
-        private bool WriteDataToLcd() {
-            var data = new byte[_device.IoReportsSize];
-            data[0] = 0x00;
-            foreach (var kvp in _device.Ports) {
-                var p = kvp.Value;
-                data[kvp.Key + Port.PortOffset] = p.GetBitStateAsByte();
-            }
-
-            var size = IowKit.Write(_device.Handler, 0, data, _device.IoReportsSize);
-
-            return size != null && size == _device.IoReportsSize;
-        }
-
-        private void SendEnablePulse() {
-            // E to 1
-            _device.SetBit(0, 7, true);
-            WriteDataToLcd();
-            // Wating time for signal rais/fall
-      
-            // E to 0
-            _device.SetBit(0, 7, false);
-            WriteDataToLcd();
         }
     }
 }
