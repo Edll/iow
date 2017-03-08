@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace IowLibary.robot {
     public class Achse {
-        private const int MIN = 150;
-        private const int MAX = 600;
+        private const int Min = 150;
+        private const int Max = 600;
 
-        private I2CMode _i2cMode;
-        private Device _device;
+        private readonly I2CMode _i2CMode;
+        private readonly Device _device;
 
-        private byte _i2cAddrs;
+        private readonly byte _i2CAddrs;
 
         private byte _registerOnL;
         private byte _registerOnH;
         private byte _registerOffL;
         private byte _registerOffH;
 
-        public int Value;
-        public int AchsenNummer;
+        private int _value;
+        private int _achsenNummer;
 
-        public IDictionary<int, Achse> LastPoints = new Dictionary<int, Achse>();
+        private IDictionary<int, Achse> _lastPoints = new Dictionary<int, Achse>();
 
         /// <summary>
         /// Neue Instanz des PMW Moduls
@@ -30,9 +31,9 @@ namespace IowLibary.robot {
         /// <param name="i2cAdress">I2C Adresse auf dem Bus</param>
         public Achse(Device device, byte  i2cAddrs) {
             this._device = device;
-            this._i2cAddrs = i2cAddrs;
+            this._i2CAddrs = i2cAddrs;
             if (_device.Modes is I2CMode) {
-                _i2cMode = _device.Modes as I2CMode;
+                _i2CMode = _device.Modes as I2CMode;
             } else {
                 _device.AddDeviceError("Device ist nicht im I2C Mode");
             }
@@ -44,33 +45,43 @@ namespace IowLibary.robot {
         /// <param name="value"></param>
         /// <param name="achsenNummer"></param>
         public void Move(int achsenNummer, int value) {
-            AchsenNummer = achsenNummer;
-            Value = value;
-            if (LastPoints.ContainsKey(achsenNummer)) {
-                Achse achse;
-                LastPoints.TryGetValue(achsenNummer, out achse);
-                achse = this;
+            _achsenNummer = achsenNummer;
+            _value = value;
+            if (_lastPoints.ContainsKey(achsenNummer)) {
+                _lastPoints[achsenNummer] = this.MemberwiseClone() as Achse;
             } else {
-                LastPoints.Add(achsenNummer, this);
+                _lastPoints.Add(achsenNummer, this.MemberwiseClone() as Achse);
             }
 
-            int maxRange = MAX - MIN;
-            int moveRange = (maxRange * value / 100) + MIN;
-            WriteToI2C(MIN, moveRange);
+            int maxRange = Max - Min;
+            int moveRange = (maxRange * value / 100) + Min;
+            WriteToI2C(Min, moveRange);
+        }
+
+        /// <summary>
+        /// Gibt die letzten angefahrenen Punkte aller Achsen die Benutzt worden sind zurück.
+        /// </summary>
+        /// <returns>Eine Dict aller zuletzt angefahrenen Achsen</returns>
+        public IDictionary<int, Achse> ReadOutLastPoints()
+        {
+            IDictionary<int, Achse> result = _lastPoints;
+            _lastPoints = new Dictionary<int, Achse>();
+            return result;
         }
 
         private void WriteToI2C(int on, int off) {
-            CalcServoAdress(AchsenNummer);
+            CalcServoAdress(_achsenNummer);
 
-            byte ON_1 = (byte)(on & 0xff);
-            byte ON_2 = (byte)(on >> 8);
-            byte OFF_1 = (byte)(off & 0xff);
-            byte OFF_2 = (byte)(off >> 8);
+            // Berechnen der Werte für die Register
+            byte on1 = (byte)(on & 0xff);
+            byte on2 = (byte)(on >> 8);
+            byte off1 = (byte)(off & 0xff);
+            byte off2 = (byte)(off >> 8);
 
-            _i2cMode.AddDataToQueue(_i2cAddrs, _registerOnL, ON_1);
-            _i2cMode.AddDataToQueue(_i2cAddrs, _registerOnH, ON_2);
-            _i2cMode.AddDataToQueue(_i2cAddrs, _registerOffL, OFF_1);
-            _i2cMode.AddDataToQueue(_i2cAddrs, _registerOffH, OFF_2);
+            _i2CMode.AddDataToQueue(_i2CAddrs, _registerOnL, on1);
+            _i2CMode.AddDataToQueue(_i2CAddrs, _registerOnH, on2);
+            _i2CMode.AddDataToQueue(_i2CAddrs, _registerOffL, off1);
+            _i2CMode.AddDataToQueue(_i2CAddrs, _registerOffH, off2);
         }
 
         private void CalcServoAdress(int servoNumber) {

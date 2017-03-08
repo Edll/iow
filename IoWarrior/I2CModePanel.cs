@@ -185,7 +185,7 @@ namespace IoWarrior {
         }
 
         private void bttSaveValues_Click(object sender, EventArgs e) {
-            saveList.Add(achse.LastPoints);
+            saveList.Add(achse.ReadOutLastPoints());
         }
 
         private void runSavePoints_Click(object sender, EventArgs e) {

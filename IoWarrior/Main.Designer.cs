@@ -48,13 +48,13 @@
             this.eventLogTab = new System.Windows.Forms.TabPage();
             this.EventLogList = new System.Windows.Forms.ListBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.rbI2C = new System.Windows.Forms.RadioButton();
             this.rbLCDMode = new System.Windows.Forms.RadioButton();
             this.rbIOMode = new System.Windows.Forms.RadioButton();
             this.runDeviceSelecter = new System.Windows.Forms.ComboBox();
             this.bttRemoveMode = new System.Windows.Forms.Button();
             this.bttAddMode = new System.Windows.Forms.Button();
             this.tabControlDevices = new System.Windows.Forms.TabControl();
-            this.rbI2C = new System.Windows.Forms.RadioButton();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -121,7 +121,7 @@
             this.toolStripStatusLabel1,
             this.numberOfConnectedDevicesLabel,
             this.NumberOfConDevices});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 587);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 828);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(882, 22);
             this.statusStrip1.TabIndex = 3;
@@ -158,7 +158,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 108F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(882, 563);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(882, 804);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // tabControl2
@@ -168,7 +168,7 @@
             this.tabControl2.Controls.Add(this.errorLogTab);
             this.tabControl2.Controls.Add(this.eventLogTab);
             this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl2.Location = new System.Drawing.Point(3, 458);
+            this.tabControl2.Location = new System.Drawing.Point(3, 699);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(876, 102);
@@ -254,6 +254,16 @@
             this.panel1.Size = new System.Drawing.Size(876, 46);
             this.panel1.TabIndex = 2;
             // 
+            // rbI2C
+            // 
+            this.rbI2C.AutoSize = true;
+            this.rbI2C.Location = new System.Drawing.Point(290, 16);
+            this.rbI2C.Name = "rbI2C";
+            this.rbI2C.Size = new System.Drawing.Size(71, 17);
+            this.rbI2C.TabIndex = 14;
+            this.rbI2C.Text = "I2C Mode";
+            this.rbI2C.UseVisualStyleBackColor = true;
+            // 
             // rbLCDMode
             // 
             this.rbLCDMode.AutoSize = true;
@@ -311,24 +321,14 @@
             this.tabControlDevices.Location = new System.Drawing.Point(3, 55);
             this.tabControlDevices.Name = "tabControlDevices";
             this.tabControlDevices.SelectedIndex = 0;
-            this.tabControlDevices.Size = new System.Drawing.Size(876, 397);
+            this.tabControlDevices.Size = new System.Drawing.Size(876, 638);
             this.tabControlDevices.TabIndex = 4;
-            // 
-            // rbI2C
-            // 
-            this.rbI2C.AutoSize = true;
-            this.rbI2C.Location = new System.Drawing.Point(290, 16);
-            this.rbI2C.Name = "rbI2C";
-            this.rbI2C.Size = new System.Drawing.Size(71, 17);
-            this.rbI2C.TabIndex = 14;
-            this.rbI2C.Text = "I2C Mode";
-            this.rbI2C.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(882, 609);
+            this.ClientSize = new System.Drawing.Size(882, 850);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
