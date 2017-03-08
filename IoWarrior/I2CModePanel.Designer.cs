@@ -30,6 +30,7 @@
             this.runtimeLabel = new System.Windows.Forms.Label();
             this.runStatus = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.tbPmwWeite = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.port0selectAll = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -46,17 +47,13 @@
             this.tbA4 = new System.Windows.Forms.TrackBar();
             this.tbA3 = new System.Windows.Forms.TrackBar();
             this.tbA2 = new System.Windows.Forms.TrackBar();
-            this.txtA4Min = new System.Windows.Forms.TextBox();
-            this.txtA3Min = new System.Windows.Forms.TextBox();
-            this.txtA2Min = new System.Windows.Forms.TextBox();
             this.txtA4Max = new System.Windows.Forms.TextBox();
             this.txtA3Max = new System.Windows.Forms.TextBox();
             this.txtA2Max = new System.Windows.Forms.TextBox();
             this.txtA1Max = new System.Windows.Forms.TextBox();
-            this.txtA1Min = new System.Windows.Forms.TextBox();
             this.tbA1 = new System.Windows.Forms.TrackBar();
-            this.bttWrite = new System.Windows.Forms.Button();
-            this.tbPmwWeite = new System.Windows.Forms.TextBox();
+            this.bttSaveValues = new System.Windows.Forms.Button();
+            this.runSavePoints = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -126,6 +123,8 @@
             // panel1
             // 
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.runSavePoints);
+            this.panel1.Controls.Add(this.bttSaveValues);
             this.panel1.Controls.Add(this.tbPmwWeite);
             this.panel1.Controls.Add(this.groupBox2);
             this.panel1.Controls.Add(this.groupBox3);
@@ -133,16 +132,11 @@
             this.panel1.Controls.Add(this.tbA4);
             this.panel1.Controls.Add(this.tbA3);
             this.panel1.Controls.Add(this.tbA2);
-            this.panel1.Controls.Add(this.txtA4Min);
-            this.panel1.Controls.Add(this.txtA3Min);
-            this.panel1.Controls.Add(this.txtA2Min);
             this.panel1.Controls.Add(this.txtA4Max);
             this.panel1.Controls.Add(this.txtA3Max);
             this.panel1.Controls.Add(this.txtA2Max);
             this.panel1.Controls.Add(this.txtA1Max);
-            this.panel1.Controls.Add(this.txtA1Min);
             this.panel1.Controls.Add(this.tbA1);
-            this.panel1.Controls.Add(this.bttWrite);
             this.panel1.Controls.Add(this.lbDeviceNumber);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.runtimeLabel);
@@ -154,6 +148,14 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(854, 557);
             this.panel1.TabIndex = 4;
+            // 
+            // tbPmwWeite
+            // 
+            this.tbPmwWeite.Location = new System.Drawing.Point(255, 41);
+            this.tbPmwWeite.Name = "tbPmwWeite";
+            this.tbPmwWeite.Size = new System.Drawing.Size(34, 20);
+            this.tbPmwWeite.TabIndex = 34;
+            this.tbPmwWeite.Text = "50";
             // 
             // groupBox2
             // 
@@ -285,125 +287,99 @@
             // 
             // tbA4
             // 
-            this.tbA4.Location = new System.Drawing.Point(115, 221);
-            this.tbA4.Maximum = 600;
-            this.tbA4.Minimum = 150;
+            this.tbA4.Location = new System.Drawing.Point(18, 219);
+            this.tbA4.Maximum = 85;
+            this.tbA4.Minimum = 45;
             this.tbA4.Name = "tbA4";
             this.tbA4.Size = new System.Drawing.Size(289, 42);
             this.tbA4.TabIndex = 30;
-            this.tbA4.Value = 150;
+            this.tbA4.Value = 45;
+            this.tbA4.ValueChanged += new System.EventHandler(this.tbA4_ValueChanged);
             // 
             // tbA3
             // 
-            this.tbA3.Location = new System.Drawing.Point(115, 173);
-            this.tbA3.Maximum = 600;
-            this.tbA3.Minimum = 150;
+            this.tbA3.Location = new System.Drawing.Point(18, 171);
+            this.tbA3.Maximum = 100;
+            this.tbA3.Minimum = 30;
             this.tbA3.Name = "tbA3";
             this.tbA3.Size = new System.Drawing.Size(289, 42);
             this.tbA3.TabIndex = 29;
-            this.tbA3.Value = 150;
+            this.tbA3.Value = 30;
+            this.tbA3.ValueChanged += new System.EventHandler(this.tbA3_ValueChanged);
             // 
             // tbA2
             // 
-            this.tbA2.Location = new System.Drawing.Point(115, 125);
-            this.tbA2.Maximum = 600;
-            this.tbA2.Minimum = 150;
+            this.tbA2.Location = new System.Drawing.Point(18, 123);
+            this.tbA2.Maximum = 100;
+            this.tbA2.Minimum = 60;
             this.tbA2.Name = "tbA2";
             this.tbA2.Size = new System.Drawing.Size(289, 42);
             this.tbA2.TabIndex = 28;
-            this.tbA2.Value = 150;
-            // 
-            // txtA4Min
-            // 
-            this.txtA4Min.Location = new System.Drawing.Point(9, 221);
-            this.txtA4Min.Name = "txtA4Min";
-            this.txtA4Min.Size = new System.Drawing.Size(100, 20);
-            this.txtA4Min.TabIndex = 27;
-            this.txtA4Min.Text = "150";
-            // 
-            // txtA3Min
-            // 
-            this.txtA3Min.Location = new System.Drawing.Point(9, 173);
-            this.txtA3Min.Name = "txtA3Min";
-            this.txtA3Min.Size = new System.Drawing.Size(100, 20);
-            this.txtA3Min.TabIndex = 26;
-            this.txtA3Min.Text = "150";
-            // 
-            // txtA2Min
-            // 
-            this.txtA2Min.Location = new System.Drawing.Point(9, 125);
-            this.txtA2Min.Name = "txtA2Min";
-            this.txtA2Min.Size = new System.Drawing.Size(100, 20);
-            this.txtA2Min.TabIndex = 25;
-            this.txtA2Min.Text = "150";
+            this.tbA2.Value = 60;
+            this.tbA2.ValueChanged += new System.EventHandler(this.tbA2_ValueChanged);
             // 
             // txtA4Max
             // 
-            this.txtA4Max.Location = new System.Drawing.Point(410, 221);
+            this.txtA4Max.Location = new System.Drawing.Point(313, 219);
             this.txtA4Max.Name = "txtA4Max";
             this.txtA4Max.Size = new System.Drawing.Size(100, 20);
             this.txtA4Max.TabIndex = 24;
-            this.txtA4Max.Text = "600";
+            this.txtA4Max.Text = "45";
             // 
             // txtA3Max
             // 
-            this.txtA3Max.Location = new System.Drawing.Point(410, 173);
+            this.txtA3Max.Location = new System.Drawing.Point(313, 171);
             this.txtA3Max.Name = "txtA3Max";
             this.txtA3Max.Size = new System.Drawing.Size(100, 20);
             this.txtA3Max.TabIndex = 23;
-            this.txtA3Max.Text = "600";
+            this.txtA3Max.Text = "30";
             // 
             // txtA2Max
             // 
-            this.txtA2Max.Location = new System.Drawing.Point(410, 125);
+            this.txtA2Max.Location = new System.Drawing.Point(313, 123);
             this.txtA2Max.Name = "txtA2Max";
             this.txtA2Max.Size = new System.Drawing.Size(100, 20);
             this.txtA2Max.TabIndex = 22;
-            this.txtA2Max.Text = "600";
+            this.txtA2Max.Text = "60";
             // 
             // txtA1Max
             // 
-            this.txtA1Max.Location = new System.Drawing.Point(410, 81);
+            this.txtA1Max.Location = new System.Drawing.Point(313, 79);
             this.txtA1Max.Name = "txtA1Max";
             this.txtA1Max.Size = new System.Drawing.Size(100, 20);
             this.txtA1Max.TabIndex = 21;
-            this.txtA1Max.Text = "600";
-            // 
-            // txtA1Min
-            // 
-            this.txtA1Min.Location = new System.Drawing.Point(9, 81);
-            this.txtA1Min.Name = "txtA1Min";
-            this.txtA1Min.Size = new System.Drawing.Size(100, 20);
-            this.txtA1Min.TabIndex = 20;
-            this.txtA1Min.Text = "150";
+            this.txtA1Max.Text = "70";
             // 
             // tbA1
             // 
-            this.tbA1.Location = new System.Drawing.Point(115, 81);
-            this.tbA1.Maximum = 600;
-            this.tbA1.Minimum = 150;
+            this.tbA1.Location = new System.Drawing.Point(18, 79);
+            this.tbA1.Maximum = 90;
+            this.tbA1.Minimum = 70;
             this.tbA1.Name = "tbA1";
             this.tbA1.Size = new System.Drawing.Size(289, 42);
             this.tbA1.TabIndex = 16;
-            this.tbA1.Value = 150;
+            this.tbA1.Value = 70;
+            this.tbA1.ValueChanged += new System.EventHandler(this.tbA1_ValueChanged);
             // 
-            // bttWrite
+            // bttSaveValues
             // 
-            this.bttWrite.Location = new System.Drawing.Point(18, 295);
-            this.bttWrite.Name = "bttWrite";
-            this.bttWrite.Size = new System.Drawing.Size(75, 23);
-            this.bttWrite.TabIndex = 15;
-            this.bttWrite.Text = "write";
-            this.bttWrite.UseVisualStyleBackColor = true;
-            this.bttWrite.Click += new System.EventHandler(this.bttWrite_Click);
+            this.bttSaveValues.Location = new System.Drawing.Point(449, 216);
+            this.bttSaveValues.Name = "bttSaveValues";
+            this.bttSaveValues.Size = new System.Drawing.Size(119, 23);
+            this.bttSaveValues.TabIndex = 35;
+            this.bttSaveValues.Text = "Werte Speichern";
+            this.bttSaveValues.UseVisualStyleBackColor = true;
+            this.bttSaveValues.Click += new System.EventHandler(this.bttSaveValues_Click);
             // 
-            // tbPmwWeite
+            // runSavePoints
             // 
-            this.tbPmwWeite.Location = new System.Drawing.Point(255, 41);
-            this.tbPmwWeite.Name = "tbPmwWeite";
-            this.tbPmwWeite.Size = new System.Drawing.Size(34, 20);
-            this.tbPmwWeite.TabIndex = 34;
-            this.tbPmwWeite.Text = "200";
+            this.runSavePoints.Location = new System.Drawing.Point(449, 253);
+            this.runSavePoints.Name = "runSavePoints";
+            this.runSavePoints.Size = new System.Drawing.Size(119, 23);
+            this.runSavePoints.TabIndex = 36;
+            this.runSavePoints.Text = "Laufen";
+            this.runSavePoints.UseVisualStyleBackColor = true;
+            this.runSavePoints.Click += new System.EventHandler(this.runSavePoints_Click);
             // 
             // I2CModePanel
             // 
@@ -434,15 +410,10 @@
         private System.Windows.Forms.Label runtimeLabel;
         private System.Windows.Forms.Label runStatus;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button bttWrite;
-        private System.Windows.Forms.TextBox txtA4Min;
-        private System.Windows.Forms.TextBox txtA3Min;
-        private System.Windows.Forms.TextBox txtA2Min;
         private System.Windows.Forms.TextBox txtA4Max;
         private System.Windows.Forms.TextBox txtA3Max;
         private System.Windows.Forms.TextBox txtA2Max;
         private System.Windows.Forms.TextBox txtA1Max;
-        private System.Windows.Forms.TextBox txtA1Min;
         private System.Windows.Forms.TrackBar tbA1;
         private System.Windows.Forms.TrackBar tbA4;
         private System.Windows.Forms.TrackBar tbA3;
@@ -461,5 +432,7 @@
         private System.Windows.Forms.CheckedListBox port0Output;
         private System.Windows.Forms.CheckedListBox port0Input;
         private System.Windows.Forms.TextBox tbPmwWeite;
+        private System.Windows.Forms.Button runSavePoints;
+        private System.Windows.Forms.Button bttSaveValues;
     }
 }

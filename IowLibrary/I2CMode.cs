@@ -32,6 +32,7 @@ namespace IowLibary {
             // timeout
             report[3] = 0X00;
 
+            IowKit.Timeout(_device.Handler, 1000);
             return IowKit.Write(_device.Handler, IowPipeSpecialMode, report, IowkitSpecialReportSize) ==
                    IowkitSpecialReportSize;
         }
@@ -107,7 +108,7 @@ namespace IowLibary {
             report[3] = register;
             report[4] = value;
 
-
+           
             IowKit.Write(_device.Handler, IowPipeSpecialMode, report, IowkitSpecialReportSize);
             IowKit.Read(_device.Handler, IowPipeSpecialMode, report, IowkitSpecialReportSize);
             //   IowKit.ReadImmediate(_device.Handler, report);

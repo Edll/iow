@@ -38,8 +38,12 @@ namespace IowLibary.robot {
             _frequenz = (byte)((25000000 / 4096 / frequenz) - 1);
 
             _i2cMode.AddDataToQueue(_i2cAddrs, 0x00, 0x10);
-            _i2cMode.AddDataToQueue(_i2cAddrs, 0xfe, 0x10);
             _i2cMode.AddDataToQueue(_i2cAddrs, 0xfe, _frequenz);
+            _i2cMode.AddDataToQueue(_i2cAddrs, 0x00, 0x01);
+
+            // sleep for 10ms 
+            _i2cMode.AddDataToQueue(_i2cAddrs, 0x00, 0x80);
+
         }
     }
 }
