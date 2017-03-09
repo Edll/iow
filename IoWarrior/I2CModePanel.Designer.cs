@@ -30,6 +30,8 @@
             this.runtimeLabel = new System.Windows.Forms.Label();
             this.runStatus = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.runSavePoints = new System.Windows.Forms.Button();
+            this.bttSaveValues = new System.Windows.Forms.Button();
             this.tbPmwWeite = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.port0selectAll = new System.Windows.Forms.CheckBox();
@@ -47,13 +49,12 @@
             this.tbA4 = new System.Windows.Forms.TrackBar();
             this.tbA3 = new System.Windows.Forms.TrackBar();
             this.tbA2 = new System.Windows.Forms.TrackBar();
-            this.txtA4Max = new System.Windows.Forms.TextBox();
-            this.txtA3Max = new System.Windows.Forms.TextBox();
-            this.txtA2Max = new System.Windows.Forms.TextBox();
-            this.txtA1Max = new System.Windows.Forms.TextBox();
+            this.txtA4 = new System.Windows.Forms.TextBox();
+            this.txtA3 = new System.Windows.Forms.TextBox();
+            this.txtA2 = new System.Windows.Forms.TextBox();
+            this.txtA1 = new System.Windows.Forms.TextBox();
             this.tbA1 = new System.Windows.Forms.TrackBar();
-            this.bttSaveValues = new System.Windows.Forms.Button();
-            this.runSavePoints = new System.Windows.Forms.Button();
+            this.runList = new System.Windows.Forms.ListBox();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -123,6 +124,7 @@
             // panel1
             // 
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.runList);
             this.panel1.Controls.Add(this.runSavePoints);
             this.panel1.Controls.Add(this.bttSaveValues);
             this.panel1.Controls.Add(this.tbPmwWeite);
@@ -132,10 +134,10 @@
             this.panel1.Controls.Add(this.tbA4);
             this.panel1.Controls.Add(this.tbA3);
             this.panel1.Controls.Add(this.tbA2);
-            this.panel1.Controls.Add(this.txtA4Max);
-            this.panel1.Controls.Add(this.txtA3Max);
-            this.panel1.Controls.Add(this.txtA2Max);
-            this.panel1.Controls.Add(this.txtA1Max);
+            this.panel1.Controls.Add(this.txtA4);
+            this.panel1.Controls.Add(this.txtA3);
+            this.panel1.Controls.Add(this.txtA2);
+            this.panel1.Controls.Add(this.txtA1);
             this.panel1.Controls.Add(this.tbA1);
             this.panel1.Controls.Add(this.lbDeviceNumber);
             this.panel1.Controls.Add(this.label1);
@@ -148,6 +150,26 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(854, 557);
             this.panel1.TabIndex = 4;
+            // 
+            // runSavePoints
+            // 
+            this.runSavePoints.Location = new System.Drawing.Point(449, 268);
+            this.runSavePoints.Name = "runSavePoints";
+            this.runSavePoints.Size = new System.Drawing.Size(119, 23);
+            this.runSavePoints.TabIndex = 36;
+            this.runSavePoints.Text = "Laufen";
+            this.runSavePoints.UseVisualStyleBackColor = true;
+            this.runSavePoints.Click += new System.EventHandler(this.runSavePoints_Click);
+            // 
+            // bttSaveValues
+            // 
+            this.bttSaveValues.Location = new System.Drawing.Point(449, 79);
+            this.bttSaveValues.Name = "bttSaveValues";
+            this.bttSaveValues.Size = new System.Drawing.Size(119, 23);
+            this.bttSaveValues.TabIndex = 35;
+            this.bttSaveValues.Text = "Werte Speichern";
+            this.bttSaveValues.UseVisualStyleBackColor = true;
+            this.bttSaveValues.Click += new System.EventHandler(this.bttSaveValues_Click);
             // 
             // tbPmwWeite
             // 
@@ -311,44 +333,48 @@
             // 
             this.tbA2.Location = new System.Drawing.Point(18, 123);
             this.tbA2.Maximum = 100;
-            this.tbA2.Minimum = 60;
+            this.tbA2.Minimum = 20;
             this.tbA2.Name = "tbA2";
             this.tbA2.Size = new System.Drawing.Size(289, 42);
             this.tbA2.TabIndex = 28;
             this.tbA2.Value = 60;
             this.tbA2.ValueChanged += new System.EventHandler(this.tbA2_ValueChanged);
             // 
-            // txtA4Max
+            // txtA4
             // 
-            this.txtA4Max.Location = new System.Drawing.Point(313, 219);
-            this.txtA4Max.Name = "txtA4Max";
-            this.txtA4Max.Size = new System.Drawing.Size(100, 20);
-            this.txtA4Max.TabIndex = 24;
-            this.txtA4Max.Text = "45";
+            this.txtA4.Location = new System.Drawing.Point(313, 219);
+            this.txtA4.Name = "txtA4";
+            this.txtA4.Size = new System.Drawing.Size(33, 20);
+            this.txtA4.TabIndex = 24;
+            this.txtA4.Text = "45";
+            this.txtA4.TextChanged += new System.EventHandler(this.txtA4_TextChanged);
             // 
-            // txtA3Max
+            // txtA3
             // 
-            this.txtA3Max.Location = new System.Drawing.Point(313, 171);
-            this.txtA3Max.Name = "txtA3Max";
-            this.txtA3Max.Size = new System.Drawing.Size(100, 20);
-            this.txtA3Max.TabIndex = 23;
-            this.txtA3Max.Text = "30";
+            this.txtA3.Location = new System.Drawing.Point(313, 171);
+            this.txtA3.Name = "txtA3";
+            this.txtA3.Size = new System.Drawing.Size(33, 20);
+            this.txtA3.TabIndex = 23;
+            this.txtA3.Text = "30";
+            this.txtA3.TextChanged += new System.EventHandler(this.txtA3_TextChanged);
             // 
-            // txtA2Max
+            // txtA2
             // 
-            this.txtA2Max.Location = new System.Drawing.Point(313, 123);
-            this.txtA2Max.Name = "txtA2Max";
-            this.txtA2Max.Size = new System.Drawing.Size(100, 20);
-            this.txtA2Max.TabIndex = 22;
-            this.txtA2Max.Text = "60";
+            this.txtA2.Location = new System.Drawing.Point(313, 123);
+            this.txtA2.Name = "txtA2";
+            this.txtA2.Size = new System.Drawing.Size(33, 20);
+            this.txtA2.TabIndex = 22;
+            this.txtA2.Text = "20";
+            this.txtA2.TextChanged += new System.EventHandler(this.txtA2_TextChanged);
             // 
-            // txtA1Max
+            // txtA1
             // 
-            this.txtA1Max.Location = new System.Drawing.Point(313, 79);
-            this.txtA1Max.Name = "txtA1Max";
-            this.txtA1Max.Size = new System.Drawing.Size(100, 20);
-            this.txtA1Max.TabIndex = 21;
-            this.txtA1Max.Text = "70";
+            this.txtA1.Location = new System.Drawing.Point(313, 79);
+            this.txtA1.Name = "txtA1";
+            this.txtA1.Size = new System.Drawing.Size(33, 20);
+            this.txtA1.TabIndex = 21;
+            this.txtA1.Text = "70";
+            this.txtA1.TextChanged += new System.EventHandler(this.txtA1_TextChanged);
             // 
             // tbA1
             // 
@@ -361,25 +387,14 @@
             this.tbA1.Value = 70;
             this.tbA1.ValueChanged += new System.EventHandler(this.tbA1_ValueChanged);
             // 
-            // bttSaveValues
+            // runList
             // 
-            this.bttSaveValues.Location = new System.Drawing.Point(449, 216);
-            this.bttSaveValues.Name = "bttSaveValues";
-            this.bttSaveValues.Size = new System.Drawing.Size(119, 23);
-            this.bttSaveValues.TabIndex = 35;
-            this.bttSaveValues.Text = "Werte Speichern";
-            this.bttSaveValues.UseVisualStyleBackColor = true;
-            this.bttSaveValues.Click += new System.EventHandler(this.bttSaveValues_Click);
-            // 
-            // runSavePoints
-            // 
-            this.runSavePoints.Location = new System.Drawing.Point(449, 253);
-            this.runSavePoints.Name = "runSavePoints";
-            this.runSavePoints.Size = new System.Drawing.Size(119, 23);
-            this.runSavePoints.TabIndex = 36;
-            this.runSavePoints.Text = "Laufen";
-            this.runSavePoints.UseVisualStyleBackColor = true;
-            this.runSavePoints.Click += new System.EventHandler(this.runSavePoints_Click);
+            this.runList.FormattingEnabled = true;
+            this.runList.Location = new System.Drawing.Point(30, 268);
+            this.runList.Name = "runList";
+            this.runList.ScrollAlwaysVisible = true;
+            this.runList.Size = new System.Drawing.Size(383, 264);
+            this.runList.TabIndex = 37;
             // 
             // I2CModePanel
             // 
@@ -410,10 +425,10 @@
         private System.Windows.Forms.Label runtimeLabel;
         private System.Windows.Forms.Label runStatus;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox txtA4Max;
-        private System.Windows.Forms.TextBox txtA3Max;
-        private System.Windows.Forms.TextBox txtA2Max;
-        private System.Windows.Forms.TextBox txtA1Max;
+        private System.Windows.Forms.TextBox txtA4;
+        private System.Windows.Forms.TextBox txtA3;
+        private System.Windows.Forms.TextBox txtA2;
+        private System.Windows.Forms.TextBox txtA1;
         private System.Windows.Forms.TrackBar tbA1;
         private System.Windows.Forms.TrackBar tbA4;
         private System.Windows.Forms.TrackBar tbA3;
@@ -434,5 +449,6 @@
         private System.Windows.Forms.TextBox tbPmwWeite;
         private System.Windows.Forms.Button runSavePoints;
         private System.Windows.Forms.Button bttSaveValues;
+        private System.Windows.Forms.ListBox runList;
     }
 }

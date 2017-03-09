@@ -73,10 +73,10 @@ namespace IoWarrior {
 
             _pmw.SetFrequenz(50);
 
-            achse.Move(0, Convert.ToInt32(txtA1Max.Text));
-            achse.Move(1, Convert.ToInt32(txtA2Max.Text));
-            achse.Move(2, Convert.ToInt32(txtA3Max.Text));
-            achse.Move(3, Convert.ToInt32(txtA4Max.Text));
+            achse.Move(0, Convert.ToInt32(txtA1.Text));
+            achse.Move(1, Convert.ToInt32(txtA2.Text));
+            achse.Move(2, Convert.ToInt32(txtA3.Text));
+            achse.Move(3, Convert.ToInt32(txtA4.Text));
         }
 
         private void ClearDevice() {
@@ -90,22 +90,22 @@ namespace IoWarrior {
 
         private void tbA1_ValueChanged(object sender, EventArgs e) {
             achse.Move(0,tbA1.Value);
-            txtA1Max.Text = (tbA1.Value).ToString();
+            txtA1.Text = (tbA1.Value).ToString();
         }
 
         private void tbA2_ValueChanged(object sender, EventArgs e) {
             achse.Move(1,tbA2.Value);
-            txtA2Max.Text = (tbA2.Value).ToString();
+            txtA2.Text = (tbA2.Value).ToString();
         }
 
         private void tbA3_ValueChanged(object sender, EventArgs e) {
             achse.Move(2,tbA3.Value);
-            txtA3Max.Text = (tbA3.Value).ToString();
+            txtA3.Text = (tbA3.Value).ToString();
         }
 
         private void tbA4_ValueChanged(object sender, EventArgs e) {
             achse.Move(3,tbA4.Value);
-            txtA4Max.Text = (tbA4.Value).ToString();
+            txtA4.Text = (tbA4.Value).ToString();
         }
 
         private void bttSetFre_Click(object sender, EventArgs e) {
@@ -185,7 +185,11 @@ namespace IoWarrior {
         }
 
         private void bttSaveValues_Click(object sender, EventArgs e) {
-            saveList.Add(achse.ReadOutLastPoints());
+            IDictionary<int, Achse> lastPoint = achse.ReadOutLastPoints();
+            saveList.Add(lastPoint);
+            foreach (KeyValuePair<int, Achse> pair in lastPoint) {
+                runList.Items.Add(pair.Value.ToString());
+            }
         }
 
         private void runSavePoints_Click(object sender, EventArgs e) {
@@ -194,6 +198,33 @@ namespace IoWarrior {
                     achse.Move(valuepair.Value.AchsenNummer, valuepair.Value.Value);
                 }
 
+            }
+        }
+
+        private void txtA4_TextChanged(object sender, EventArgs e) {
+            achse.Move(3, ConvertInput(txtA1));
+        }
+
+        private void txtA3_TextChanged(object sender, EventArgs e) {
+            achse.Move(2, ConvertInput(txtA1));
+        }
+
+        private void txtA2_TextChanged(object sender, EventArgs e) {
+            achse.Move(1, ConvertInput(txtA1));
+        }
+
+        private void txtA1_TextChanged(object sender, EventArgs e) {
+            achse.Move(0, ConvertInput(txtA1));
+        }
+
+        private int ConvertInput(TextBox textBoxt) {
+            try {
+                textBoxt.BackColor = Color.White;
+                return Convert.ToInt32(textBoxt.Text);
+            }
+            catch (ArgumentException) {
+                textBoxt.BackColor = Color.Crimson;
+                return -1;
             }
         }
     }

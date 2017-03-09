@@ -19,8 +19,8 @@ namespace IowLibary.robot {
         private byte _registerOffL;
         private byte _registerOffH;
 
-        private int _value;
-        private int _achsenNummer;
+        public int Value { get; set; }
+        public int AchsenNummer { get; set; }
 
         private IDictionary<int, Achse> _lastPoints = new Dictionary<int, Achse>();
 
@@ -29,12 +29,13 @@ namespace IowLibary.robot {
         /// </summary>
         /// <param name="device">Device welches genutzt werden soll</param>
         /// <param name="i2cAdress">I2C Adresse auf dem Bus</param>
-        public Achse(Device device, byte  i2cAddrs) {
+        public Achse(Device device, byte i2cAddrs) {
             this._device = device;
             this._i2CAddrs = i2cAddrs;
             if (_device.Modes is I2CMode) {
                 _i2CMode = _device.Modes as I2CMode;
-            } else {
+            }
+            else {
                 _device.AddDeviceError("Device ist nicht im I2C Mode");
             }
         }
@@ -45,38 +46,66 @@ namespace IowLibary.robot {
         /// <param name="value"></param>
         /// <param name="achsenNummer"></param>
         public void Move(int achsenNummer, int value) {
-            _achsenNummer = achsenNummer;
-            _value = value;
-            if (_lastPoints.ContainsKey(achsenNummer)) {
-                _lastPoints[achsenNummer] = this.MemberwiseClone() as Achse;
-            } else {
-                _lastPoints.Add(achsenNummer, this.MemberwiseClone() as Achse);
+            AchsenNummer = achsenNummer;
+            Value = value;
+
+ 
+
+            int stepPoints = 2;
+            int startPosition = 0;
+            Achse lastPoint;
+            _lastPoints.TryGetValue( achsenNummer, out lastPoint);
+            if (lastPoint != null) {
+                startPosition = lastPoint.Value;
+            }
+            int diff = startPosition - value;
+            if (diff < 0) {
+                diff = diff*-1;
+            }
+            int steps = diff/stepPoints;
+
+            for (int i = startPosition; i <= value; i = i + stepPoints) {
+
+
+                int maxRange = Max - Min;
+                int moveRange = (maxRange*i/100) + Min;
+                WriteToI2C(Min, moveRange);
             }
 
-            int maxRange = Max - Min;
-            int moveRange = (maxRange * value / 100) + Min;
-            WriteToI2C(Min, moveRange);
+            AddAchseToLastPoints(achsenNummer);
+        }
+
+        private void AddAchseToLastPoints(int achsenNummer) {
+            if (_lastPoints.ContainsKey(achsenNummer)) {
+                _lastPoints[achsenNummer] = this.MemberwiseClone() as Achse;
+            }
+            else {
+                _lastPoints.Add(achsenNummer, this.MemberwiseClone() as Achse);
+            }
         }
 
         /// <summary>
         /// Gibt die letzten angefahrenen Punkte aller Achsen die Benutzt worden sind zurück.
         /// </summary>
         /// <returns>Eine Dict aller zuletzt angefahrenen Achsen</returns>
-        public IDictionary<int, Achse> ReadOutLastPoints()
-        {
+        public IDictionary<int, Achse> ReadOutLastPoints() {
             IDictionary<int, Achse> result = _lastPoints;
             _lastPoints = new Dictionary<int, Achse>();
             return result;
         }
 
+        public string ToString() {
+            return "Achse: " + AchsenNummer + " Value: ";
+        }
+
         private void WriteToI2C(int on, int off) {
-            CalcServoAdress(_achsenNummer);
+            CalcServoAdress(AchsenNummer);
 
             // Berechnen der Werte für die Register
-            byte on1 = (byte)(on & 0xff);
-            byte on2 = (byte)(on >> 8);
-            byte off1 = (byte)(off & 0xff);
-            byte off2 = (byte)(off >> 8);
+            byte on1 = (byte) (on & 0xff);
+            byte on2 = (byte) (on >> 8);
+            byte off1 = (byte) (off & 0xff);
+            byte off2 = (byte) (off >> 8);
 
             _i2CMode.AddDataToQueue(_i2CAddrs, _registerOnL, on1);
             _i2CMode.AddDataToQueue(_i2CAddrs, _registerOnH, on2);
@@ -85,10 +114,10 @@ namespace IowLibary.robot {
         }
 
         private void CalcServoAdress(int servoNumber) {
-            _registerOnL = (byte)((servoNumber * 4) + 6);
-            _registerOnH = (byte)((servoNumber * 4) + 7);
-            _registerOffL = (byte)((servoNumber * 4) + 8);
-            _registerOffH = (byte)((servoNumber * 4) + 9);
+            _registerOnL = (byte) ((servoNumber*4) + 6);
+            _registerOnH = (byte) ((servoNumber*4) + 7);
+            _registerOffL = (byte) ((servoNumber*4) + 8);
+            _registerOffH = (byte) ((servoNumber*4) + 9);
         }
     }
 }
