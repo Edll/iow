@@ -22,7 +22,7 @@ namespace IowLibary.robot {
         public int Value { get; set; }
         public int AchsenNummer { get; set; }
 
-        private IDictionary<int, Achse> _lastPoints = new Dictionary<int, Achse>();
+        private IDictionary<int, int> _lastPoints = new Dictionary<int, int>();
 
         /// <summary>
         /// Neue Instanz des PMW Moduls
@@ -46,17 +46,23 @@ namespace IowLibary.robot {
         /// <param name="value"></param>
         /// <param name="achsenNummer"></param>
         public void Move(int achsenNummer, int value) {
+            if (value == -1) {
+                Console.WriteLine("Value == -1");
+                return;
+          
+            }
+
             AchsenNummer = achsenNummer;
             Value = value;
 
  
 
-            int stepPoints = 2;
+            int stepPoints = 1;
             int startPosition = 0;
-            Achse lastPoint;
+            Int32 lastPoint;
             _lastPoints.TryGetValue( achsenNummer, out lastPoint);
             if (lastPoint != null) {
-                startPosition = lastPoint.Value;
+                startPosition = lastPoint;
             }
             int diff = startPosition - value;
             if (diff < 0) {
@@ -64,7 +70,7 @@ namespace IowLibary.robot {
             }
             int steps = diff/stepPoints;
 
-            for (int i = startPosition; i <= value; i = i + stepPoints) {
+            for (int i = startPosition; i <= value; i = i + steps) {
 
 
                 int maxRange = Max - Min;
@@ -72,15 +78,20 @@ namespace IowLibary.robot {
                 WriteToI2C(Min, moveRange);
             }
 
-            AddAchseToLastPoints(achsenNummer);
+            int maxRange2 = Max - Min;
+            int moveRange2 = (maxRange2 * value / 100) + Min;
+            WriteToI2C(Min, moveRange2);
+
+            // bring uns in einen Speicher überlauf???
+           // AddAchseToLastPoints(achsenNummer);
         }
 
         private void AddAchseToLastPoints(int achsenNummer) {
             if (_lastPoints.ContainsKey(achsenNummer)) {
-                _lastPoints[achsenNummer] = this.MemberwiseClone() as Achse;
+                _lastPoints[achsenNummer] = Value;
             }
             else {
-                _lastPoints.Add(achsenNummer, this.MemberwiseClone() as Achse);
+                _lastPoints.Add(achsenNummer, Value);
             }
         }
 
@@ -88,14 +99,14 @@ namespace IowLibary.robot {
         /// Gibt die letzten angefahrenen Punkte aller Achsen die Benutzt worden sind zurück.
         /// </summary>
         /// <returns>Eine Dict aller zuletzt angefahrenen Achsen</returns>
-        public IDictionary<int, Achse> ReadOutLastPoints() {
-            IDictionary<int, Achse> result = _lastPoints;
-            _lastPoints = new Dictionary<int, Achse>();
+        public IDictionary<int, int> ReadOutLastPoints() {
+            IDictionary<int, int> result = _lastPoints;
+            _lastPoints = new Dictionary<int, int>();
             return result;
         }
 
         public string ToString() {
-            return "Achse: " + AchsenNummer + " Value: ";
+            return "Achse: " + AchsenNummer + " Value: " + Value;
         }
 
         private void WriteToI2C(int on, int off) {
@@ -106,7 +117,7 @@ namespace IowLibary.robot {
             byte on2 = (byte) (on >> 8);
             byte off1 = (byte) (off & 0xff);
             byte off2 = (byte) (off >> 8);
-
+            Console.WriteLine("Write To ic2");
             _i2CMode.AddDataToQueue(_i2CAddrs, _registerOnL, on1);
             _i2CMode.AddDataToQueue(_i2CAddrs, _registerOnH, on2);
             _i2CMode.AddDataToQueue(_i2CAddrs, _registerOffL, off1);

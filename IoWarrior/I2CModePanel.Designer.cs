@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             this.bttStop = new System.Windows.Forms.Button();
             this.bttRun = new System.Windows.Forms.Button();
             this.lbDeviceNumber = new System.Windows.Forms.Label();
@@ -55,6 +56,12 @@
             this.txtA1 = new System.Windows.Forms.TextBox();
             this.tbA1 = new System.Windows.Forms.TrackBar();
             this.runList = new System.Windows.Forms.ListBox();
+            this.txtOut1 = new System.Windows.Forms.TextBox();
+            this.txtOut2 = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.txtOut3 = new System.Windows.Forms.TextBox();
+            this.txtOut4 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -124,6 +131,11 @@
             // panel1
             // 
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.txtOut4);
+            this.panel1.Controls.Add(this.txtOut3);
+            this.panel1.Controls.Add(this.txtOut2);
+            this.panel1.Controls.Add(this.txtOut1);
             this.panel1.Controls.Add(this.runList);
             this.panel1.Controls.Add(this.runSavePoints);
             this.panel1.Controls.Add(this.bttSaveValues);
@@ -342,39 +354,39 @@
             // 
             // txtA4
             // 
-            this.txtA4.Location = new System.Drawing.Point(313, 219);
+            this.txtA4.Location = new System.Drawing.Point(365, 219);
             this.txtA4.Name = "txtA4";
             this.txtA4.Size = new System.Drawing.Size(33, 20);
             this.txtA4.TabIndex = 24;
             this.txtA4.Text = "45";
-            this.txtA4.TextChanged += new System.EventHandler(this.txtA4_TextChanged);
+       
             // 
             // txtA3
             // 
-            this.txtA3.Location = new System.Drawing.Point(313, 171);
+            this.txtA3.Location = new System.Drawing.Point(365, 171);
             this.txtA3.Name = "txtA3";
             this.txtA3.Size = new System.Drawing.Size(33, 20);
             this.txtA3.TabIndex = 23;
             this.txtA3.Text = "30";
-            this.txtA3.TextChanged += new System.EventHandler(this.txtA3_TextChanged);
+       
             // 
             // txtA2
             // 
-            this.txtA2.Location = new System.Drawing.Point(313, 123);
+            this.txtA2.Location = new System.Drawing.Point(365, 123);
             this.txtA2.Name = "txtA2";
             this.txtA2.Size = new System.Drawing.Size(33, 20);
             this.txtA2.TabIndex = 22;
             this.txtA2.Text = "20";
-            this.txtA2.TextChanged += new System.EventHandler(this.txtA2_TextChanged);
+         
             // 
             // txtA1
             // 
-            this.txtA1.Location = new System.Drawing.Point(313, 79);
+            this.txtA1.Location = new System.Drawing.Point(365, 79);
             this.txtA1.Name = "txtA1";
             this.txtA1.Size = new System.Drawing.Size(33, 20);
             this.txtA1.TabIndex = 21;
             this.txtA1.Text = "70";
-            this.txtA1.TextChanged += new System.EventHandler(this.txtA1_TextChanged);
+    
             // 
             // tbA1
             // 
@@ -395,6 +407,53 @@
             this.runList.ScrollAlwaysVisible = true;
             this.runList.Size = new System.Drawing.Size(383, 264);
             this.runList.TabIndex = 37;
+            // 
+            // txtOut1
+            // 
+            this.txtOut1.Enabled = false;
+            this.txtOut1.Location = new System.Drawing.Point(304, 81);
+            this.txtOut1.Name = "txtOut1";
+            this.txtOut1.Size = new System.Drawing.Size(43, 20);
+            this.txtOut1.TabIndex = 38;
+            // 
+            // txtOut2
+            // 
+            this.txtOut2.Enabled = false;
+            this.txtOut2.Location = new System.Drawing.Point(304, 123);
+            this.txtOut2.Name = "txtOut2";
+            this.txtOut2.Size = new System.Drawing.Size(43, 20);
+            this.txtOut2.TabIndex = 39;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // txtOut3
+            // 
+            this.txtOut3.Enabled = false;
+            this.txtOut3.Location = new System.Drawing.Point(304, 171);
+            this.txtOut3.Name = "txtOut3";
+            this.txtOut3.Size = new System.Drawing.Size(43, 20);
+            this.txtOut3.TabIndex = 40;
+            // 
+            // txtOut4
+            // 
+            this.txtOut4.Enabled = false;
+            this.txtOut4.Location = new System.Drawing.Point(304, 219);
+            this.txtOut4.Name = "txtOut4";
+            this.txtOut4.Size = new System.Drawing.Size(43, 20);
+            this.txtOut4.TabIndex = 41;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(429, 141);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 42;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // I2CModePanel
             // 
@@ -450,5 +509,11 @@
         private System.Windows.Forms.Button runSavePoints;
         private System.Windows.Forms.Button bttSaveValues;
         private System.Windows.Forms.ListBox runList;
+        private System.Windows.Forms.TextBox txtOut4;
+        private System.Windows.Forms.TextBox txtOut3;
+        private System.Windows.Forms.TextBox txtOut2;
+        private System.Windows.Forms.TextBox txtOut1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.Button button1;
     }
 }

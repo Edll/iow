@@ -73,24 +73,35 @@ namespace IowLibary {
             IList<I2CData> removeList = new List<I2CData>();
 
             // Durch die Warteschleife der Daten gehen
-            foreach (I2CData i2CData in dataQueue.ToList()) {
-                bool result = WriteSingelRegister(i2CData.Adress, i2CData.Register, i2CData.Value);
-                if (result) {
-                    removeList.Add(i2CData);
+            try {
+                foreach (I2CData i2CData in dataQueue.ToList()) {
+                    bool result = WriteSingelRegister(i2CData.Adress, i2CData.Register, i2CData.Value);
+                    if (result) {
+                        removeList.Add(i2CData);
+                    }
                 }
-            }
 
-            // Alle geschriebenen Elemente aus der Warteschleife entfernen
-            foreach (I2CData i2CData in removeList) {
-                try {
-                    dataQueue.Remove(i2CData);
-                } catch (Exception) {
-                    _device.Log.AddErrorLog(_device,
-                        "Fehler beim entfernen von Element aus der Data Queue, alles wurde zurück gesetzt");
-                    dataQueue.Clear();
-                    return false;
+
+                // Alle geschriebenen Elemente aus der Warteschleife entfernen
+                foreach (I2CData i2CData in removeList) {
+                    try {
+                        dataQueue.Remove(i2CData);
+                    }
+                    catch (Exception) {
+                        _device.Log.AddErrorLog(_device,
+                            "Fehler beim entfernen von Element aus der Data Queue, alles wurde zurück gesetzt");
+                        dataQueue.Clear();
+                        return false;
+                    }
                 }
             }
+            catch (
+                ArgumentException) {
+                dataQueue = new List<I2CData>();
+                removeList = new List<I2CData>();
+                return false;
+            }
+            dataQueue = new List<I2CData>();
             removeList.Clear();
             return true;
         }
@@ -108,7 +119,7 @@ namespace IowLibary {
             report[3] = register;
             report[4] = value;
 
-           
+
             IowKit.Write(_device.Handler, IowPipeSpecialMode, report, IowkitSpecialReportSize);
             IowKit.Read(_device.Handler, IowPipeSpecialMode, report, IowkitSpecialReportSize);
             //   IowKit.ReadImmediate(_device.Handler, report);
@@ -138,17 +149,17 @@ namespace IowLibary {
             var data = new byte[_device.IoReportsSize];
             var ok = IowKit.ReadImmediate(_device.Handler, data);
             if (!ok) {
-
                 data = ReadDeviceImmediate();
             }
             _writeLoopCounter = 0;
-            if (data != null) { return data; }
+            if (data != null) {
+                return data;
+            }
 
             _device.AddDeviceError("Device ist offenbar nicht mehr angeschlossen");
             return new byte[_device.IoReportsSize];
         }
     }
-
 
 
     class I2CData {

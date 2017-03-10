@@ -28,7 +28,7 @@ namespace IoWarrior {
         private PMW _pmw;
         private Achse achse;
 
-        private IList<IDictionary<int, Achse>> saveList = new List<IDictionary<int, Achse>>();
+        private IList<IDictionary<int, int>> saveList = new List<IDictionary<int, int>>();
 
         /// <summary>
         /// Panel to show the IOMode
@@ -73,10 +73,10 @@ namespace IoWarrior {
 
             _pmw.SetFrequenz(50);
 
-            achse.Move(0, Convert.ToInt32(txtA1.Text));
-            achse.Move(1, Convert.ToInt32(txtA2.Text));
-            achse.Move(2, Convert.ToInt32(txtA3.Text));
-            achse.Move(3, Convert.ToInt32(txtA4.Text));
+            achse.Move(0, 75);
+            achse.Move(1, 50);
+            achse.Move(2, 50);
+            achse.Move(3, 60);
         }
 
         private void ClearDevice() {
@@ -90,22 +90,22 @@ namespace IoWarrior {
 
         private void tbA1_ValueChanged(object sender, EventArgs e) {
             achse.Move(0,tbA1.Value);
-            txtA1.Text = (tbA1.Value).ToString();
+            txtOut1.Text = (tbA1.Value).ToString();
         }
 
         private void tbA2_ValueChanged(object sender, EventArgs e) {
             achse.Move(1,tbA2.Value);
-            txtA2.Text = (tbA2.Value).ToString();
+            txtOut2.Text = (tbA2.Value).ToString();
         }
 
         private void tbA3_ValueChanged(object sender, EventArgs e) {
             achse.Move(2,tbA3.Value);
-            txtA3.Text = (tbA3.Value).ToString();
+            txtOut3.Text = (tbA3.Value).ToString();
         }
 
         private void tbA4_ValueChanged(object sender, EventArgs e) {
             achse.Move(3,tbA4.Value);
-            txtA4.Text = (tbA4.Value).ToString();
+            txtOut4.Text = (tbA4.Value).ToString();
         }
 
         private void bttSetFre_Click(object sender, EventArgs e) {
@@ -185,9 +185,9 @@ namespace IoWarrior {
         }
 
         private void bttSaveValues_Click(object sender, EventArgs e) {
-            IDictionary<int, Achse> lastPoint = achse.ReadOutLastPoints();
+            IDictionary<int, int> lastPoint = achse.ReadOutLastPoints();
             saveList.Add(lastPoint);
-            foreach (KeyValuePair<int, Achse> pair in lastPoint) {
+            foreach (KeyValuePair<int, int> pair in lastPoint) {
                 runList.Items.Add(pair.Value.ToString());
             }
         }
@@ -201,31 +201,27 @@ namespace IoWarrior {
             }
         }
 
-        private void txtA4_TextChanged(object sender, EventArgs e) {
-            achse.Move(3, ConvertInput(txtA1));
-        }
-
-        private void txtA3_TextChanged(object sender, EventArgs e) {
-            achse.Move(2, ConvertInput(txtA1));
-        }
-
-        private void txtA2_TextChanged(object sender, EventArgs e) {
-            achse.Move(1, ConvertInput(txtA1));
-        }
-
-        private void txtA1_TextChanged(object sender, EventArgs e) {
-            achse.Move(0, ConvertInput(txtA1));
-        }
-
         private int ConvertInput(TextBox textBoxt) {
             try {
                 textBoxt.BackColor = Color.White;
-                return Convert.ToInt32(textBoxt.Text);
+                if (textBoxt.Text == null) {
+                    return -1;
+                }else if (Convert.ToInt32(textBoxt.Text) >= 99) {
+                    return -1;
+                }
+                return Convert.ToInt32(textBoxt.Text); 
             }
-            catch (ArgumentException) {
+            catch (FormatException) {
                 textBoxt.BackColor = Color.Crimson;
                 return -1;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e) {
+            achse.Move(0, ConvertInput(txtA1));
+            achse.Move(1, ConvertInput(txtA2));
+            achse.Move(2, ConvertInput(txtA3));
+            achse.Move(3, ConvertInput(txtA4));
         }
     }
 }
