@@ -46,7 +46,8 @@ namespace IowLibary.robot {
         /// <param name="value"></param>
         /// <param name="achsenNummer"></param>
         public void Move(int achsenNummer, int value) {
-            if (value == -1) {
+            // wenn 0 dann schleife ewig!
+            if (value <= 0) {
                 Console.WriteLine("Value == -1");
                 return;
           
@@ -80,7 +81,7 @@ namespace IowLibary.robot {
 
             int maxRange2 = Max - Min;
             int moveRange2 = (maxRange2 * value / 100) + Min;
-            WriteToI2C(Min, moveRange2);
+       //     WriteToI2C(Min, moveRange2);
 
             // bring uns in einen Speicher überlauf???
            // AddAchseToLastPoints(achsenNummer);
