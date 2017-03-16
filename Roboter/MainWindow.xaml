@@ -1,0 +1,65 @@
+﻿<Window x:Class="Roboter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Roboter"
+        mc:Ignorable="d"
+        Title="RoboterControl" Height="582.681" Width="1015.075">
+    <Grid RenderTransformOrigin="0.506,0.628">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Menu x:Name="menu" 
+              HorizontalAlignment="Left" 
+              Height="19.833" 
+              VerticalAlignment="Top" 
+              Width="1007.075">
+            
+            <MenuItem Header="_Datei">
+                <MenuItem x:Name="MenuClose" Header="_Beenden" Click="MenuClose_Click" />
+            </MenuItem>
+            <MenuItem Header="_Bearbeiten">
+                <MenuItem Header="_Ausschneiden" Command="Cut" />
+                <MenuItem Header="_Kopieren" Command="Copy" />
+                <MenuItem Header="_Einfügen" Command="Paste" />
+            </MenuItem>
+            <MenuItem x:Name="MenuConnectIow" Header="_Verbinden" Click="MenuConnectIow_Click" />
+            <MenuItem x:Name="MenuCloseIow" Header="_Schließen" Click="MenuCloseIow_Click" />
+            <MenuItem Header="_Hilfe">
+                <MenuItem Header="_Hilfe" />
+                <MenuItem Header="_Über" />
+            </MenuItem>
+        </Menu>
+        <GridSplitter
+            ResizeDirection="Rows"
+            Grid.Row="2" Grid.Column="0"
+            Width="Auto"
+            Height="5"
+            HorizontalAlignment="Stretch"
+            Margin="0" />
+
+        <TabControl x:Name="LogTab" HorizontalAlignment="Left" Height="Auto" Margin="0"
+                    VerticalAlignment="Top" Width="1007.075" Grid.ColumnSpan="1" Grid.Row="3">
+            
+            <TabItem Header="_Iow Details">
+                <Grid Background="#FFE5E5E5" />
+            </TabItem>
+            <TabItem Header="_Event Log">
+                <Grid Background="#FFE5E5E5" />
+            </TabItem>
+            <TabItem Header="_Error Log">
+                <Grid Background="#FFE5E5E5" />
+            </TabItem>
+        </TabControl>
+
+
+    </Grid>
+</Window>
