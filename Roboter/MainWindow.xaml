@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
         
         <Menu x:Name="menu" 
-              HorizontalAlignment="Left" 
+            HorizontalAlignment="Stretch"
               Height="19.833" 
               VerticalAlignment="Top" 
               Width="1007.075">
@@ -46,8 +46,8 @@
             HorizontalAlignment="Stretch"
             Margin="0" />
 
-        <TabControl x:Name="LogTab" HorizontalAlignment="Left" Height="Auto" Margin="0"
-                    VerticalAlignment="Top" Width="1007.075" Grid.ColumnSpan="1" Grid.Row="3">
+        <TabControl x:Name="LogTab" HorizontalAlignment="Stretch" Height="Auto" Margin="0"
+                    VerticalAlignment="Stretch" Width="1007.075" Grid.ColumnSpan="1" Grid.Row="3">
             
             <TabItem Header="_Iow Details">
                 <Grid Background="#FFE5E5E5" />
