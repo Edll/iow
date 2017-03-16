@@ -33,5 +33,8 @@ namespace Roboter {
         private void MenuClose_Click(object sender, RoutedEventArgs e) {
            // TODO Schliesen des Forms
         }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e) {
+        }
     }
 }
