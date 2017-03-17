@@ -56,6 +56,12 @@ namespace Roboter {
         private void BttAktiv_Click(object sender, RoutedEventArgs e) {
             IsAktiv = !IsAktiv;
             CheckIsAktiv.IsChecked = IsAktiv;
+            if (IsAktiv) {
+                BttAktiv.Content = "Deaktivieren";
+            }
+            else {
+                BttAktiv.Content = "Aktivieren";
+            }
         }
 
         private void CheckEndPosition_Checked(object sender, RoutedEventArgs e) {
