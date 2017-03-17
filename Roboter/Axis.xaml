@@ -47,7 +47,7 @@
                         Margin="5,5,5,5"
                         Grid.RowSpan="2"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Top" />
+                        VerticalAlignment="Top" Click="BttAktiv_Click" />
 
                 <CheckBox x:Name="CheckIsAktiv"
                           Content="Aktiv"
@@ -57,19 +57,19 @@
                           VerticalAlignment="Top"
                           Grid.RowSpan="2"
                           IsEnabled="False"
+                           Foreground="Black"
                           Margin="90,5,5,5" />
-
+                <Grid Name="GridCheckEndPosition"   Grid.Row="0"
+                          Grid.Column="0"
+                          Grid.RowSpan="2"  Margin="90,25,5,5">
                 <CheckBox x:Name="CheckEndPosition"
                           Content="Endlage erreicht"
                           Height="13"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
-                          Margin="90,25,5,5"
-                          Grid.Row="0"
-                          Grid.Column="0"
-                          Grid.RowSpan="2"
-                          IsEnabled="False" />
-
+                          Foreground="Black"
+                          IsEnabled="False" Checked="CheckEndPosition_Checked" Unchecked="CheckEndPosition_Unchecked" />
+                </Grid>
                 <Slider x:Name="SliderManual"
                         Height="23"
                         Width="250"
@@ -81,7 +81,7 @@
                         TickFrequency="36"
                         HorizontalAlignment="Left"
                         Grid.ColumnSpan="2"
-                        Cursor="ScrollWE" SmallChange="1" />
+                        Cursor="ScrollWE" SmallChange="1" ValueChanged="SliderManual_ValueChanged" />
 
                 <TextBox x:Name="TxtManualValue"
                          Height="23"
@@ -92,7 +92,7 @@
                          Grid.Row="2"
                          Grid.Column="3"
                          MaxLength="3"
-                         MaxLines="1" />
+                         MaxLines="1" KeyUp="TxtManualValue_KeyUp" />
 
 
                 <TextBox x:Name="TxtActualValue"

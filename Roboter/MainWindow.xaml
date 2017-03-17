@@ -103,10 +103,10 @@
             <Button x:Name="button" Content="Achsen Einlesen" Grid.Column="3" HorizontalAlignment="Left"
                     Margin="10,10,0,0" VerticalAlignment="Top" Width="Auto" />
             
-            <local:Axis Grid.Column="3" Margin="0,0,0,0" Grid.Row="1"/>
-            <local:Axis Grid.Column="3" Margin="0,0,0,0" Grid.Row="2"/>
-            <local:Axis Grid.Column="3" Margin="0,0,0,0" Grid.Row="3"/>
-            <local:Axis Grid.Column="3" Margin="0,0,0,0" Grid.Row="4"/>
+            <local:Axis x:Name="Axis1" Grid.Column="3" Margin="0,0,0,0" Grid.Row="1"/>
+            <local:Axis x:Name="Axis2" Grid.Column="3" Margin="0,0,0,0" Grid.Row="2"/>
+            <local:Axis x:Name="Axis3" Grid.Column="3" Margin="0,0,0,0" Grid.Row="3"/>
+            <local:Axis x:Name="Axis4" Grid.Column="3" Margin="0,0,0,0" Grid.Row="4"/>
         </Grid>
 
         <GridSplitter

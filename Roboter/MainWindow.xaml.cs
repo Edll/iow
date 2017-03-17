@@ -19,6 +19,9 @@ namespace Roboter {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+
+            Axis1.MaximalValue = 360;
+            Axis1.MinimalValue = 0;
         }
 
 
