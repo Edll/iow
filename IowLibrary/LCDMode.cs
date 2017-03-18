@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using IowLibary.DllWapper;
+using Roboter.DllWapper;
 
-namespace IowLibary {
+namespace Roboter {
     /// <summary>
     /// LCDMode representation for LCD Mode current Only for KSO076B Driver
     /// </summary>

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace IowLibary {
+namespace Roboter {
     namespace DllWapper {
         /// <summary>
         /// Wapper for CodeMercs dll.

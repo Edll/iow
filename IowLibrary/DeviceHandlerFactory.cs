@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 
-namespace IowLibary {
+namespace Roboter {
     /// <summary>
     /// Controlls and Handel Threads for the DeviceManager.
     /// </summary>

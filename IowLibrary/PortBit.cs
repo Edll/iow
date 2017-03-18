@@ -1,7 +1,7 @@
 ﻿using System;
-using IowLibary.DllWapper;
+using Roboter.DllWapper;
 
-namespace IowLibary {
+namespace Roboter {
     /// <summary>
     /// Bit change event delegater
     /// </summary>

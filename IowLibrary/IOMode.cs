@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IowLibary.DllWapper;
+using Roboter.DllWapper;
 
-namespace IowLibary {
+namespace Roboter {
     /// <summary>
     /// Mode for standard I/O funktion of the device Ports
     /// </summary>

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace IowLibary.robot {
+﻿namespace Roboter.Control {
 
     /// <summary>
     /// Steuerung von PMW Modulen über I2C

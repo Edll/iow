@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 
-namespace IowLibary.robot {
+namespace Roboter.Control {
     public class Achse {
         private const int Min = 150;
         private const int Max = 600;

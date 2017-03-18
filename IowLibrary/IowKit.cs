@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using IowLibary.DllWapper;
+using Roboter.DllWapper;
 
-namespace IowLibary
+namespace Roboter
 {
     /// <summary>
     /// IowKit calls methods from the DllWapper class. It will be Warp input 

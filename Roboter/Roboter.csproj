@@ -59,8 +59,8 @@
     <Compile Include="GUI\SourceCodeEditor.xaml.cs">
       <DependentUpon>SourceCodeEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="robot\Achse.cs" />
-    <Compile Include="robot\PMW.cs" />
+    <Compile Include="Control\Achse.cs" />
+    <Compile Include="Control\PMW.cs" />
     <Page Include="GUI\Axis.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,6 +129,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Ninja Head Filled-100.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IowLibrary\IowLibary.csproj">
+      <Project>{c2606d6f-db64-4ba3-9139-be9e63139ad8}</Project>
+      <Name>IowLibary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

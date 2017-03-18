@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static IowLibary.DllWapper.Defines;
+using static Roboter.DllWapper.Defines;
 
-namespace IowLibary {
+namespace Roboter {
     /// <summary>
     /// I2c mode
     /// </summary>
