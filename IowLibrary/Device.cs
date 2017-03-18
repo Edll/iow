@@ -265,13 +265,18 @@ namespace Roboter {
             AddDeviceEventLog("wurde erfolgreich geschlossen.");
         }
 
-        private void AddDeviceEventLog(string log) {
+        /// <summary>
+        /// Adds Device Event Log
+        /// </summary>
+        /// <param name="log">Event to Add</param>
+        public void AddDeviceEventLog(string log) {
             Log.AddEventLog(this, log);
             DeviceEventLog?.Invoke(this);
         }
 
         /// <summary>
         /// Add an error to the device error log
+        /// ATTENTION: THIS STOPS THE DEVICE AND DISCONNECT IT!!!
         ///  </summary>
         /// <param name="msg">error log entry</param>
         public void AddDeviceError(string msg) {

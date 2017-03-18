@@ -134,12 +134,12 @@ namespace Roboter {
             /// <summary>
             /// Event Level
             /// </summary>
-            Event,
+            Event = 0,
 
             /// <summary>
             /// Error Level
             /// </summary>
-            Error
+            Error = 1
         };
 
         /// <summary>

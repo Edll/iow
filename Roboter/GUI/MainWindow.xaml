@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Roboter.GUI"
+        xmlns:roboter="clr-namespace:Roboter;assembly=IowLibary"
         mc:Ignorable="d"
-        Title="RoboterControl" Height="800" Width="1100" SizeChanged="Window_SizeChanged" Icon="../Resources/Ninja Head Filled-100.ico">
+        Title="RoboterControl" Height="800" Width="1100" SizeChanged="Window_SizeChanged"
+        Icon="../Resources/Ninja Head Filled-100.ico">
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -26,12 +28,12 @@
             <MenuItem Header="_Datei">
                 <MenuItem x:Name="MenuClose" Header="_Beenden" Click="MenuClose_Click" />
             </MenuItem>
-            <MenuItem x:Name="MenuConnectIow" Header="_Verbinden" Click="MenuConnectIow_Click" >
+            <MenuItem x:Name="MenuConnectIow" Header="_Verbinden" Click="MenuConnectIow_Click">
                 <MenuItem.Icon>
                     <Image Source="../Resources/Icons/connect.png" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuCloseIow" Header="_Schließen" Click="MenuCloseIow_Click" IsEnabled="False" >
+            <MenuItem x:Name="MenuCloseIow" Header="_Schließen" Click="MenuCloseIow_Click" IsEnabled="False">
                 <MenuItem.Icon>
                     <Image Source="../Resources/Icons/disconnect.png" />
                 </MenuItem.Icon>
@@ -40,7 +42,7 @@
                 <MenuItem.Icon>
                     <Image Source="../Resources/Icons/help.png" />
                 </MenuItem.Icon>
-     
+
                 <MenuItem Header="_Hilfe" />
                 <MenuItem Header="_Über" />
             </MenuItem>
@@ -63,27 +65,27 @@
                 <RowDefinition Height="120" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <local:Axis x:Name="Axis1" 
-                        Grid.Column="0" 
-                        Margin="0,0,0,0" 
-                        Grid.Row="0" 
+            <local:Axis x:Name="Axis1"
+                        Grid.Column="0"
+                        Margin="0,0,0,0"
+                        Grid.Row="0"
                         IsEnabled="False" />
-            <local:Axis x:Name="Axis2" 
-                        Grid.Column="0" 
-                        Margin="0,0,0,0" 
-                        Grid.Row="1" 
-                        IsEnabled="False"/>
-            <local:Axis x:Name="Axis3" 
-                        Grid.Column="0" 
-                        Margin="0,0,0,0" 
-                        Grid.Row="2" 
-                        IsEnabled="False"/>
-            <local:Axis x:Name="Axis4" 
-                        Grid.Column="0" 
-                        Margin="0,0,0,0" 
-                        Grid.Row="3" 
-                        IsEnabled="False"/>
-           
+            <local:Axis x:Name="Axis2"
+                        Grid.Column="0"
+                        Margin="0,0,0,0"
+                        Grid.Row="1"
+                        IsEnabled="False" />
+            <local:Axis x:Name="Axis3"
+                        Grid.Column="0"
+                        Margin="0,0,0,0"
+                        Grid.Row="2"
+                        IsEnabled="False" />
+            <local:Axis x:Name="Axis4"
+                        Grid.Column="0"
+                        Margin="0,0,0,0"
+                        Grid.Row="3"
+                        IsEnabled="False" />
+
             <GridSplitter
                 ResizeDirection="Columns"
                 Grid.Row="0" Grid.Column="1"
@@ -92,7 +94,7 @@
                 Height="Auto"
                 VerticalAlignment="Stretch"
                 Margin="0" />
-           
+
             <local:SourceCodeEditor
                 x:Name="SourceCode"
                 Grid.Column="2"
@@ -117,19 +119,40 @@
                     Grid.ColumnSpan="1"
                     Grid.Row="3">
             <TabItem Header="_Meldungen">
-                <DataGrid AutoGenerateColumns="True" 
-                          HorizontalAlignment="Stretch" 
-                          VerticalAlignment="Stretch" 
+                <DataGrid AutoGenerateColumns="False"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
                           Name="ListLog"
-                          IsEnabled="False"/>
+                          IsEnabled="true"
+                          CanUserAddRows="False"
+                          IsReadOnly="true"
+                          ItemsSource="{Binding}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Level}" Header="Level" />
+                        <DataGridTextColumn Binding="{Binding  TimeStamp}" Header="Datum" />
+                        <DataGridTextColumn Binding="{Binding  Device}" Header="Gerät" />
+                        <DataGridTextColumn Binding="{Binding  Message}" Header="Meldung" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
             <TabItem Header="_Iow Details">
-                <DataGrid 
-                    AutoGenerateColumns="True" 
-                    HorizontalAlignment="Stretch" 
-                    VerticalAlignment="Stretch" 
+                <DataGrid
+                    AutoGenerateColumns="True"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
                     Name="ListConnectedDevices"
-                    IsEnabled="False"/>
+                    IsEnabled="true"
+                    CanUserAddRows="False"
+                    IsReadOnly="true"
+                    ItemsSource="{Binding}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding  DeviceNumber}" Header="Nummer" />
+                        <DataGridTextColumn Binding="{Binding  ProductId}" Header="Produkt Id" />
+                        <DataGridTextColumn Binding="{Binding  SoftwareVersion}" Header="Software Version" />
+                        <DataGridTextColumn Binding="{Binding  Serial}" Header="Serien Nummer" />
+                        <DataGridTextColumn Binding="{Binding  Handler}" Header="Handle" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
         </TabControl>
     </Grid>

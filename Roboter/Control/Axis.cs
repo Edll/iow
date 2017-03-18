@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 
 namespace Roboter.Control {
-    public class Achse {
+    public class Axis {
         private const int Min = 150;
         private const int Max = 600;
 
         private readonly I2CMode _i2CMode;
-        private readonly Device _device;
 
         private readonly byte _i2CAddrs;
 
@@ -17,23 +16,25 @@ namespace Roboter.Control {
         private byte _registerOffH;
 
         public int Value { get; set; }
-        public int AchsenNummer { get; set; }
-
-        private IDictionary<int, int> _lastPoints = new Dictionary<int, int>();
+        private int _lastPosition = 0;
+        public int AxisNumber { get; set; }
 
         /// <summary>
         /// Neue Instanz des PMW Moduls
         /// </summary>
         /// <param name="device">Device welches genutzt werden soll</param>
-        /// <param name="i2cAdress">I2C Adresse auf dem Bus</param>
-        public Achse(Device device, byte i2cAddrs) {
-            this._device = device;
-            this._i2CAddrs = i2cAddrs;
-            if (_device.Modes is I2CMode) {
-                _i2CMode = _device.Modes as I2CMode;
+        /// <param name="i2CAddrs">I2C Adresse auf dem Bus</param>
+        /// <param name="axisNumber">Nummer der Achse am Arm. Ist 0 Basierend</param>
+        public Axis(Device device, byte i2CAddrs, int axisNumber) {
+            AxisNumber = axisNumber;
+            _i2CAddrs = i2CAddrs;
+
+            I2CMode i2CMode = device.Modes as I2CMode;
+            if (i2CMode != null) {
+                _i2CMode = i2CMode;
             }
             else {
-                _device.AddDeviceError("Device ist nicht im I2C Mode");
+                device.AddDeviceError("Device ist nicht im I2C Mode");
             }
         }
 
@@ -42,26 +43,17 @@ namespace Roboter.Control {
         /// </summary>
         /// <param name="value"></param>
         /// <param name="achsenNummer"></param>
-        public void Move(int achsenNummer, int value) {
+        public void Move(int value) {
             // wenn 0 dann schleife ewig!
             if (value <= 0) {
                 Console.WriteLine("Value == -1");
                 return;
           
             }
-
-            AchsenNummer = achsenNummer;
             Value = value;
-
- 
-
             int stepPoints = 1;
-            int startPosition = 0;
-            Int32 lastPoint;
-            _lastPoints.TryGetValue( achsenNummer, out lastPoint);
-            if (lastPoint != null) {
-                startPosition = lastPoint;
-            }
+            int startPosition = _lastPosition;
+   
             int diff = startPosition - value;
             if (diff < 0) {
                 diff = diff*-1;
@@ -69,7 +61,6 @@ namespace Roboter.Control {
             int steps = diff/stepPoints;
 
             for (int i = startPosition; i <= value; i = i + steps) {
-
 
                 int maxRange = Max - Min;
                 int moveRange = (maxRange*i/100) + Min;
@@ -84,31 +75,13 @@ namespace Roboter.Control {
            // AddAchseToLastPoints(achsenNummer);
         }
 
-        private void AddAchseToLastPoints(int achsenNummer) {
-            if (_lastPoints.ContainsKey(achsenNummer)) {
-                _lastPoints[achsenNummer] = Value;
-            }
-            else {
-                _lastPoints.Add(achsenNummer, Value);
-            }
-        }
-
-        /// <summary>
-        /// Gibt die letzten angefahrenen Punkte aller Achsen die Benutzt worden sind zurück.
-        /// </summary>
-        /// <returns>Eine Dict aller zuletzt angefahrenen Achsen</returns>
-        public IDictionary<int, int> ReadOutLastPoints() {
-            IDictionary<int, int> result = _lastPoints;
-            _lastPoints = new Dictionary<int, int>();
-            return result;
-        }
-
-        public string ToString() {
-            return "Achse: " + AchsenNummer + " Value: " + Value;
+ 
+        public override string ToString() {
+            return "Achse: " + AxisNumber + " Value: " + Value;
         }
 
         private void WriteToI2C(int on, int off) {
-            CalcServoAdress(AchsenNummer);
+            CalcServoAdress(AxisNumber);
 
             // Berechnen der Werte für die Register
             byte on1 = (byte) (on & 0xff);
