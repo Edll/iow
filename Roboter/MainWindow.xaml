@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Roboter"
         mc:Ignorable="d"
-        Title="RoboterControl" Height="767.661" Width="1181.04" SizeChanged="Window_SizeChanged">
+        Title="RoboterControl" Height="800" Width="1100" SizeChanged="Window_SizeChanged" Icon="Ninja Head Filled-100.ico">
     <Grid>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="150" />
@@ -26,14 +26,21 @@
             <MenuItem Header="_Datei">
                 <MenuItem x:Name="MenuClose" Header="_Beenden" Click="MenuClose_Click" />
             </MenuItem>
-            <MenuItem Header="_Bearbeiten">
-                <MenuItem Header="_Ausschneiden" Command="Cut" />
-                <MenuItem Header="_Kopieren" Command="Copy" />
-                <MenuItem Header="_Einfügen" Command="Paste" />
+            <MenuItem x:Name="MenuConnectIow" Header="_Verbinden" Click="MenuConnectIow_Click" >
+                <MenuItem.Icon>
+                    <Image Source="Resources/Icons/connect.png" />
+                </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuConnectIow" Header="_Verbinden" Click="MenuConnectIow_Click" />
-            <MenuItem x:Name="MenuCloseIow" Header="_Schließen" Click="MenuCloseIow_Click" />
+            <MenuItem x:Name="MenuCloseIow" Header="_Schließen" Click="MenuCloseIow_Click" >
+                <MenuItem.Icon>
+                    <Image Source="Resources/Icons/disconnect.png" />
+                </MenuItem.Icon>
+            </MenuItem>
             <MenuItem Header="_Hilfe">
+                <MenuItem.Icon>
+                    <Image Source="Resources/Icons/help.png" />
+                </MenuItem.Icon>
+     
                 <MenuItem Header="_Hilfe" />
                 <MenuItem Header="_Über" />
             </MenuItem>
@@ -45,68 +52,37 @@
               VerticalAlignment="Stretch"
               Width="Auto">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="104*" />
-                <ColumnDefinition Width="99*" />
-                <ColumnDefinition Width="203*" />
-                <ColumnDefinition Width="767*" />
+                <ColumnDefinition Width="*" MinWidth="400" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="100000*" MinWidth="470" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="35" />
-                <RowDefinition Height="125*" />
-                <RowDefinition Height="125*" />
-                <RowDefinition Height="125*" />
-                <RowDefinition Height="125*" />
-                <RowDefinition Height="39" />
+                <RowDefinition Height="120" />
+                <RowDefinition Height="120" />
+                <RowDefinition Height="120" />
+                <RowDefinition Height="120" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-
-            <TextBox x:Name="TxtBlCode"
-                     HorizontalAlignment="Left"
-                     Width="400"
-                     Margin="0"
-                     Grid.Row="1"
-                     Grid.RowSpan="4"
-                     TextWrapping="Wrap"
-                     Text="TextBlock"
-                     VerticalAlignment="Stretch" Grid.ColumnSpan="3"
-                     IsEnabled="True"
-                     Background="AliceBlue" />
-
-            <Button x:Name="BttClear"
-                    Content="Leeren"
-                    HorizontalAlignment="Left"
-                    Margin="12,11.999,0,0"
-                    Grid.Row="5"
-                    Grid.Column="0"
-                    VerticalAlignment="Top"
-                    Width="75" Height="20.276" />
-
-            <Button x:Name="BttLoad"
-                    Content="Laden"
-                    HorizontalAlignment="Left"
-                    Margin="12,11.999,0,0"
-                    Grid.Row="5"
-                    Grid.Column="1"
-                    VerticalAlignment="Top"
-                    Width="75"
-                    Height="20.276" />
-
-            <Button x:Name="BttSave"
-                    Content="Speichern"
-                    HorizontalAlignment="Left"
-                    Margin="12,11.999,0,0"
-                    Grid.Row="5"
-                    Grid.Column="2"
-                    VerticalAlignment="Top"
-                    Width="75" Height="20.276" />
-
-
-            <Button x:Name="button" Content="Achsen Einlesen" Grid.Column="3" HorizontalAlignment="Left"
-                    Margin="10,10,0,0" VerticalAlignment="Top" Width="Auto" />
-            
-            <local:Axis x:Name="Axis1" Grid.Column="3" Margin="0,0,0,0" Grid.Row="1"/>
-            <local:Axis x:Name="Axis2" Grid.Column="3" Margin="0,0,0,0" Grid.Row="2"/>
-            <local:Axis x:Name="Axis3" Grid.Column="3" Margin="0,0,0,0" Grid.Row="3"/>
-            <local:Axis x:Name="Axis4" Grid.Column="3" Margin="0,0,0,0" Grid.Row="4"/>
+            <local:Axis x:Name="Axis1" Grid.Column="0" Margin="0,0,0,0" Grid.Row="0" />
+            <local:Axis x:Name="Axis2" Grid.Column="0" Margin="0,0,0,0" Grid.Row="1" />
+            <local:Axis x:Name="Axis3" Grid.Column="0" Margin="0,0,0,0" Grid.Row="2" />
+            <local:Axis x:Name="Axis4" Grid.Column="0" Margin="0,0,0,0" Grid.Row="3" />
+           
+            <GridSplitter
+                ResizeDirection="Columns"
+                Grid.Row="0" Grid.Column="1"
+                Grid.RowSpan="5"
+                Width="5"
+                Height="Auto"
+                VerticalAlignment="Stretch"
+                Margin="0" />
+           
+            <local:SourceCodeEditor
+                x:Name="SourceCode"
+                Grid.Column="2"
+                Margin="10,10,10,10"
+                Grid.Row="0"
+                Grid.RowSpan="5" />
         </Grid>
 
         <GridSplitter
