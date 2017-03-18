@@ -21,7 +21,7 @@ namespace IoWarrior {
 
         private delegate void SetObjectCallback(List<LogEntry> ojc);
 
-        private readonly DeviceFactory _deviceFactory;
+        private readonly DeviceManager _deviceManager;
         private readonly Device _device;
 
         private I2CMode mode = new I2CMode();
@@ -33,10 +33,10 @@ namespace IoWarrior {
         /// <summary>
         /// Panel to show the IOMode
         /// </summary>
-        /// <param name="deviceFactory">current instacen of device Factory</param>
+        /// <param name="deviceManager">current instacen of device Factory</param>
         /// <param name="device">device which should be show</param>
-        public I2CModePanel(DeviceFactory deviceFactory, Device device) {
-            _deviceFactory = deviceFactory;
+        public I2CModePanel(DeviceManager deviceManager, Device device) {
+            _deviceManager = deviceManager;
             _device = device;
             InitializeComponent();
 
@@ -55,7 +55,7 @@ namespace IoWarrior {
         }
 
         private void InitDevice() {
-            _deviceFactory.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
+            _deviceManager.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
 
 
             GuiUtils.CreatePortEntrys(port0Input, false);
@@ -67,7 +67,7 @@ namespace IoWarrior {
             GuiUtils.CreatePortEntrys(port1Output, true);
             port1Output.ItemCheck += Port1Output_ItemCheck;
 
-            _deviceFactory.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
+            _deviceManager.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
           //  achse = new IowLibary.robot.Achse(_device, (0x40 << 1));
          //   _pmw = new IowLibary.robot.PMW(_device, (0x40 << 1));
 
@@ -80,7 +80,7 @@ namespace IoWarrior {
         }
 
         private void ClearDevice() {
-            _deviceFactory.StopDevice(_device.DeviceNumber);
+            _deviceManager.StopDevice(_device.DeviceNumber);
 
             port0Input.Items.Clear();
             port1Input.Items.Clear();
@@ -177,7 +177,7 @@ namespace IoWarrior {
             var clb = (CheckedListBox)sender;
             var bit = Convert.ToInt32(clb.SelectedItem);
             var value = e.NewValue == CheckState.Checked;
-            _deviceFactory.SetBit(device, port, bit, value);
+            _deviceManager.SetBit(device, port, bit, value);
         }
 
         private void SetRuntimeLabelText(string text) {

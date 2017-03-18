@@ -18,17 +18,17 @@ namespace IoWarrior {
         private delegate void SetStringCallback(string text);
         private delegate void SetObjectCallback(List<LogEntry> ojc);
 
-        private readonly DeviceFactory _deviceFactory;
+        private readonly DeviceManager _deviceManager;
         private readonly Device _device;
         private LCDMode mode = new LCDMode();
 
         /// <summary>
         /// Panel to show the IOMode
         /// </summary>
-        /// <param name="deviceFactory">current instacen of device Factory</param>
+        /// <param name="deviceManager">current instacen of device Factory</param>
         /// <param name="device">device which should be show</param>
-        public LcdModePanel(DeviceFactory deviceFactory, Device device) {
-            _deviceFactory = deviceFactory;
+        public LcdModePanel(DeviceManager deviceManager, Device device) {
+            _deviceManager = deviceManager;
             _device = device;
             InitializeComponent();
 
@@ -48,11 +48,11 @@ namespace IoWarrior {
         }
 
         private void InitDevice() {
-            _deviceFactory.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
+            _deviceManager.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
         }
 
         private void ClearDevice() {
-            _deviceFactory.StopDevice(_device.DeviceNumber);
+            _deviceManager.StopDevice(_device.DeviceNumber);
         }
 
         private void SetButtonStatusRun() {

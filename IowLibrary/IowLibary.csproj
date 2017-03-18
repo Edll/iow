@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Device.cs" />
-    <Compile Include="DeviceFactory.cs" />
+    <Compile Include="DeviceManager.cs" />
     <Compile Include="DeviceHandlerFactory.cs" />
     <Compile Include="DllWapper.cs" />
     <Compile Include="I2CMode.cs" />

@@ -7,7 +7,7 @@ namespace IowLibary {
     /// delegate events from factory
     /// </summary>
     /// <param name="device">this</param>
-    public delegate void DeviceFactoryEventHandler(DeviceFactory device);
+    public delegate void DeviceFactoryEventHandler(DeviceManager device);
 
     /// <summary>
     /// delegate update events on runtime
@@ -20,8 +20,8 @@ namespace IowLibary {
     /// On Remove it close the device. On deconstruction of the factory 
     /// it close an destroy all device.
     /// <code>
-    ///  // open of the DeviceFactory
-    /// _deviceFactory = new DeviceFactory(DeviceFactory_Error, DeviceFactory_EventLog);
+    ///  // open of the DeviceManager
+    /// _deviceFactory = new DeviceManager(DeviceFactory_Error, DeviceFactory_EventLog);
     /// // init of all connected devices
     /// var isConnected = _deviceFactory.InitFactory();
     /// 
@@ -33,7 +33,7 @@ namespace IowLibary {
     /// </code>
     /// </summary>
     /// <author>M. Vervoorst junk@edlly.de</author>
-    public class DeviceFactory {
+    public class DeviceManager {
 
         /// <summary>
         /// delegates Device Errors to observers
@@ -57,7 +57,7 @@ namespace IowLibary {
         public Dictionary<int, Device> Devices { get; set; }
 
         private int? _deviceCounter;
-        private readonly DeviceFactory _instance;
+        private readonly DeviceManager _instance;
         private DeviceHandlerFactory _deviceHandlerFactory = new DeviceHandlerFactory();
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace IowLibary {
         /// </summary>
         /// <param name="deviceError">reports all device errors to given delegate event method</param>
         /// <param name="deviceEvent">reports all device errors to given delegate event method</param>
-        public DeviceFactory(DeviceFactoryEventHandler deviceError, DeviceFactoryEventHandler deviceEvent) {
+        public DeviceManager(DeviceFactoryEventHandler deviceError, DeviceFactoryEventHandler deviceEvent) {
             DeviceError += deviceError;
             DeviceEvent += deviceEvent;
 
@@ -81,7 +81,7 @@ namespace IowLibary {
         }
 
         /// <inheritdoc />
-        ~DeviceFactory() {
+        ~DeviceManager() {
             RemoveAllDevices();
         }
 

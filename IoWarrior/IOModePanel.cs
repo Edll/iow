@@ -18,7 +18,7 @@ namespace IoWarrior {
         private delegate void SetStringCallback(string text);
         private delegate void SetObjectCallback(List<LogEntry> ojc);
 
-        private readonly DeviceFactory _deviceFactory;
+        private readonly DeviceManager _deviceManager;
         private readonly Device _device;
 
         private bool lauflichtRun;
@@ -28,10 +28,10 @@ namespace IoWarrior {
         /// <summary>
         /// Panel to show the IOMode
         /// </summary>
-        /// <param name="deviceFactory">current instacen of device Factory</param>
+        /// <param name="deviceManager">current instacen of device Factory</param>
         /// <param name="device">device which should be show</param>
-        public IoModePanel(DeviceFactory deviceFactory, Device device) {
-            _deviceFactory = deviceFactory;
+        public IoModePanel(DeviceManager deviceManager, Device device) {
+            _deviceManager = deviceManager;
             _device = device;
             InitializeComponent();
 
@@ -64,12 +64,12 @@ namespace IoWarrior {
             GuiUtils.CreatePortEntrys(port1Output, true);
             port1Output.ItemCheck += Port1Output_ItemCheck;
 
-            _deviceFactory.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
+            _deviceManager.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
 
         }
 
         private void ClearDevice() {
-            _deviceFactory.StopDevice(_device.DeviceNumber);
+            _deviceManager.StopDevice(_device.DeviceNumber);
 
             port0Input.Items.Clear();
             port1Input.Items.Clear();
@@ -137,7 +137,7 @@ namespace IoWarrior {
             var clb = (CheckedListBox)sender;
             var bit = Convert.ToInt32(clb.SelectedItem);
             var value = e.NewValue == CheckState.Checked;
-            _deviceFactory.SetBit(device, port, bit, value);
+            _deviceManager.SetBit(device, port, bit, value);
         }
 
         private void checked_port0selectAll(object sender, EventArgs e) {

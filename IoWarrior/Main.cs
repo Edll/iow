@@ -16,7 +16,7 @@ namespace IoWarrior {
         private delegate void SetStringCallback(string text);
         private delegate void SetObjectCallback(List<LogEntry> ojc);
 
-        private readonly DeviceFactory _deviceFactory;
+        private readonly DeviceManager _deviceManager;
 
         /// <summary>
         /// Start Point for GUI
@@ -25,12 +25,12 @@ namespace IoWarrior {
 
             InitializeComponent();
 
-            // open of the DeviceFactory
-            _deviceFactory = new DeviceFactory(DeviceFactory_Error, DeviceFactory_EventLog);
+            // open of the DeviceManager
+            _deviceManager = new DeviceManager(DeviceFactory_Error, DeviceFactory_EventLog);
         }
 
         private void OnClick_OpenAllConnected(object sender, EventArgs e) {
-            var isConnected = _deviceFactory.InitFactory();
+            var isConnected = _deviceManager.InitFactory();
             if (!isConnected) return;
             SetDevices();
             closeAllToolStripMenuItem1.Enabled = true;
@@ -49,7 +49,7 @@ namespace IoWarrior {
         // Neue erkenntnis:
         // Das laden der Assemlby ist nicht so einfach da die iowkit.dll kein .net ist sondern native
         private void OnClick_CloseConnected(object sender, EventArgs e) {
-            _deviceFactory.RemoveAllDevices();
+            _deviceManager.RemoveAllDevices();
             NumberOfConDevices.Text = Resources.Connect_0_devices;
             dataGridView1.DataSource = null;
             closeAllToolStripMenuItem1.Enabled = false;
@@ -74,12 +74,12 @@ namespace IoWarrior {
             Control panel = null;
             if (rbIOMode.Checked)
             {
-                 panel = new IoModePanel(_deviceFactory, _deviceFactory.GetDeviceNumber(deviceNumber));
+                 panel = new IoModePanel(_deviceManager, _deviceManager.GetDeviceNumber(deviceNumber));
             }else if (rbLCDMode.Checked)
             {
-                 panel = new LcdModePanel(_deviceFactory, _deviceFactory.GetDeviceNumber(deviceNumber));
+                 panel = new LcdModePanel(_deviceManager, _deviceManager.GetDeviceNumber(deviceNumber));
             } else if (rbI2C.Checked) {
-                panel = new I2CModePanel(_deviceFactory, _deviceFactory.GetDeviceNumber(deviceNumber));
+                panel = new I2CModePanel(_deviceManager, _deviceManager.GetDeviceNumber(deviceNumber));
             }
 
             tabPage.Controls.Add(panel);
@@ -91,7 +91,7 @@ namespace IoWarrior {
             var deviceNumber = GetDeviceNumber();
 
             tabControlDevices.TabPages.RemoveAt(0);
-            _deviceFactory.StopDevice(deviceNumber);
+            _deviceManager.StopDevice(deviceNumber);
         }
 
         private void ClearDeviceSelectorList() {
@@ -99,23 +99,23 @@ namespace IoWarrior {
         }
 
         private void CloseProgramm(object sender, FormClosedEventArgs e) {
-            _deviceFactory.RemoveAllDevices();
+            _deviceManager.RemoveAllDevices();
         }
 
 
         private void SetDevices() {
-            if (_deviceFactory.Devices == null) return;
-            dataGridView1.DataSource = IowDataModelTable.GetResultsTable(_deviceFactory.Devices);
+            if (_deviceManager.Devices == null) return;
+            dataGridView1.DataSource = IowDataModelTable.GetResultsTable(_deviceManager.Devices);
 
-            NumberOfConDevices.Text = _deviceFactory.GetNumberOfDevices().ToString();
+            NumberOfConDevices.Text = _deviceManager.GetNumberOfDevices().ToString();
 
-            foreach (var dev in _deviceFactory.Devices) {
+            foreach (var dev in _deviceManager.Devices) {
                 runDeviceSelecter.Items.Add(dev.Value.DeviceNumber);
             }
             runDeviceSelecter.SelectedIndex = 0;
         }
 
-        private void DeviceFactory_Error(DeviceFactory deviceError) {
+        private void DeviceFactory_Error(DeviceManager deviceError) {
             SetErrorLog(deviceError.Log.GetLogEntrysErrorAndReset());
         }
 
@@ -134,7 +134,7 @@ namespace IoWarrior {
             }
         }
 
-        private void DeviceFactory_EventLog(DeviceFactory deviceEvent) {
+        private void DeviceFactory_EventLog(DeviceManager deviceEvent) {
             SetEventLog(deviceEvent.Log.GetLogEntrysEvent());
         }
 

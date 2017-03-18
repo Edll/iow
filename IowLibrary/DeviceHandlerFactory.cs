@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace IowLibary {
     /// <summary>
-    /// Controlls and Handel Threads for the DeviceFactory.
+    /// Controlls and Handel Threads for the DeviceManager.
     /// </summary>
     /// <author>M. Vervoorst junk@edlly.de</author>
     public class DeviceHandlerFactory {
