@@ -31,7 +31,7 @@
                     <Image Source="Resources/Icons/connect.png" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuCloseIow" Header="_Schließen" Click="MenuCloseIow_Click" >
+            <MenuItem x:Name="MenuCloseIow" Header="_Schließen" Click="MenuCloseIow_Click" IsEnabled="False" >
                 <MenuItem.Icon>
                     <Image Source="Resources/Icons/disconnect.png" />
                 </MenuItem.Icon>
@@ -63,10 +63,26 @@
                 <RowDefinition Height="120" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <local:Axis x:Name="Axis1" Grid.Column="0" Margin="0,0,0,0" Grid.Row="0" />
-            <local:Axis x:Name="Axis2" Grid.Column="0" Margin="0,0,0,0" Grid.Row="1" />
-            <local:Axis x:Name="Axis3" Grid.Column="0" Margin="0,0,0,0" Grid.Row="2" />
-            <local:Axis x:Name="Axis4" Grid.Column="0" Margin="0,0,0,0" Grid.Row="3" />
+            <local:Axis x:Name="Axis1" 
+                        Grid.Column="0" 
+                        Margin="0,0,0,0" 
+                        Grid.Row="0" 
+                        IsEnabled="False" />
+            <local:Axis x:Name="Axis2" 
+                        Grid.Column="0" 
+                        Margin="0,0,0,0" 
+                        Grid.Row="1" 
+                        IsEnabled="False"/>
+            <local:Axis x:Name="Axis3" 
+                        Grid.Column="0" 
+                        Margin="0,0,0,0" 
+                        Grid.Row="2" 
+                        IsEnabled="False"/>
+            <local:Axis x:Name="Axis4" 
+                        Grid.Column="0" 
+                        Margin="0,0,0,0" 
+                        Grid.Row="3" 
+                        IsEnabled="False"/>
            
             <GridSplitter
                 ResizeDirection="Columns"
@@ -100,14 +116,20 @@
                     VerticalAlignment="Stretch"
                     Grid.ColumnSpan="1"
                     Grid.Row="3">
+            <TabItem Header="_Meldungen">
+                <DataGrid AutoGenerateColumns="True" 
+                          HorizontalAlignment="Stretch" 
+                          VerticalAlignment="Stretch" 
+                          Name="ListLog"
+                          IsEnabled="False"/>
+            </TabItem>
             <TabItem Header="_Iow Details">
-                <Grid Background="#FFE5E5E5" />
-            </TabItem>
-            <TabItem Header="_Event Log">
-                <Grid Background="#FFE5E5E5" />
-            </TabItem>
-            <TabItem Header="_Error Log">
-                <Grid Background="#FFE5E5E5" />
+                <DataGrid 
+                    AutoGenerateColumns="True" 
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch" 
+                    Name="ListConnectedDevices"
+                    IsEnabled="False"/>
             </TabItem>
         </TabControl>
     </Grid>
