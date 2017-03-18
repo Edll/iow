@@ -22,6 +22,12 @@ namespace Roboter {
 
             Axis1.MaximalValue = 360;
             Axis1.MinimalValue = 0;
+            Axis1.HeaderName = "Achse 1";
+            Axis1.Changed +=Axis1OnChanged;
+        }
+
+        private void Axis1OnChanged(int value) {
+            Console.WriteLine("Value: " + value);
         }
 
 
