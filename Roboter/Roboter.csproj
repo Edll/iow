@@ -59,6 +59,8 @@
     <Compile Include="GUI\SourceCodeEditor.xaml.cs">
       <DependentUpon>SourceCodeEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="robot\Achse.cs" />
+    <Compile Include="robot\PMW.cs" />
     <Page Include="GUI\Axis.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

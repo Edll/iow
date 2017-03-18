@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using IowLibary;
 using IoWarrior.Properties;
-using IowLibary.robot;
+//using Roboter.
 
 namespace IoWarrior {
     /// <summary>
@@ -25,8 +25,8 @@ namespace IoWarrior {
         private readonly Device _device;
 
         private I2CMode mode = new I2CMode();
-        private PMW _pmw;
-        private Achse achse;
+       // private PMW _pmw;
+      //  private Achse achse;
 
         private IList<IDictionary<int, int>> saveList = new List<IDictionary<int, int>>();
 
@@ -68,15 +68,15 @@ namespace IoWarrior {
             port1Output.ItemCheck += Port1Output_ItemCheck;
 
             _deviceFactory.RunDevice(_device.DeviceNumber, Device_PortChangeStatus, DeviceFactoryRunTimeUpdate, mode);
-            achse = new IowLibary.robot.Achse(_device, (0x40 << 1));
-            _pmw = new IowLibary.robot.PMW(_device, (0x40 << 1));
+          //  achse = new IowLibary.robot.Achse(_device, (0x40 << 1));
+         //   _pmw = new IowLibary.robot.PMW(_device, (0x40 << 1));
 
-            _pmw.SetFrequenz(50);
+         //   _pmw.SetFrequenz(50);
 
-            achse.Move(0, 75);
-            achse.Move(1, 50);
-            achse.Move(2, 50);
-            achse.Move(3, 60);
+         //   achse.Move(0, 75);
+        //    achse.Move(1, 50);
+        //    achse.Move(2, 50);
+        //    achse.Move(3, 60);
         }
 
         private void ClearDevice() {
@@ -89,29 +89,29 @@ namespace IoWarrior {
         }
 
         private void tbA1_ValueChanged(object sender, EventArgs e) {
-            achse.Move(0,tbA1.Value);
+       //     achse.Move(0,tbA1.Value);
             txtOut1.Text = (tbA1.Value).ToString();
         }
 
         private void tbA2_ValueChanged(object sender, EventArgs e) {
-            achse.Move(1,tbA2.Value);
+      //      achse.Move(1,tbA2.Value);
             txtOut2.Text = (tbA2.Value).ToString();
         }
 
         private void tbA3_ValueChanged(object sender, EventArgs e) {
-            achse.Move(2,tbA3.Value);
+      //      achse.Move(2,tbA3.Value);
             txtOut3.Text = (tbA3.Value).ToString();
         }
 
         private void tbA4_ValueChanged(object sender, EventArgs e) {
-            achse.Move(3,tbA4.Value);
+       //     achse.Move(3,tbA4.Value);
             txtOut4.Text = (tbA4.Value).ToString();
         }
 
         private void bttSetFre_Click(object sender, EventArgs e) {
             try {
                 int range = Convert.ToInt32(tbPmwWeite.Text);
-                _pmw.SetFrequenz(range);
+         //       _pmw.SetFrequenz(range);
             }catch(FormatException) {
                 tbPmwWeite.BackColor = Color.IndianRed;
             }
@@ -185,43 +185,43 @@ namespace IoWarrior {
         }
 
         private void bttSaveValues_Click(object sender, EventArgs e) {
-            IDictionary<int, int> lastPoint = achse.ReadOutLastPoints();
-            saveList.Add(lastPoint);
-            foreach (KeyValuePair<int, int> pair in lastPoint) {
-                runList.Items.Add(pair.Value.ToString());
-            }
+       //     IDictionary<int, int> lastPoint = achse.ReadOutLastPoints();
+       //     saveList.Add(lastPoint);
+      //      foreach (KeyValuePair<int, int> pair in lastPoint) {
+     //           runList.Items.Add(pair.Value.ToString());
+    //        }
         }
 
         private void runSavePoints_Click(object sender, EventArgs e) {
-            foreach(IDictionary<int, Achse> achsen in saveList) {
-                foreach(KeyValuePair<int, Achse> valuepair in achsen) {
-                    achse.Move(valuepair.Value.AchsenNummer, valuepair.Value.Value);
-                }
+       //     foreach(IDictionary<int, Achse> achsen in saveList) {
+        //        foreach(KeyValuePair<int, Achse> valuepair in achsen) {
+      //              achse.Move(valuepair.Value.AchsenNummer, valuepair.Value.Value);
+//                }
 
-            }
+     //       }
         }
-
-        private int ConvertInput(TextBox textBoxt) {
-            try {
-                textBoxt.BackColor = Color.White;
-                if (textBoxt.Text == null) {
-                    return -1;
-                }else if (Convert.ToInt32(textBoxt.Text) >= 99) {
-                    return -1;
-                }
-                return Convert.ToInt32(textBoxt.Text); 
-            }
-            catch (FormatException) {
-                textBoxt.BackColor = Color.Crimson;
-                return -1;
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e) {
-            achse.Move(0, ConvertInput(txtA1));
-            achse.Move(1, ConvertInput(txtA2));
-            achse.Move(2, ConvertInput(txtA3));
-            achse.Move(3, ConvertInput(txtA4));
-        }
+//
+//        private int ConvertInput(TextBox textBoxt) {
+//            try {
+//                textBoxt.BackColor = Color.White;
+//                if (textBoxt.Text == null) {
+//                    return -1;
+//                }else if (Convert.ToInt32(textBoxt.Text) >= 99) {
+//                    return -1;
+//                }
+//                return Convert.ToInt32(textBoxt.Text); 
+//            }
+//            catch (FormatException) {
+//                textBoxt.BackColor = Color.Crimson;
+//                return -1;
+//            }
+//        }
+//
+//        private void button1_Click(object sender, EventArgs e) {
+//            achse.Move(0, ConvertInput(txtA1));
+//            achse.Move(1, ConvertInput(txtA2));
+//            achse.Move(2, ConvertInput(txtA3));
+//            achse.Move(3, ConvertInput(txtA4));
+//        }
     }
 }
