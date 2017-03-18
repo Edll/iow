@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Roboter {
+namespace Roboter.GUI {
 
     /// <summary>
     /// Menü Events im SourceCodeEditor Editor

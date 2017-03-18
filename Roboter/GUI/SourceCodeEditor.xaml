@@ -1,9 +1,8 @@
-﻿<UserControl x:Class="Roboter.SourceCodeEditor"
+﻿<UserControl x:Class="Roboter.GUI.SourceCodeEditor"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Roboter"
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="450">
     <Grid>
@@ -18,51 +17,51 @@
               Height="20">
             <MenuItem x:Name="MenuLoad" Header="_Laden" Click="MenuLoad_OnClick">
                 <MenuItem.Icon>
-                    <Image Source="Resources/Icons/open.png" />
+                    <Image Source="../Resources/Icons/open.png" />
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem x:Name="MenuSave" Header="_Speichern" Click="MenuSave_OnClick">
                 <MenuItem.Icon>
-                    <Image Source="Resources/Icons/save.png" />
+                    <Image Source="../Resources/Icons/save.png" />
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem Header="_Bearbeiten">
                 <MenuItem Header="_Rückgängig" Command="Undo">
                     <MenuItem.Icon>
-                        <Image Source="Resources/Icons/revert.png" />
+                        <Image Source="../Resources/Icons/revert.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="_Wiederherstellen" Command="Redo">
                     <MenuItem.Icon>
-                        <Image Source="Resources/Icons/redo.png" />
+                        <Image Source="../Resources/Icons/redo.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
 
                 <MenuItem Header="_Ausschneiden" Command="Cut">
                     <MenuItem.Icon>
-                        <Image Source="Resources/Icons/cut.png" />
+                        <Image Source="../Resources/Icons/cut.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="_Kopieren" Command="Copy">
                     <MenuItem.Icon>
-                        <Image Source="Resources/Icons/copy.png" />
+                        <Image Source="../Resources/Icons/copy.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="_Einfügen" Command="Paste">
                     <MenuItem.Icon>
-                        <Image Source="Resources/Icons/paste.png" />
+                        <Image Source="../Resources/Icons/paste.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Prüfen" Click="MenuCheckCode_OnClick">
                 <MenuItem.Icon>
-                    <Image Source="Resources/Icons/check.png" />
+                    <Image Source="../Resources/Icons/check.png" />
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem Header="_Ausführen" Click="MenuRun_OnClick">
                 <MenuItem.Icon>
-                    <Image Source="Resources/Icons/run.png" />
+                    <Image Source="../Resources/Icons/run.png" />
                 </MenuItem.Icon>
             </MenuItem>
         </Menu>

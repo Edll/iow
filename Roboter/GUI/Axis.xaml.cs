@@ -5,7 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Roboter {
+namespace Roboter.GUI {
     /// <summary>
     /// Wenn der User die Achse verändert wird diese Event ausgelöst
     /// </summary>
