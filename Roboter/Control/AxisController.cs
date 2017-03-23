@@ -59,5 +59,18 @@ namespace Roboter.Control {
             }
             axis.Speed = speed;
         }
+
+        /// <summary>
+        /// Ändert den Active Status der Achse
+        /// </summary>
+        /// <param name="axisNumber">Nummer des Achse die Bewegt werden soll. Ist 1 basierend</param>
+        /// <param name="isActive">bool wert der den Active Status der Achse abbildet</param>
+        public void ChangeActive(int axisNumber, bool isActive) {
+            var axis = GetAxis(axisNumber);
+            if (axis == null) {
+                return;
+            }
+            axis.IsActive = isActive;
+        }
     }
 }

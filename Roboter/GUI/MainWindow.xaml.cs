@@ -93,6 +93,7 @@ namespace Roboter.GUI {
             Axis1.HeaderName = "Achse 1";
             Axis1.AxisValueChanged += Axis1OnAxisValueChanged;
             Axis1.SpeedValueChanged += Axis1_SpeedValueChanged;
+            Axis1.OnChangedActive += Axis1OnChangedActive;
             Axis1.IsEnabled = true;
             _axisController.AddAxis(1);
 
@@ -101,6 +102,7 @@ namespace Roboter.GUI {
             Axis2.HeaderName = "Achse 2";
             Axis2.AxisValueChanged += Axis2OnAxisValueChanged;
             Axis2.SpeedValueChanged += Axis2_SpeedValueChanged;
+            Axis2.OnChangedActive += Axis2_OnChangedActive;
             Axis2.IsEnabled = true;
             _axisController.AddAxis(2);
 
@@ -109,6 +111,7 @@ namespace Roboter.GUI {
             Axis3.HeaderName = "Achse 3";
             Axis3.AxisValueChanged += Axis3OnAxisValueChanged;
             Axis3.SpeedValueChanged += Axis3_SpeedValueChanged;
+            Axis3.OnChangedActive += Axis3_OnChangedActive;
             Axis3.IsEnabled = true;
             _axisController.AddAxis(3);
 
@@ -117,8 +120,25 @@ namespace Roboter.GUI {
             Axis4.HeaderName = "Achse 4";
             Axis4.AxisValueChanged += Axis4OnAxisValueChanged;
             Axis4.SpeedValueChanged += Axis4_SpeedValueChanged;
+            Axis4.OnChangedActive += Axis4_OnChangedActive;
             Axis4.IsEnabled = true;
             _axisController.AddAxis(4);
+        }
+
+        private void Axis1OnChangedActive(bool active) {
+            _axisController.ChangeActive(1, active);
+        }
+
+        private void Axis2_OnChangedActive(bool active) {
+            _axisController.ChangeActive(2, active);
+        }
+
+        private void Axis3_OnChangedActive(bool active) {
+            _axisController.ChangeActive(3, active);
+        }
+
+        private void Axis4_OnChangedActive(bool active) {
+            _axisController.ChangeActive(4, active);
         }
 
         private void Axis1OnAxisValueChanged(int value) {

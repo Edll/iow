@@ -22,7 +22,7 @@ namespace Roboter.Control {
         public int Value { get; set; }
         private int _lastPosition = 0;
         public int AxisNumber { get; set; }
-        private bool IsActive { get; set; }
+        public bool IsActive { get; set; }
         public int Speed { get; set; }
 
         /// <summary>

@@ -13,6 +13,12 @@ namespace Roboter.GUI {
     public delegate void ChangeAxisValueEvent(int value);
 
     /// <summary>
+    /// Wird ausgelöst wenn sich der Aktiv Status der Achse ändert
+    /// </summary>
+    /// <param name="active">bool der den Actualvalue der Achse enthält</param>
+    public delegate void ChangeActiveEvent(bool active);
+
+    /// <summary>
     /// Interaction logic for Axis.xaml
     /// </summary>
     public partial class Axis : UserControl {
@@ -35,6 +41,11 @@ namespace Roboter.GUI {
         public event ChangeAxisValueEvent SpeedValueChanged;
 
         /// <summary>
+        /// Wird ausgelöst wenn sich der Aktivstatus der Achse ändert
+        /// </summary>
+        public event ChangeActiveEvent OnChangedActive;
+
+        /// <summary>
         /// Gibt den aktuellen Aktiv Status des Achsenkanals wieder oder setzt den in die GUI
         /// </summary>
         public bool IsActive {
@@ -42,6 +53,7 @@ namespace Roboter.GUI {
             set {
                 _isActive = value;
                 ChangeActivStatus(_isActive);
+                OnChangeActive();
             }
         }
 
@@ -100,6 +112,9 @@ namespace Roboter.GUI {
             }
         }
 
+        /// <summary>
+        /// Speed wert der Achse
+        /// </summary>
         public int Speed {
             get { return _speed; }
             set {
@@ -119,6 +134,10 @@ namespace Roboter.GUI {
 
         protected virtual void OnChangedSpeed() {
             SpeedValueChanged?.Invoke(_speed);
+        }
+
+        protected virtual void OnChangeActive() {
+            OnChangedActive?.Invoke(_isActive);
         }
 
         private void BttAktiv_Click(object sender, RoutedEventArgs e) {
