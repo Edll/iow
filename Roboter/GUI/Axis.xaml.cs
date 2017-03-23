@@ -22,11 +22,17 @@ namespace Roboter.GUI {
         private string _name = "Achse";
         private bool _isActive;
         private int _axisValue;
+        private int _speed;
 
         /// <summary>
         /// Wird ausgelöst wann immer der User den Aktuellen Wert verändert
         /// </summary>
-        public event ChangeAxisValueEvent Changed;
+        public event ChangeAxisValueEvent AxisValueChanged;
+
+        /// <summary>
+        /// Wird ausgelöst wenn der SpeedWert geändert wird
+        /// </summary>
+        public event ChangeAxisValueEvent SpeedValueChanged;
 
         /// <summary>
         /// Gibt den aktuellen Aktiv Status des Achsenkanals wieder oder setzt den in die GUI
@@ -64,11 +70,13 @@ namespace Roboter.GUI {
         /// <summary>
         /// Aktueller wert der für die Achse eingestellt worden ist.
         /// </summary>
-        public int AxisValue { get { return _axisValue; }
+        public int AxisValue {
+            get { return _axisValue; }
             set {
                 _axisValue = value;
-                OnChanged();
-            } }
+                OnChangedValue();
+            }
+        }
 
         /// <summary>
         /// Gibt den Minimal oder Setzt den Minimal wert in die Oberfläche
@@ -92,12 +100,25 @@ namespace Roboter.GUI {
             }
         }
 
+        public int Speed {
+            get { return _speed; }
+            set {
+                _speed = value;
+                TxtSpeed.Text = Convert.ToString(value);
+                OnChangedSpeed();
+            }
+        }
+
         public Axis() {
             InitializeComponent();
         }
 
-        protected virtual void OnChanged() {
-            Changed?.Invoke(_axisValue);
+        protected virtual void OnChangedValue() {
+            AxisValueChanged?.Invoke(_axisValue);
+        }
+
+        protected virtual void OnChangedSpeed() {
+            SpeedValueChanged?.Invoke(_speed);
         }
 
         private void BttAktiv_Click(object sender, RoutedEventArgs e) {
@@ -156,6 +177,27 @@ namespace Roboter.GUI {
             if (e.Key == Key.Left || e.Key == Key.Right) {
                 AxisValue = Convert.ToInt32(SliderManual.Value);
                 TxtActualValue.Text = Convert.ToString(AxisValue);
+            }
+        }
+
+        private void TxtSpeed_KeyUp(object sender, KeyEventArgs e) {
+            try {
+                // Wenn Enter gedrückt wird dann wird der eingeben wert eingestellt
+                if (e.Key == Key.Enter) {
+                    int speed = Convert.ToInt32(TxtSpeed.Text);
+                    // Wert ausserhalb des grenzbereiches dann gibt des einen Fehler
+                    if (speed < Control.Axis.MinSpeed || speed > Control.Axis.MaxSpeed ) {
+                        TxtSpeed.Background = Brushes.Tomato;
+                        return;
+                    }
+                    // Werte übertragen auf Slider und Anzeige
+                    Speed = speed;
+                    TxtSpeed.Text = Convert.ToString(speed);
+                } else {
+                    TxtSpeed.Background = Brushes.White;
+                }
+            } catch (FormatException) {
+                TxtSpeed.Background = Brushes.Tomato;
             }
         }
     }

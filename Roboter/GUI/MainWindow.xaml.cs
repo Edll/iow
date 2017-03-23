@@ -53,6 +53,7 @@ namespace Roboter.GUI {
         }
 
         private void MenuClose_Click(object sender, RoutedEventArgs e) {
+            Disconnect();
             // TODO Schliesen des Forms
         }
 
@@ -90,48 +91,67 @@ namespace Roboter.GUI {
             Axis1.MaximalValue = 360;
             Axis1.MinimalValue = 0;
             Axis1.HeaderName = "Achse 1";
-            Axis1.Changed += Axis1OnChanged;
+            Axis1.AxisValueChanged += Axis1OnAxisValueChanged;
+            Axis1.SpeedValueChanged += Axis1_SpeedValueChanged;
             Axis1.IsEnabled = true;
             _axisController.AddAxis(1);
 
             Axis2.MaximalValue = 360;
             Axis2.MinimalValue = 0;
             Axis2.HeaderName = "Achse 2";
-            Axis2.Changed += Axis2OnChanged;
+            Axis2.AxisValueChanged += Axis2OnAxisValueChanged;
+            Axis2.SpeedValueChanged += Axis2_SpeedValueChanged;
             Axis2.IsEnabled = true;
             _axisController.AddAxis(2);
 
             Axis3.MaximalValue = 360;
             Axis3.MinimalValue = 0;
             Axis3.HeaderName = "Achse 3";
-            Axis3.Changed += Axis3OnChanged;
+            Axis3.AxisValueChanged += Axis3OnAxisValueChanged;
+            Axis3.SpeedValueChanged += Axis3_SpeedValueChanged;
             Axis3.IsEnabled = true;
             _axisController.AddAxis(3);
 
             Axis4.MaximalValue = 360;
             Axis4.MinimalValue = 0;
             Axis4.HeaderName = "Achse 4";
-            Axis4.Changed += Axis4OnChanged;
+            Axis4.AxisValueChanged += Axis4OnAxisValueChanged;
+            Axis4.SpeedValueChanged += Axis4_SpeedValueChanged;
             Axis4.IsEnabled = true;
             _axisController.AddAxis(4);
         }
 
-        private void Axis1OnChanged(int value) {
+        private void Axis1OnAxisValueChanged(int value) {
             _axisController.MoveAxis(1, value);
         }
 
-        private void Axis2OnChanged(int value) {
+        private void Axis2OnAxisValueChanged(int value) {
             _axisController.MoveAxis(2, value);
         }
 
-        private void Axis3OnChanged(int value) {
+        private void Axis3OnAxisValueChanged(int value) {
             _axisController.MoveAxis(3, value);
         }
 
-        private void Axis4OnChanged(int value) {
+        private void Axis4OnAxisValueChanged(int value) {
             _axisController.MoveAxis(4, value);
         }
 
+        private void Axis4_SpeedValueChanged(int value) {
+            _axisController.ChangeSpeed(1, value);
+        }
+
+        private void Axis2_SpeedValueChanged(int value) {
+            _axisController.ChangeSpeed(2, value);
+        }
+
+        private void Axis3_SpeedValueChanged(int value) {
+            _axisController.ChangeSpeed(3, value);
+        }
+
+        private void Axis1_SpeedValueChanged(int value) {
+            _axisController.ChangeSpeed(4, value);
+        }
 
         private bool Disconnect() {
             _deviceManager.RemoveAllDevices();

@@ -59,10 +59,10 @@
                 <ColumnDefinition Width="100000*" MinWidth="470" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="120" />
-                <RowDefinition Height="120" />
-                <RowDefinition Height="120" />
-                <RowDefinition Height="120" />
+                <RowDefinition Height="140" />
+                <RowDefinition Height="140" />
+                <RowDefinition Height="140" />
+                <RowDefinition Height="140" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <local:Axis x:Name="Axis1"

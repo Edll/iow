@@ -5,6 +5,8 @@ namespace Roboter.Control {
     public class Axis {
         private const int Min = 150;
         private const int Max = 600;
+        public const int MaxSpeed = 100;
+        public const int MinSpeed = 1;
 
         private readonly I2CMode _i2CMode;
 
@@ -15,9 +17,13 @@ namespace Roboter.Control {
         private byte _registerOffL;
         private byte _registerOffH;
 
+      
+
         public int Value { get; set; }
         private int _lastPosition = 0;
         public int AxisNumber { get; set; }
+        private bool IsActive { get; set; }
+        public int Speed { get; set; }
 
         /// <summary>
         /// Neue Instanz des PMW Moduls

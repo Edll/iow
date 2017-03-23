@@ -36,13 +36,28 @@ namespace Roboter.Control {
         /// <param name="axisNumber">Nummer des Achse die Bewegt werden soll. Ist 1 basierend</param>
         /// <param name="value">Wert um den die Achse bewegt werden soll</param>
         public void MoveAxis(int axisNumber, int value) {
+            var axis = GetAxis(axisNumber);
+            axis?.Move(value);
+        }
+
+        private Axis GetAxis(int axisNumber) {
             axisNumber = axisNumber - 1;
             Axis axis;
             _axis.TryGetValue(axisNumber, out axis);
+            return axis;
+        }
+
+        /// <summary>
+        /// Ändert die Achsengeschwindigkeit an einer Achse
+        /// </summary>
+        /// <param name="axisNumber">Nummer des Achse die Bewegt werden soll. Ist 1 basierend</param>
+        /// <param name="speed">Geschwindigkeit mit dem die Achse bewegt werden soll</param>
+        public void ChangeSpeed(int axisNumber, int speed) {
+            var axis = GetAxis(axisNumber);
             if (axis == null) {
                 return;
             }
-            axis.Move(value);
+            axis.Speed = speed;
         }
     }
 }

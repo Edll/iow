@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Roboter.GUI"
              mc:Ignorable="d"
-             d:DesignHeight="120" d:DesignWidth="370">
+             d:DesignHeight="130" d:DesignWidth="370">
     <Grid>
         <GroupBox Margin="10,10,10,10"
                   HorizontalAlignment="Left"
@@ -22,7 +22,7 @@
 
             <Grid
                 HorizontalAlignment="Stretch"
-                Height="80"
+                Height="100"
                 Width="330"
                 Margin="0,0,0,0"
                 VerticalAlignment="Top">
@@ -34,8 +34,9 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
                     <RowDefinition Height="15" />
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="30" />
                     <RowDefinition Height="30" />
                 </Grid.RowDefinitions>
 
@@ -46,7 +47,7 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         Margin="5,5,5,5"
-                        Grid.RowSpan="2"
+                        Grid.RowSpan="3"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top" Click="BttAktiv_Click" />
 
@@ -62,19 +63,21 @@
                           Margin="90,5,5,5" />
                 <Grid Name="GridCheckEndPosition"   Grid.Row="0"
                           Grid.Column="0"
-                          Grid.RowSpan="2"  Margin="90,25,5,5">
+                        Grid.RowSpan="3"
+                           Margin="90,25,5,5">
                 <CheckBox x:Name="CheckEndPosition"
                           Content="Endlage erreicht"
                           Height="13"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
                           Foreground="Black"
+                          Grid.RowSpan="2"
                           IsEnabled="False" Checked="CheckEndPosition_Checked" Unchecked="CheckEndPosition_Unchecked" />
                 </Grid>
                 <Slider x:Name="SliderManual"
                         Height="23"
                         Width="250"
-                        Grid.Row="2"
+                        Grid.Row="3"
                         Grid.Column="0"
                         TickPlacement="BottomRight"
                         Maximum="360"
@@ -93,7 +96,7 @@
                          Text="0"
                          HorizontalAlignment="Left"
                          Width="30"
-                         Grid.Row="2"
+                         Grid.Row="3"
                          Grid.Column="3"
                          MaxLength="3"
                          MaxLines="1" KeyUp="TxtManualValue_KeyUp" />
@@ -106,44 +109,66 @@
                          HorizontalAlignment="Left"
                          IsEnabled="False"
                          Width="30"
-                         Grid.Row="2"
+                         Grid.Row="3"
                          Grid.Column="2" />
+                
                 <Label x:Name="Label1"
                        Content="Minimal"
                        Grid.Row="0"
                        Grid.Column="1"
                        HorizontalAlignment="Right"
-                       Margin="0,0,0,0"
-                       FontSize="12" />
+                        VerticalAlignment="Stretch"
+                       Margin="0,-5,0,0"
+                       Grid.RowSpan="2"
+                        Grid.ColumnSpan="2"
+                       FontSize="10" />
 
                 <Label x:Name="Label"
                        Content="Maximal"
-                       Grid.Row="0"
+                       Grid.Row="1"
                        Grid.Column="1"
                        HorizontalAlignment="Right"
-                       Margin="0,14,0,0"
+                       Margin="0,-4,0,0"
+                        Grid.ColumnSpan="2"
                        Grid.RowSpan="2"
+                       FontSize="10" />
+
+                <Label x:Name="Label2"
+                       Content="Geschwindigkeit"
+                       Grid.Row="2"
+                       Grid.Column="1"
+                       Grid.ColumnSpan="2"
+                       HorizontalAlignment="right"
+                       Margin="0,0,0,0"
                        FontSize="12" />
 
                 <Label x:Name="LblMinimal"
                        Content="0"
-                       Grid.Column="2"
+                       Grid.Column="3"
                        Grid.Row="0"
                        HorizontalAlignment="Left"
-                       Margin="0,0,0,0"
-                       Grid.ColumnSpan="2"
-                       FontSize="12" />
+                       Margin="0,-5,0,0"
+                       FontSize="10" />
 
                 <Label x:Name="LblMaximal"
                        Content="0"
-                       Grid.Row="0"
-                       Grid.Column="2"
+                       Grid.Row="1"
+                       Grid.Column="3"
                        HorizontalAlignment="Left"
-                       Grid.ColumnSpan="2"
-                       Margin="0,14,0,0"
-                       Grid.RowSpan="2"
-                       FontSize="12" />
+                       Margin="0,-5,0,0"
+                       FontSize="10" />
+                
+                <TextBox x:Name="TxtSpeed"
+                         Height="23"
+                         TextWrapping="NoWrap"
+                         Text="0"
+                         HorizontalAlignment="Left"
+                         Width="30"
+                         Grid.Row="2"
+                         Grid.Column="3"
+                         MaxLength="3"
 
+                         MaxLines="1" KeyUp="TxtSpeed_KeyUp" />
             </Grid>
         </GroupBox>
     </Grid>
