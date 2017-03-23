@@ -5,15 +5,15 @@ using System.Text;
 
 namespace Roboter.Control {
     public class AxisController {
-        private Dictionary<int, Axis> _axis = new Dictionary<int, Axis>();
 
-        private Device _device;
-        private byte _i2cAdress;
-        private PMW _pmw;
+        private readonly Dictionary<int, Axis> _axis = new Dictionary<int, Axis>();
+        private readonly Device _device;
+        private readonly byte _i2CAdress;
+        private readonly PMW _pmw;
 
         public AxisController(Device device, byte i2CAdress, int pmwRange) {
             _device = device;
-            _i2cAdress = i2CAdress;
+            _i2CAdress = i2CAdress;
 
             _pmw = new PMW(_device, i2CAdress);
             _pmw.SetFrequenz(pmwRange);
@@ -25,7 +25,7 @@ namespace Roboter.Control {
         /// <param name="axisNumber">Die Achsenummer. Ist 1 basierend</param>
         public void AddAxis(int axisNumber) {
             axisNumber = axisNumber - 1;
-            Axis axis = new Axis(_device, _i2cAdress, axisNumber);
+            Axis axis = new Axis(_device, _i2CAdress, axisNumber);
             _axis.Add(axisNumber, axis);
             _device.AddDeviceEventLog("Achse " + axisNumber + " erfolgreich eingefügt");
         }

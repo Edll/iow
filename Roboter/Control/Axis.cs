@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 namespace Roboter.Control {
     public class Axis {
-        private const int Min = 150;
-        private const int Max = 600;
+        // Minmal und Maximalwert für die Achsengeschwindigkeit
         public const int MaxSpeed = 100;
         public const int MinSpeed = 1;
 
+        private const int Min = 150;
+        private const int Max = 600;
+  
         private readonly I2CMode _i2CMode;
 
         private readonly byte _i2CAddrs;
@@ -17,12 +19,26 @@ namespace Roboter.Control {
         private byte _registerOffL;
         private byte _registerOffH;
 
-      
-
-        public int Value { get; set; }
         private int _lastPosition = 0;
+
+        /// <summary>
+        /// Positions wert der Achse
+        /// </summary>
+        public int Value { get; set; }
+
+        /// <summary>
+        /// Achsennummer der Achse
+        /// </summary>
         public int AxisNumber { get; set; }
+
+        /// <summary>
+        /// Active status der Achse
+        /// </summary>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Geschwindigkeits wert mit die Achse verstellt wird in Anlauf und Ablauf
+        /// </summary>
         public int Speed { get; set; }
 
         /// <summary>
@@ -54,12 +70,11 @@ namespace Roboter.Control {
             if (value <= 0) {
                 Console.WriteLine("Value == -1");
                 return;
-          
             }
             Value = value;
             int stepPoints = 1;
             int startPosition = _lastPosition;
-   
+
             int diff = startPosition - value;
             if (diff < 0) {
                 diff = diff*-1;
@@ -67,21 +82,20 @@ namespace Roboter.Control {
             int steps = diff/stepPoints;
 
             for (int i = startPosition; i <= value; i = i + steps) {
-
                 int maxRange = Max - Min;
                 int moveRange = (maxRange*i/100) + Min;
                 WriteToI2C(Min, moveRange);
             }
 
             int maxRange2 = Max - Min;
-            int moveRange2 = (maxRange2 * value / 100) + Min;
-       //     WriteToI2C(Min, moveRange2);
+            int moveRange2 = (maxRange2*value/100) + Min;
+            //     WriteToI2C(Min, moveRange2);
 
             // bring uns in einen Speicher überlauf???
-           // AddAchseToLastPoints(achsenNummer);
+            // AddAchseToLastPoints(achsenNummer);
         }
 
- 
+
         public override string ToString() {
             return "Achse: " + AxisNumber + " Value: " + Value;
         }
